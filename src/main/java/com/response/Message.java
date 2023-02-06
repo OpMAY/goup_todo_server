@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,25 +25,21 @@ public class Message {
     }
 
     public <T> boolean pop(String key) {
-        Set set = map.keySet();
-        Iterator iterator = set.iterator();
-        while (iterator.hasNext()) {
-            boolean check = ((String) iterator.next()).equals(key) ? true : false;
+        Set<String> set = map.keySet();
+        for (Object o : set) {
+            boolean check = o.equals(key);
             if (check) {
                 map.remove(key);
                 return true;
             }
-            continue;
         }
         return false;
     }
 
     public Map<String, Object> getHashMap(boolean isLog) throws JSONException {
-        if (isLog == true) {
-            Iterator<String> keys = map.keySet().iterator();
-            while (keys.hasNext()) {
-                String key = keys.next();
-                String value = map.get(key).toString();
+        if (isLog) {
+            for (String key : map.keySet()) {
+                String value = map.get(key) != null ? map.get(key).toString() : null;
                 log.info("Message Map Value -> {},{}", key, value);
             }
         }

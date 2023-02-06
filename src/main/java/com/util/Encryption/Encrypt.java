@@ -13,6 +13,10 @@ public interface Encrypt {
 
     public String encryptJWT(RootUser user);
 
+    String encryptGoupJWT();
+
+    boolean decryptGoupJWT(String encryptedJWT);
+
     public String encryptSHA256(String msg);
 
     public String bytesToHex(byte[] bytes);

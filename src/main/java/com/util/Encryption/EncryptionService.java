@@ -1,6 +1,7 @@
 package com.util.Encryption;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -9,6 +10,7 @@ import com.exception.enums.GlobalExceptionType;
 import com.model.jwt.RootUser;
 import com.util.Constant;
 import com.util.TimeFormatter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -27,6 +29,8 @@ import java.util.HashMap;
 
 @Service
 public class EncryptionService implements Encrypt {
+    @Value("${GOUP.ACCESS.KEY}")
+    private String accessKey;
     private final static String SECRET_KEY = "secret";
     private static final String ALG = "AES/CBC/PKCS5Padding";
     private static final String KEY = "0123456789012345";
@@ -98,7 +102,36 @@ public class EncryptionService implements Encrypt {
             builder.withClaim(JWTEnum.SIGNATURE.name(), encryptSHA256(SECRET_KEY));
         }
         builder.withIssuer("auth0");
-        return builder.sign(Algorithm.HMAC256(SECRET_KEY));
+        return builder.sign(algorithm);
+    }
+
+    @Override
+    public String encryptGoupJWT() {
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+        JWTCreator.Builder builder = JWT.create()
+                .withClaim(JWTEnum.VERSION.name(), Constant.VERSION)
+                .withClaim(JWTEnum.TOKEN.name(), accessKey)
+                .withExpiresAt(TimeFormatter.LongTimeStamp(1))
+                .withIssuer("auth0");
+        return builder.sign(algorithm);
+    }
+
+    @Override
+    public boolean decryptGoupJWT(String encryptedJWT) {
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("auth0")
+                .build(); //Reusable verifier instance
+        DecodedJWT jwt = verifier.verify(encryptedJWT);
+        if(jwt != null && jwt.getClaim(JWTEnum.TOKEN.name()) != null) {
+            if(jwt.getClaim(JWTEnum.TOKEN.name()).toString().equals(accessKey)) {
+                return !jwt.getExpiresAt().before(TimeFormatter.LongTimeStamp(0));
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     @Override
