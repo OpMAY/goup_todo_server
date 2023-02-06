@@ -2,5 +2,45 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mapper.TodoMapper">
+<mapper namespace="com.mapper.TaskMapper">
+    <insert id="makeTask" keyProperty="no" useGeneratedKeys="true">
+        insert into task(userToken, title, content, regDatetime, updateDatetime)
+        VALUES (#{userToken}, #{title}, #{content}, now(), now())
+    </insert>
+    <select id="getUserTasks" resultType="Task">
+        select *
+        from task
+        WHERE userToken = #{userToken}
+        order by regDatetime DESC
+    </select>
+    <select id="getUserTasksByComplete" resultType="Task">
+        select *
+        from task
+        WHERE complete = #{complete}
+          AND userToken = #{userToken}
+        order by regDatetime DESC
+    </select>
+    <update id="updateTask">
+        update task
+        SET title    = #{title},
+            complete = #{complete},
+            content  = #{content}
+        WHERE no = #{no}
+    </update>
+    <delete id="deleteTask">
+        delete
+        from task
+        WHERE no = #{no}
+    </delete>
+    <delete id="deleteUserCompletedTasks">
+        delete
+        from task
+        WHERE userToken = #{userToken}
+          AND complete = true;
+    </delete>
+    <select id="getTaskByNo" resultType="Task">
+        select *
+        from task
+        WHERE no = #{no}
+    </select>
 </mapper>
