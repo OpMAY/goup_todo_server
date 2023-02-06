@@ -23,6 +23,11 @@ public class TestController {
 
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView home() {
+        return new ModelAndView("sample");
+    }
+
     /**
      * Recover Interceptor Active
      */
