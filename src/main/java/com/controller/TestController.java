@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class TestController {
     public static void main(String[] args) {
-        String token = new EncryptionService().encryptAES("goup_token_gen", true);
-        System.out.println(token);
+        String token = "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJWRVJTSU9OIjoiMC4xLjEuYiIsImlzcyI6ImF1dGgwIiwiZXhwIjoxNjc1ODMyMDE4LCJUT0tFTiI6ImdvdXBfdG9rZW5fZ2VuIn0.pEwIPAjRK4mELFod6re_dFAss6PWJGqKik5LLAPK29U";
+        System.out.println(token.substring(token.indexOf("bearer") + "bearer".length() + 1));
+
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

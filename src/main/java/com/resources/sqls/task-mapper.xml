@@ -43,4 +43,7 @@
         from task
         WHERE no = #{no}
     </select>
+    <select id="checkUserExists" resultType="_boolean">
+        select EXISTS(select * from task WHERE userToken = #{token})
+    </select>
 </mapper>

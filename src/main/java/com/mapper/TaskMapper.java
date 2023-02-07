@@ -19,4 +19,6 @@ public interface TaskMapper {
     void deleteUserCompletedTasks(String userToken);
 
     Task getTaskByNo(int no);
+
+    boolean checkUserExists(String token);
 }

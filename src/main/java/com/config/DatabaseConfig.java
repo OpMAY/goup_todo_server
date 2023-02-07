@@ -57,7 +57,7 @@ public class DatabaseConfig {
             throw new RuntimeException();
         }
 
-        Resource[] locations = applicationContext.getResources("classpath:/sqls/**/*.xml");
+        Resource[] locations = applicationContext.getResources("classpath:/sqls/*.xml");
         if (locations != null && locations.length != 0) {
             factoryBean.setMapperLocations(locations);
         } else {

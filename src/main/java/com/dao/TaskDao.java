@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 @Repository
 public class TaskDao {
-    private final TaskMapper mapper;
+    private TaskMapper mapper;
 
     private TaskDao(SqlSession sqlSession) {
         this.mapper = sqlSession.getMapper(TaskMapper.class);
@@ -41,5 +41,9 @@ public class TaskDao {
 
     public Task getTaskByNo(int no) {
         return mapper.getTaskByNo(no);
+    }
+
+    public boolean checkUserExists(String result) {
+        return mapper.checkUserExists(result);
     }
 }
