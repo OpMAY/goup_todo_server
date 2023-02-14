@@ -111,6 +111,7 @@ public class PropertyConfig implements ApplicationContextInitializer<Configurabl
 
             propertySource = new ResourcePropertySource(new ClassPathResource("/key.properties"));
             properties = propertySource.getSource();
+            log.info("properties : {}", properties);
             log.info(" ============================ key.properties file keys start ============================");
             properties.forEach((key, value) -> {
                 try {

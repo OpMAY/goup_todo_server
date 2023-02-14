@@ -22,6 +22,15 @@ public class BaseRestController {
     @Value("${GOUP.ACCESS.KEY}")
     private String accessKey;
 
+    @Value("${KAKAO.JAVASCRIPT}")
+    private String KAKAO_JAVASCRIPT;
+
+    @Value("${NAVER.CLIENT_ID}")
+    private String NAVER_CLIENT_ID;
+
+    @Value("${GOOGLE.CLIENT_ID}")
+    private String GOOGLE_CLIENT_ID;
+
     private final EncryptionService encryptionService;
     private final TaskDao taskDao;
 
@@ -47,6 +56,27 @@ public class BaseRestController {
             message.put("status", true);
             message.put("token", result);
         }
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/sns/key/{type}", method = RequestMethod.POST)
+    public ResponseEntity getSnsKey(@PathVariable String type) {
+        Message message = new Message();
+        String key;
+        switch (type) {
+            case "kakao" :
+                key = KAKAO_JAVASCRIPT;
+                break;
+            case "naver" :
+                key = NAVER_CLIENT_ID;
+                break;
+            case "google":
+                key = GOOGLE_CLIENT_ID;
+                break;
+            default:
+                return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
+        }
+        message.put("key", key);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 }

@@ -49,3 +49,26 @@ async function apiFileUpload(file) {
         console.log(error);
     }
 }
+
+async function getKakaoKey() {
+    function apigetKakaoKey(email, password) {
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Content-Api", tokenGenerator(8));
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+        };
+        const response = fetch(`/api/sns`, requestOptions);
+        return response.then(res => res.json());
+    }
+
+    let result;
+    try {
+        result = await apigetKakaoKey();
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
+}

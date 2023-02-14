@@ -67,12 +67,13 @@ const APILogin = function (options = {
         getKey(this.options.type.name).then((result) => {
             console.log('getKey', result);
             if (result.status === 'OK') {
-                _options.key = result.data.key;
+                _options.key = result.data.javascript;
                 if (_options.type == LOGIN_TYPE.KAKAO) {
                     if (typeof Kakao === 'undefined') {
                         // CALL kakao login script
                         $.getScript('https://developers.kakao.com/sdk/js/kakao.js', function () {
                             // Stuff to do after someScript has loaded
+                            console.log(_options.key);
                             Kakao.init(_options.key);
                             _options.initialize(_options);
                         });

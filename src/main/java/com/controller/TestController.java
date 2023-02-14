@@ -1,14 +1,19 @@
 package com.controller;
 
+import com.api.LoginAPI;
 import com.exception.GrantAccessDeniedException;
 import com.exception.enums.GlobalExceptionType;
 import com.model.User;
 import com.model.grant.GrantType;
+import com.response.DefaultRes;
+import com.response.Message;
 import com.util.Constant;
 import com.util.Encryption.EncryptionService;
 import com.util.Encryption.JWTEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,10 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequiredArgsConstructor
 public class TestController {
+    private final LoginAPI loginAPI;
     public static void main(String[] args) {
-        String token = "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJWRVJTSU9OIjoiMC4xLjEuYiIsImlzcyI6ImF1dGgwIiwiZXhwIjoxNjc1ODMyMDE4LCJUT0tFTiI6ImdvdXBfdG9rZW5fZ2VuIn0.pEwIPAjRK4mELFod6re_dFAss6PWJGqKik5LLAPK29U";
-        System.out.println(token.substring(token.indexOf("bearer") + "bearer".length() + 1));
-
+        EncryptionService encryptionService = new EncryptionService();
+        System.out.println((encryptionService.encryptAES("a0a20ee78364f16b2fce94d6a4847f75", false)));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -85,6 +90,7 @@ public class TestController {
      */
     @RequestMapping(value = "/test/logic", method = RequestMethod.GET)
     public ModelAndView test(HttpServletRequest request) {
-        return new ModelAndView("test/file-test");
+        return new ModelAndView("test/login-test");
     }
+
 }
