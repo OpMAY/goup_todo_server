@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class MetaData {
-    private String meta = "lechat_4993";
+    private String meta = "test";
 }

@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class BootPayItem {
-    private String id = "lechat_item_001";
-    private String name = "LE CHAT 375ml / 12.7fl.oz";
+    private String id = "BP_Test_item_1";
+    private String name = "BootPay Test Item";
     private int qty;
-    private int price = 32000;
+    private int price = 1000;
 }

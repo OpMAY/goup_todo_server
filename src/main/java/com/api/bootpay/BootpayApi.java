@@ -58,6 +58,10 @@ public class BootpayApi {
         this.token = token;
     }
 
+    public boolean isTokenInit() {
+        return this.token != null;
+    }
+
     private HttpGet getGet(String url) throws Exception {
         HttpGet get = new HttpGet(url);
         URI uri = new URIBuilder(get.getURI()).build();

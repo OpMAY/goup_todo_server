@@ -27,7 +27,7 @@ public class TestController {
     private final LoginAPI loginAPI;
     public static void main(String[] args) {
         EncryptionService encryptionService = new EncryptionService();
-        System.out.println((encryptionService.encryptAES("a0a20ee78364f16b2fce94d6a4847f75", false)));
+        System.out.println((encryptionService.encryptAES("62de2ff2d01c7e001d5eeea6", false)));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
