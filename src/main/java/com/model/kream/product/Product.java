@@ -14,7 +14,6 @@ public class Product extends Time {
     private int gender;
     // BOOLEANS
     private boolean is_one_size;
-    private boolean is_fast_delivery;
     private boolean is_direct;
     private boolean product_yn;
     // MIGHT BE NO USE
