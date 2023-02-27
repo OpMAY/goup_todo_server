@@ -30,7 +30,7 @@ public class TestRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/oauth/callback", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/oauth/callback", method = RequestMethod.GET)
     public ResponseEntity KakaoLoginCallback(HttpServletRequest request) {
         User user = loginAPI.apiLoginInit(request);
         Message message = new Message();

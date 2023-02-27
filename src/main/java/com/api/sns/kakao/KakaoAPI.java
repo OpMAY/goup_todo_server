@@ -49,7 +49,8 @@ public class KakaoAPI {
             params.put("grant_type", "authorization_code");
             params.put("client_id", KAKAO_CLIENT_ID);
             params.put("client_secret", KAKAO_CLIENT_SECRET);
-            params.put("redirect_uri", req.getRequestURL());
+//            params.put("redirect_uri", req.getRequestURL());
+            params.put("redirect_uri", "http://localhost:3000/oauth");
             params.put("code", authorize_code);
 
             protocolBuilder.openWriter(params);
