@@ -1,13 +1,14 @@
 package com.dao;
 
 import com.mapper.SizeMapper;
-import com.mapper.StyleMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class SizeDao {
 
-   private SizeMapper sizeMapper;
+   private SizeMapper mapper;
    private SizeDao(SqlSession sqlSession){
-       this.sizeMapper = sqlSession.getMapper(SizeMapper.class);
+       this.mapper = sqlSession.getMapper(SizeMapper.class);
    }
 }

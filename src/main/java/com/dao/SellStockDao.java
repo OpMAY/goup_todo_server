@@ -1,13 +1,14 @@
 package com.dao;
 
-import com.mapper.CategoryMapper;
 import com.mapper.SellStockMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class SellStockDao {
-    private SellStockMapper sellStockMapper;
+    private SellStockMapper mapper;
 
     private SellStockDao(SqlSession sqlSession){
-        this.sellStockMapper = sqlSession.getMapper(SellStockMapper.class);
+        this.mapper = sqlSession.getMapper(SellStockMapper.class);
     }
 }

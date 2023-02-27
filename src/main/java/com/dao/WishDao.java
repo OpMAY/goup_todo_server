@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class WishDao {
-    private WishMapper wishMapper;
+    private WishMapper mapper;
 
     private WishDao(SqlSession sqlSession){
-        this.wishMapper=sqlSession.getMapper(WishMapper.class);
+        this.mapper =sqlSession.getMapper(WishMapper.class);
     }
 
 

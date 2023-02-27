@@ -2,11 +2,13 @@ package com.dao;
 
 import com.mapper.BrandMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class BrandDao {
-    private BrandMapper brandMapper;
+    private BrandMapper mapper;
 
     private BrandDao(SqlSession sqlSession){
-        this.brandMapper = sqlSession.getMapper(BrandMapper.class);
+        this.mapper = sqlSession.getMapper(BrandMapper.class);
     }
 }

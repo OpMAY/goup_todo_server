@@ -1,13 +1,14 @@
 package com.dao;
 
-import com.mapper.BrandMapper;
 import com.mapper.PurchaseMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class PurchaseDao {
-    private PurchaseMapper  purchaseMapper;
+    private PurchaseMapper mapper;
 
-    private PurchaseDao(SqlSession sqlSession){
-        this.purchaseMapper = sqlSession.getMapper(PurchaseMapper.class);
+    private PurchaseDao(SqlSession sqlSession) {
+        this.mapper = sqlSession.getMapper(PurchaseMapper.class);
     }
 }

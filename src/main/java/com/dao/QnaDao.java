@@ -1,13 +1,14 @@
 package com.dao;
 
-import com.mapper.BrandMapper;
 import com.mapper.QnAMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class QnaDao {
-    private QnAMapper qnAMapper;
+    private QnAMapper mapper;
 
     private QnaDao(SqlSession sqlSession){
-        this.qnAMapper = sqlSession.getMapper(QnAMapper.class);
+        this.mapper = sqlSession.getMapper(QnAMapper.class);
     }
 }

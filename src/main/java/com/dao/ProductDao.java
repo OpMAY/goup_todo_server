@@ -1,13 +1,14 @@
 package com.dao;
 
-import com.mapper.PointMapper;
 import com.mapper.ProductMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ProductDao {
-    private ProductMapper productMapper;
+    private ProductMapper mapper;
 
     private ProductDao(SqlSession sqlSession){
-        this.productMapper = sqlSession.getMapper(ProductMapper.class);
+        this.mapper = sqlSession.getMapper(ProductMapper.class);
     }
 }

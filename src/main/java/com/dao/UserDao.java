@@ -9,13 +9,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDao {
 
-    private UserMapper userMapper;
+    private UserMapper mapper;
 
     private UserDao(SqlSession sqlSession){
-        this.userMapper = sqlSession.getMapper(UserMapper.class);
+        this.mapper = sqlSession.getMapper(UserMapper.class);
     }
 
     public void User(User user){
-        userMapper.user(user);
+        mapper.user(user);
     }
 }

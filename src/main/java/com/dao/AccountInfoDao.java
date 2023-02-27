@@ -2,14 +2,14 @@ package com.dao;
 
 import com.mapper.AccountInfoMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class AccountInfoDao {
 
-    private AccountInfoMapper accountInfoMapper;
+    private AccountInfoMapper mapper;
 
     private AccountInfoDao(SqlSession sqlSession){
-        this.accountInfoMapper = sqlSession.getMapper(AccountInfoMapper.class);
+        this.mapper = sqlSession.getMapper(AccountInfoMapper.class);
     }
-
-
 }

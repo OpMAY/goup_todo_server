@@ -1,15 +1,16 @@
 package com.dao;
 
-import com.mapper.StyleFollowMapper;
 import com.mapper.StyleLikeMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class StyleLikeDao {
 
-    private StyleLikeMapper styleLikeMapper ;
+    private StyleLikeMapper mapper;
 
     private StyleLikeDao(SqlSession sqlSession){
-        this.styleLikeMapper = sqlSession.getMapper(StyleLikeMapper.class);
+        this.mapper = sqlSession.getMapper(StyleLikeMapper.class);
     }
 
 

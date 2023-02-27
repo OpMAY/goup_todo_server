@@ -1,12 +1,13 @@
 package com.dao;
 
-import com.mapper.SellStockMapper;
 import com.mapper.StyleCommentMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class StyleCommentDao {
-    private StyleCommentMapper styleCommentMapper;
+    private StyleCommentMapper mapper;
     private StyleCommentDao(SqlSession sqlSession){
-        this.styleCommentMapper = sqlSession.getMapper(StyleCommentMapper.class);
+        this.mapper = sqlSession.getMapper(StyleCommentMapper.class);
     }
 }

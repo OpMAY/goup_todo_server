@@ -2,12 +2,13 @@ package com.dao;
 
 import com.mapper.OrderMapper;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class OrderDao {
-    private OrderMapper orderMapper;
+    private OrderMapper mapper;
 
     private OrderDao(SqlSession sqlSession){
-        this.orderMapper = sqlSession.getMapper(OrderMapper.class);
+        this.mapper = sqlSession.getMapper(OrderMapper.class);
     }
 }
