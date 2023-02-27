@@ -5,4 +5,49 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.UserMapper">
+    <resultMap id="User" type="com.model.User">
+        <result column="profile_img" property="profile_img" typeHandler="com.middleware.JsonObjectTypeHandler"
+                javaType="com.model.common.MFile"/>
+    </resultMap>
+
+    <select id="getProfileInfo" resultType="User">
+        select u.name,u.phone_number,u.size,u.email_alarm
+        from user u where access_token =#{access_token} is not null and no = #{no} is not null
+    </select>
+
+
+
+    <insert id="registUser" useGeneratedKeys="true" keyProperty="no">
+        insert into user(name, access_token, phone_number, size,point,email_alarm,zipcode,address,address_detail,login_type,
+                         reg_datetime,last_login_datetime,profile_img,updated_datetime)
+        values (#{name},
+                #{access_token},
+                #{phone_number},
+                #{size},
+                #{point},
+                #{email_alarm},
+                #{zipcode},
+                #{address},
+                #{address_detail},
+                #{login_type},
+                now(),
+                #{last_login_datetime},
+                #{profile_img,typeHandler=JsonObjectTypeHandler},
+                now());
+    </insert>
+
+    <update id="updateUser">
+        update user set name =#{name},
+                        updated_datetime = now()
+                        where no =#{no}
+    </update>
+
+    <delete id="deleteUser">
+        delete  from user where no =#{no};
+    </delete>
+
+
+
+
+
 </mapper>

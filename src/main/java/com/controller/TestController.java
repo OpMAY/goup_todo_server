@@ -1,9 +1,10 @@
 package com.controller;
 
 import com.api.LoginAPI;
+import com.dao.UserDao;
 import com.exception.GrantAccessDeniedException;
 import com.exception.enums.GlobalExceptionType;
-import com.model.user.User;
+import com.model.User;
 import com.model.grant.GrantType;
 import com.util.Constant;
 import com.util.Encryption.EncryptionService;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class TestController {
     private final LoginAPI loginAPI;
+
+    private final UserDao userDao;
     public static void main(String[] args) {
         EncryptionService encryptionService = new EncryptionService();
         System.out.println((encryptionService.encryptAES("62de2ff2d01c7e001d5eeea6", false)));
@@ -28,6 +31,8 @@ public class TestController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView home() {
+
+
         return new ModelAndView("sample");
     }
 

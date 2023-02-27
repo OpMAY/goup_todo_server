@@ -1,4 +1,4 @@
-package com.model.user;
+package com.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.model.common.MFile;
