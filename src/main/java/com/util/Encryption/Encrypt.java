@@ -1,9 +1,7 @@
 package com.util.Encryption;
 
-import com.model.User;
 import com.model.jwt.RootUser;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 public interface Encrypt {

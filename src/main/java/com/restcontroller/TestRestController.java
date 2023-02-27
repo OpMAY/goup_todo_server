@@ -1,7 +1,7 @@
 package com.restcontroller;
 
 import com.api.LoginAPI;
-import com.model.User;
+import com.model.user.User;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.TestService;
