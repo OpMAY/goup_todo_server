@@ -5,5 +5,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.SellMapper">
-
+    <select id="getProductSellHistory" resultType="ProductPriceWithSizeAndCount">
+        select (select size from size WHERE no = s.size_no) as size,
+               price,
+               (select COUNT(*) from sell ss WHERE size_no = s.size_no AND price = s.price)
+        from sell s
+        WHERE size_no in (select no from size WHERE product_no = #{product_no})
+        GROUP BY size_no, price
+        ORDER BY price;
+    </select>
 </mapper>
