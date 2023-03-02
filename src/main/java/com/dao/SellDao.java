@@ -18,4 +18,8 @@ public class SellDao {
     public List<ProductPriceWithSizeAndCount> getProductSellHistory(int product_no) {
         return mapper.getProductSellHistory(product_no);
     }
+
+    public Integer getSizeProductSellLowestPrice(int size_no) {
+        return mapper.getSizeProductSellLowestPrice(size_no);
+    }
 }

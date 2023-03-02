@@ -2,6 +2,8 @@ package com.mapper;
 
 import com.model.kream.DATE_RANGE_TYPE;
 import com.model.kream.product.Product;
+import com.model.kream.product.ProductMain;
+import com.model.kream.product.ProductShop;
 import com.model.kream.product.price.ProductPriceHistory;
 import com.model.kream.product.price.ProductPriceWithSize;
 import org.apache.ibatis.annotations.Param;
@@ -26,4 +28,8 @@ public interface ProductMapper {
     List<ProductPriceHistory> getProductPriceHistory(@Param("product_no") int product_no, @Param("type") DATE_RANGE_TYPE type);
 
     void updateProductViews(int no);
+
+    List<ProductMain> getMainProducts();
+
+    List<ProductShop> getShopProducts();
 }

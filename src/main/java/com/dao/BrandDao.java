@@ -16,4 +16,8 @@ public class BrandDao {
     public Brand getBrandByNo(int brand_no) {
         return mapper.getBrandByNo(brand_no);
     }
+
+    public Brand getBrandByProductNo(int no) {
+        return mapper.getBrandByProductNo(no);
+    }
 }

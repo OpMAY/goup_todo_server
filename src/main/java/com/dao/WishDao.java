@@ -36,4 +36,8 @@ public class WishDao {
     public void deleteUserWishByUserNoAndSizeNo(int user_no, int size_no) {
         mapper.deleteUserWishByUserNoAndSizeNo(user_no, size_no);
     }
+
+    public boolean isUserWishProduct(int product_no, int user_no) {
+        return mapper.isUserWishProduct(product_no, user_no);
+    }
 }

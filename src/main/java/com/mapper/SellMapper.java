@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SellMapper {
     List<ProductPriceWithSizeAndCount> getProductSellHistory(int product_no);
+
+    Integer getSizeProductSellLowestPrice(int size_no);
 }

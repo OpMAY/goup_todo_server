@@ -14,4 +14,13 @@
         GROUP BY size_no, price
         ORDER BY price
     </select>
+    <select id="getSizeProductPurchaseHighestPrice" resultType="integer">
+        select price
+        from purchase
+                 left join `order` on purchase.no = `order`.purchase_no
+        WHERE size_no = #{size_no}
+          AND `order`.no is null
+        ORDER BY price
+        LIMIT 1
+    </select>
 </mapper>

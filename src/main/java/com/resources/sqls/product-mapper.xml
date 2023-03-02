@@ -7,6 +7,12 @@
         <result column="product_info" property="product_info" typeHandler="com.middleware.JsonObjectTypeHandler"/>
         <result column="images" property="images" typeHandler="com.middleware.JsonArrayObjectTypeHandler"/>
     </resultMap>
+    <resultMap id="ProductMain" type="com.model.kream.product.ProductMain">
+        <result column="image" property="image" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
+    <resultMap id="ProductShop" type="com.model.kream.product.ProductShop">
+        <result column="image" property="image" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
     <select id="getProductByNo" resultType="Product" resultMap="Product">
         select *
         from product
@@ -143,4 +149,14 @@
         SET views = views + 1
         WHERE no = #{no}
     </update>
+    <select id="getMainProducts" resultType="ProductMain" resultMap="ProductMain">
+        select no, en_name as name, JSON_EXTRACT(images, '$[0]') as image
+        from product
+        # TODO 조건 추가
+    </select>
+    <select id="getShopProducts" resultType="ProductShop" resultMap="ProductShop">
+        select no, en_name, kor_name, JSON_EXTRACT(images, '$[0]') as image
+        from product
+        # TODO 조건 추가
+    </select>
 </mapper>

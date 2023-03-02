@@ -3,6 +3,8 @@ package com.dao;
 import com.mapper.ProductMapper;
 import com.model.kream.DATE_RANGE_TYPE;
 import com.model.kream.product.Product;
+import com.model.kream.product.ProductMain;
+import com.model.kream.product.ProductShop;
 import com.model.kream.product.price.ProductPriceHistory;
 import com.model.kream.product.price.ProductPriceWithSize;
 import org.apache.ibatis.annotations.Param;
@@ -27,10 +29,12 @@ public class ProductDao {
         return mapper.getProductByCategories(categories);
     }
 
+    @Deprecated
     public List<ProductPriceWithSize> getProductPurchasePrices(int product_no) {
         return mapper.getProductPurchasePrices(product_no);
     }
 
+    @Deprecated
     public List<ProductPriceWithSize> getProductSellPrices(int product_no) {
         return mapper.getProductSellPrices(product_no);
     }
@@ -53,5 +57,13 @@ public class ProductDao {
 
     public void updateProductViews(int no) {
         mapper.updateProductViews(no);
+    }
+
+    public List<ProductMain> getMainProducts() {
+        return mapper.getMainProducts();
+    }
+
+    public List<ProductShop> getShopProducts() {
+        return mapper.getShopProducts();
     }
 }

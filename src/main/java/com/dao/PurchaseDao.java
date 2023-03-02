@@ -18,4 +18,8 @@ public class PurchaseDao {
     public List<ProductPriceWithSizeAndCount> getProductPurchaseHistory(int product_no) {
         return mapper.getProductPurchaseHistory(product_no);
     }
+
+    public Integer getSizeProductPurchaseHighestPrice(int size_no) {
+        return mapper.getSizeProductPurchaseHighestPrice(size_no);
+    }
 }
