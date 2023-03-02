@@ -1,8 +1,11 @@
 package com.dao;
 
 import com.mapper.PurchaseMapper;
+import com.model.kream.product.price.ProductPriceWithSizeAndCount;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class PurchaseDao {
@@ -10,5 +13,13 @@ public class PurchaseDao {
 
     private PurchaseDao(SqlSession sqlSession) {
         this.mapper = sqlSession.getMapper(PurchaseMapper.class);
+    }
+
+    public List<ProductPriceWithSizeAndCount> getProductPurchaseHistory(int product_no) {
+        return mapper.getProductPurchaseHistory(product_no);
+    }
+
+    public Integer getSizeProductPurchaseHighestPrice(int size_no) {
+        return mapper.getSizeProductPurchaseHighestPrice(size_no);
     }
 }

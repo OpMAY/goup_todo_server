@@ -1,9 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.ProductMapper">
+    <resultMap id="Product" type="com.model.kream.product.Product">
+        <result column="product_info" property="product_info" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+        <result column="images" property="images" typeHandler="com.middleware.JsonArrayObjectTypeHandler"/>
+    </resultMap>
+    <resultMap id="ProductMain" type="com.model.kream.product.ProductMain">
+        <result column="image" property="image" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
+    <resultMap id="ProductShop" type="com.model.kream.product.ProductShop">
+        <result column="image" property="image" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
+    <select id="getProductByNo" resultType="Product" resultMap="Product">
+        select *
+        from product
+        WHERE no = #{no}
+    </select>
+    <select id="getProductsByCategory" resultType="Product" resultMap="Product">
+        select *
+        from product
+        WHERE category_no in
+        <foreach item="no" index="index" collection="list"
+                 open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </select>
 
+    <!-- 판매 화면에서 사이즈 별 구매 입찰 최대 금액 가져오기 => 거래 생성 안된 부분으로 -->
+    <select id="getProductPurchasePrices" resultType="ProductPriceWithSize">
+        select product.no,
+               size,
+               MAX(p.price) as price
+        from product
+                 left join size s on product.no = s.product_no
+                 left join purchase p on s.no = p.size_no
+                 left join `order` o on p.no = o.purchase_no
+        WHERE o.no is null
+          AND (p.purchase_type = 'AUCTION' OR p.purchase_type is null)
+          AND (p.p_bid_flag = true OR p.p_bid_flag is null)
+          AND product.no = #{product_no}
+        group by size
+        order by size;
+    </select>
+
+    <!-- 구매 화면에서 사이즈 별 구매 입찰 최대 금액 가져오기 (거래 생성 안된 부분으로) -->
+    <select id="getProductSellPrices" resultType="ProductPriceWithSize">
+        select product.no,
+               size,
+               MIN(sell.price) as price
+        from product
+                 left join size s on product.no = s.product_no
+                 left join sell on s.no = sell.size_no
+                 left join `order` o on sell.no = o.sell_no
+        WHERE o.no is null
+          AND (sell.sell_type = 'AUCTION' OR sell.sell_type is null)
+          AND (sell.s_bid_flag = true OR sell.s_bid_flag is null)
+          AND product.no = #{product_no}
+        group by size
+        order by size;
+    </select>
+
+    <!-- 판매 입찰 현황 내역 중 가장 낮은 금액 가져오기 -->
+    <select id="getProductLowestSellPrice" resultType="ProductPriceWithSize">
+        select *
+        from (select product.no,
+                     MIN(sell.price) as price
+              from product
+                       left join size s on product.no = s.product_no
+                       left join sell on s.no = sell.size_no
+                       left join `order` o on sell.no = o.sell_no
+              WHERE o.no is null
+                AND sell.sell_type = 'AUCTION'
+                AND sell.s_bid_flag = true
+                AND product.no = #{product_no}
+              order by size) as t
+        WHERE t.price is not null;
+    </select>
+
+    <!--  구매 입찰 현황 내역 중 가장 높은 금액 가져오기  -->
+    <select id="getProductHighestPurchasePrice" resultType="ProductPriceWithSize">
+        select *
+        from (select product.no,
+                     MAX(p.price) as price
+              from product
+                       left join size s on product.no = s.product_no
+                       left join purchase p on s.no = p.size_no
+                       left join `order` o on p.no = o.purchase_no
+              WHERE o.no is null
+                AND p.purchase_type = 'AUCTION'
+                AND p.p_bid_flag = true
+                AND product.no = 1
+              order by size) as t
+        WHERE price is not null;
+    </select>
+
+    <!-- 상품 거래 내역에 관한 것-->
+    <select id="getProductOrderHistory" resultType="ProductPriceWithSize">
+        select size, s.price, o.reg_datetime
+        from product
+                 left join size on product.no = size.product_no
+                 left join sell s on size.no = s.size_no
+                 left join purchase p on size.no = p.size_no
+                 left join `order` o on s.no = o.sell_no or p.no = o.purchase_no
+        WHERE product.no = #{product_no}
+          AND o.no is not null
+        GROUP BY o.reg_datetime, o.no
+        ORDER BY o.reg_datetime DESC;
+    </select>
+
+    <!--  기간 별 거래 내역 금액  -->
+    <select id="getProductPriceHistory" resultType="ProductPriceHistory">
+        select price, target_date
+        from (select s.price,
+        DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') as target_date,
+        ROW_NUMBER() over (partition by o.reg_datetime ORDER BY o.reg_datetime DESC) as order_number
+        from product
+        left join size on product.no = size.product_no
+        left join sell s on size.no = s.size_no
+        left join purchase p on size.no = p.size_no
+        left join `order` o on s.no = o.sell_no or p.no = o.purchase_no
+        WHERE product.no = #{product_no}
+        <choose>
+            <when test="type.name() eq 'MONTHLY'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
+            </when>
+            <when test="type.name() eq 'QUARTER'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+            </when>
+            <when test="type.name() eq 'HALF'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -6 MONTH) AND NOW()
+            </when>
+            <when test="type.name() eq 'YEARLY'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR) AND NOW()
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        AND o.no is not null
+        GROUP BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d'), o.no
+        ORDER BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') DESC) as t
+        WHERE order_number = 1;
+    </select>
+
+    <update id="updateProductViews">
+        update product
+        SET views = views + 1
+        WHERE no = #{no}
+    </update>
+    <select id="getMainProducts" resultType="ProductMain" resultMap="ProductMain">
+        select no, en_name as name, JSON_EXTRACT(images, '$[0]') as image
+        from product
+        # TODO 조건 추가
+    </select>
+    <select id="getShopProducts" resultType="ProductShop" resultMap="ProductShop">
+        select no, en_name, kor_name, JSON_EXTRACT(images, '$[0]') as image
+        from product
+        # TODO 조건 추가
+    </select>
 </mapper>

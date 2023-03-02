@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 @Data
 public abstract class Time {
 
-    private LocalDateTime regDatetime;
-    private LocalDateTime updatedDatetime;
+    private LocalDateTime reg_datetime;
+    private LocalDateTime updated_datetime;
 
     public Time() {
 
     }
 
-    public Time(LocalDateTime regDatetime, LocalDateTime updatedDatetime) {
-        this.regDatetime = regDatetime;
-        this.updatedDatetime = updatedDatetime;
+    public Time(LocalDateTime reg_datetime, LocalDateTime updated_datetime) {
+        this.reg_datetime = reg_datetime;
+        this.updated_datetime = updated_datetime;
     }
 }

@@ -7,4 +7,5 @@ import lombok.Data;
 public class Brand extends Time {
     private int no;
     private String name;
+    private String color;
 }
