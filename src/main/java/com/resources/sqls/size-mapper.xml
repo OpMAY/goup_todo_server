@@ -1,9 +1,38 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.SizeMapper">
-
+    <select id="getProductSize" resultType="Size">
+        select *
+        from size
+        WHERE product_no = #{product_no}
+    </select>
+    <select id="isProductOneSize" resultType="_boolean">
+        select COUNT(*) = 1
+        from size
+        WHERE product_no = #{product_no}
+    </select>
+    <insert id="insertProductSize" useGeneratedKeys="true" keyProperty="no">
+        insert into size (product_no, size)
+        VALUES (#{product_no}, #{size})
+    </insert>
+    <delete id="deleteSizeByNo">
+        delete
+        from size
+        WHERE no = #{no}
+    </delete>
+    <delete id="deleteSizeByProductNoAndSize">
+        delete
+        from size
+        WHERE product_no = #{product_no}
+          AND size = #{size}
+    </delete>
+    <update id="updateSize">
+        update size
+        SET size = #{size}
+        WHERE no = #{no}
+    </update>
 </mapper>
