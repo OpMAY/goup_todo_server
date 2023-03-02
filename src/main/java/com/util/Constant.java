@@ -18,7 +18,7 @@ public class Constant {
      * @Description Database Setting Static Class
      */
     public static class DatabaseSetting {
-        public static final String DATABASE_SOURCE = "LOCAL1";
+        public static final String DATABASE_SOURCE = "DEPLOY";
         /**
          * PR
          *
