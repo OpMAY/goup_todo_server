@@ -159,4 +159,9 @@
         from product
         # TODO 조건 추가
     </select>
+    <select id="getProductBySizeNo" resultType="Product">
+        select *
+        from product
+        WHERE no = (select product_no from size WHERE no = #{size_no})
+    </select>
 </mapper>

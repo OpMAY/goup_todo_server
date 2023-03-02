@@ -5,8 +5,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.PurchaseMapper">
+    <resultMap id="Purchase" type="com.model.kream.order.before.Purchase">
+        <result column="purchase_agree" property="purchase_agree" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+        <result column="p_order_agree" property="p_order_agree" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+        <result column="delivery_info" property="delivery_info" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+        <result column="receipt" property="receipt" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
     <select id="getProductPurchaseHistory" resultType="ProductPriceWithSizeAndCount">
-        select (select size from size WHERE no = p.size_no) as size,
+        select (select size from size WHERE no = p.size_no)                                     as size,
                price,
                (select COUNT(*) from purchase pp WHERE size_no = p.size_no AND price = p.price) as count
         from purchase p
@@ -23,4 +29,27 @@
         ORDER BY price
         LIMIT 1
     </select>
+    <select id="getPurchaseForOrder" resultType="Purchase" resultMap="Purchase">
+        select *
+        from purchase
+                 left join `order` o on purchase.no = o.purchase_no
+        WHERE size_no = #{size_no}
+          AND price = #{price}
+          AND o.no is null
+        ORDER BY purchase.reg_datetime
+        LIMIT 1
+    </select>
+    <insert id="registerPurchase" keyProperty="no" useGeneratedKeys="true">
+        insert into purchase(user_no, size_no, purchase_agree, purchase_type, expiration_date, expiration_days, price,
+                             delivery_info, delivery_method, point, commission, delivery_price, total_price,
+                             payment_method, receipt, p_order_agree, reg_datetime, updated_datetime)
+        VALUES (#{user_no}, #{size_no}, #{purchase_agree, typeHandler=com.middleware.JsonObjectTypeHandler},
+                #{purchase_type},
+                #{expiration_date}, #{expiration_days}, #{price},
+                #{delivery_info, typeHandler=com.middleware.JsonObjectTypeHandler}, #{delivery_method}, #{point},
+                #{commission},
+                #{delivery_price}, #{total_price},
+                #{payment_method}, #{receipt, typeHandler=com.middleware.JsonObjectTypeHandler},
+                #{p_order_agree, typeHandler=com.middleware.JsonObjectTypeHandler}, NOW(), NOW())
+    </insert>
 </mapper>

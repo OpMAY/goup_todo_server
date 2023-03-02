@@ -66,4 +66,8 @@ public class ProductDao {
     public List<ProductShop> getShopProducts() {
         return mapper.getShopProducts();
     }
+
+    public Product getProductBySizeNo(int size_no) {
+        return mapper.getProductBySizeNo(size_no);
+    }
 }

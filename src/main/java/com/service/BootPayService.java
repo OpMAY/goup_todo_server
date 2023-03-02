@@ -46,6 +46,7 @@ public class BootPayService {
 
     public boolean verifyReceipt(BootPayDefaultModel defaultModel) {
         try {
+            log.info("bootPay Verify Receipt Start {}", defaultModel);
             Gson gson = new Gson();
             if(defaultModel.getMethod().equals("kakaopay")) {
                 // KAKAO PAY의 경우 V1으로 검증해야함
