@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.AddressMapper">
+
+        <select id="getMyAddresses" resultType="Address" >
+            select * from address where user_no=#{user_no} order by reg_datetime desc;
+        </select>
+
+
+    <insert id="registAddress" useGeneratedKeys="true" keyProperty="no">
+        insert into address(user_no, name, phone_number, zip_code, address, address_detail, is_default_address,
+                            reg_datetime, updated_datetime)
+        values (#{user_no},
+                #{name},
+                #{phone_number},
+                #{zip_code},
+                #{address},
+                #{address_detail},
+                #{is_default_address},
+                now(),
+                now());
+    </insert>
+
+    <update id="updateAddress">
+        update address
+        set name=#{name},
+            phone_number=#{phone_number},
+            zip_code=#{zip_code},
+            address=#{address},
+            address_detail=#{address_detail},
+            is_default_address=#{is_default_address},
+            updated_datetime=now()
+        where no = #{no}
+    </update>
+
+    <update id="resetDefaultAddress">
+        update address
+        set is_default_address = false
+        where user_no = #{user_no}
+    </update>
+
+    <delete id="deleteAddress">
+        delete
+        from address
+        where no = #{no}
+    </delete>
+
+
+</mapper>

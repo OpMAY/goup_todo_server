@@ -9,7 +9,7 @@ import com.api.sns.kakao.KakaoInfo;
 import com.api.sns.naver.NaverAPI;
 import com.api.sns.naver.NaverAccess;
 import com.api.sns.naver.NaverInfo;
-import com.model.user.User;
+import com.model.User;
 import com.model.common.MFile;
 import com.util.Utility;
 import lombok.RequiredArgsConstructor;

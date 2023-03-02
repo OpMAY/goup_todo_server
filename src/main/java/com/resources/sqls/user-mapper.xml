@@ -1,8 +1,99 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.UserMapper">
+    <resultMap id="user_map" type="com.model.User">
+        <result column="profile_img" property="profile_img" typeHandler="com.middleware.JsonObjectTypeHandler"
+                javaType="com.model.common.MFile"/>
+    </resultMap>
+
+    <select id="getProfileInfo" resultType="User" resultMap="user_map">
+        select u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img
+        from user u
+        where no = #{no}
+    </select>
+
+
+    <insert id="registUser" useGeneratedKeys="true" keyProperty="no">
+        insert into user(name, access_token, phone_number, size, point, email_alarm, zipcode, address, address_detail,
+                         login_type, email,
+                         reg_datetime, last_login_datetime, profile_img, updated_datetime)
+        values (#{name},
+                #{access_token},
+                #{phone_number},
+                #{size},
+                #{point},
+                #{email_alarm},
+                #{zipcode},
+                #{address},
+                #{address_detail},
+                #{login_type},
+                #{email},
+                now(),
+                now(),
+                #{profile_img,typeHandler=JsonObjectTypeHandler},
+                now())
+    </insert>
+
+
+    <update id="updateEmail">
+        update user
+        set email            =#{email},
+            updated_datetime = now()
+        where no = #{no}
+    </update>
+
+    <update id="updateUserName">
+        update user
+        set name             =#{name},
+            updated_datetime = now()
+        where no = #{no}
+    </update>
+
+    <update id="updatePhoneNumber">
+        update user
+        set phone_number     =#{phone_number},
+            updated_datetime = now()
+        where no = #{no}
+    </update>
+
+    <update id="updateSize">
+        update user
+        set size =#{size}
+        where no = #{no}
+    </update>
+
+    <update id="updateEmailAlarm">
+        update user
+        set email_alarm      =#{email_alarm},
+            updated_datetime = now()
+        where no = #{no}
+    </update>
+
+    <update id="updateProfileImage">
+        update user
+        set profile_img      =#{profile_img,typeHandler=JsonObjectTypeHandler},
+            updated_datetime = now()
+        where no = #{user_no}
+    </update>
+
+    <update id="updateReceiptInfo">
+        update user
+        set cash_receipt_type =#{cash_receipt_type},
+            cr_card_number    =#{cr_card_number},
+            cr_phone_number   =#{cr_phone_number},
+            cr_alarm_agree    =#{cr_alarm_agree}
+        where no = #{no}
+    </update>
+
+
+    <update id="deleteUser">
+        update user set user_flag =#{user_flag}
+        where no = #{no}
+    </update>
+
+
 </mapper>

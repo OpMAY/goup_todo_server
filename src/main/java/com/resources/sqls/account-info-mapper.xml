@@ -1,9 +1,42 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.AccountInfoMapper">
+
+
+    <select id ="getAccountInfo" resultType="AccountInfo">
+        select * from account_info where user_no =#{user_no}
+    </select>
+
+    <insert id="registAccountInfo">
+        insert into account_info(user_no, bank_name, account_number, account_name, account_yn, reg_datetime, updated_datetime)
+            values (
+                    #{user_no},
+                    #{bank_name},
+                    #{account_number},
+                    #{account_name},
+                    #{account_yn},
+                    now(),
+                    now()
+                   )
+    </insert>
+
+    <update id="updateAccountInfo">
+        update account_info set
+            bank_name=#{bank_name},
+            account_name=#{account_number},
+            account_name=#{account_name},
+            account_yn=#{account_yn},
+            updated_datetime= now()
+        where user_no =#{user_no}
+    </update>
+
+    <delete id="deleteAccountInfo">
+        delete from account_info where user_no=#{user_no}
+    </delete>
+
 
 </mapper>

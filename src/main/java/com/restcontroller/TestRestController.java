@@ -1,7 +1,7 @@
 package com.restcontroller;
 
 import com.api.LoginAPI;
-import com.model.user.User;
+import com.model.User;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.TestService;
@@ -38,4 +38,9 @@ public class TestRestController {
         message.put("success", user != null);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
+
+
+
 }
+
+

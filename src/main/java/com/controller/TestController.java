@@ -1,10 +1,13 @@
 package com.controller;
 
 import com.api.LoginAPI;
+import com.dao.AddressDao;
+import com.dao.UserDao;
 import com.exception.GrantAccessDeniedException;
 import com.exception.enums.GlobalExceptionType;
-import com.model.user.User;
+import com.model.User;
 import com.model.grant.GrantType;
+import com.model.kream.user.address.Address;
 import com.util.Constant;
 import com.util.Encryption.EncryptionService;
 import com.util.Encryption.JWTEnum;
@@ -21,13 +24,19 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class TestController {
     private final LoginAPI loginAPI;
+
+    private final UserDao userDao;
+
     public static void main(String[] args) {
         EncryptionService encryptionService = new EncryptionService();
-        System.out.println((encryptionService.encryptAES("goup", false)));
+        System.out.println((encryptionService.encryptAES("jdbc:mysql://goup.cc5p1zh5h1ho.ap-northeast-2.rds.amazonaws.com:3306/goup", false)));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView home() {
+
+        userDao.getProfileInfo(1);
+        log.info("{}",userDao.getProfileInfo(1));
         return new ModelAndView("sample");
     }
 
@@ -88,5 +97,7 @@ public class TestController {
     public ModelAndView test(HttpServletRequest request) {
         return new ModelAndView("test/login-test");
     }
+
+
 
 }

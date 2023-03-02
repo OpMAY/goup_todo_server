@@ -3,4 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.PointMapper">
+    <insert id="addPoint" useGeneratedKeys="true" keyProperty="no">
+        insert into point( user_no, point, type, used_point, flag, reg_datetime, updated_datetime)
+        values (
+                   #{user_no},
+                   #{point},
+                   #{type},
+                   #{used_point},
+                   #{flag},
+                   now(),
+                   now()
+               )
+    </insert>
+
 </mapper>
