@@ -1,6 +1,7 @@
 package com.middleware;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Slf4j
 public class JsonArrayObjectTypeHandler<T> extends BaseTypeHandler<T> {
@@ -52,11 +54,15 @@ public class JsonArrayObjectTypeHandler<T> extends BaseTypeHandler<T> {
             JSONArray jsonArray = new JSONArray(jsonString);
             Class<?> findClass = type;
             if (jsonArray.length() != 0) {
-                ArrayList arrayList = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    arrayList.add((T) new ObjectMapper().readValue(jsonArray.getJSONObject(i).toString(), findClass));
-                }
-                return (T) arrayList;
+//                ArrayList arrayList = new ArrayList<>();
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    arrayList.add((T) new ObjectMapper().readValue(jsonArray.getJSONObject(i).toString(), findClass));
+//                }
+//                return (T) arrayList;
+                Collection<T> result = new ObjectMapper().readValue(
+                        jsonString, new TypeReference<Collection<T>>() { }
+                );
+                return (T) result;
             } else {
                 return (T) new ArrayList<T>();
             }

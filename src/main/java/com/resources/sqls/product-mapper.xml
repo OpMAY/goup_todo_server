@@ -5,6 +5,7 @@
 <mapper namespace="com.mapper.ProductMapper">
     <resultMap id="Product" type="com.model.kream.product.Product">
         <result column="product_info" property="product_info" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+        <result column="images" property="images" typeHandler="com.middleware.JsonArrayObjectTypeHandler"/>
     </resultMap>
     <select id="getProductByNo" resultType="Product" resultMap="Product">
         select *
@@ -107,34 +108,39 @@
     <select id="getProductPriceHistory" resultType="ProductPriceHistory">
         select price, target_date
         from (select s.price,
-                     DATE_FORMAT(o.reg_datetime, '%Y-%m-%d')                                      as target_date,
-                     ROW_NUMBER() over (partition by o.reg_datetime ORDER BY o.reg_datetime DESC) as order_number
-              from product
-                       left join size on product.no = size.product_no
-                       left join sell s on size.no = s.size_no
-                       left join purchase p on size.no = p.size_no
-                       left join `order` o on s.no = o.sell_no or p.no = o.purchase_no
-              WHERE product.no = #{product_no}
-                <choose>
-                    <when test="type eq 'MONTHLY'">
-                        AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW() # 전체는 AND 이후 구문 없애기
-                    </when>
-                    <when test="type eq 'QUARTER'">
-                        AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW() # 전체는 AND 이후 구문 없애기
-                    </when>
-                    <when test="type eq 'HALF'">
-                        AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -6 MONTH) AND NOW() # 전체는 AND 이후 구문 없애기
-                    </when>
-                    <when test="type eq 'YEARLY'">
-                        AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR) AND NOW() # 전체는 AND 이후 구문 없애기
-                    </when>
-                    <otherwise>
-                    </otherwise>
-                </choose>
-                AND o.no is not null
-              GROUP BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d'), o.no
-              ORDER BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') DESC) as t
+        DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') as target_date,
+        ROW_NUMBER() over (partition by o.reg_datetime ORDER BY o.reg_datetime DESC) as order_number
+        from product
+        left join size on product.no = size.product_no
+        left join sell s on size.no = s.size_no
+        left join purchase p on size.no = p.size_no
+        left join `order` o on s.no = o.sell_no or p.no = o.purchase_no
+        WHERE product.no = #{product_no}
+        <choose>
+            <when test="type.name() eq 'MONTHLY'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
+            </when>
+            <when test="type.name() eq 'QUARTER'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+            </when>
+            <when test="type.name() eq 'HALF'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -6 MONTH) AND NOW()
+            </when>
+            <when test="type.name() eq 'YEARLY'">
+                AND DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR) AND NOW()
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        AND o.no is not null
+        GROUP BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d'), o.no
+        ORDER BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') DESC) as t
         WHERE order_number = 1;
     </select>
 
+    <update id="updateProductViews">
+        update product
+        SET views = views + 1
+        WHERE no = #{no}
+    </update>
 </mapper>

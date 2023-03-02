@@ -1,5 +1,6 @@
 package com.model.kream.product;
 
+import com.model.kream.DATE_RANGE_TYPE;
 import com.model.kream.product.brand.Brand;
 import com.model.kream.product.price.ProductPriceHistory;
 import com.model.kream.product.price.ProductPriceWithSize;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Data
 public class ProductDetail {
+    // TODO ADD SIZE 별 판매 재고 (FOR 구매)
     private Product product; // 상품 기본 정보
     private Integer direct_sell_price; // 즉시 판매가
     private Integer direct_purchase_price; // 즉시 구매가
@@ -22,6 +24,7 @@ public class ProductDetail {
     private int wishes; // 관심 상품 Count
     private List<ProductPriceHistory> price_history; // 시세 정보
     private List<ProductPriceWithSize> order_history; // 체결 거래 기록
+    private DATE_RANGE_TYPE order_history_date_range_type; // 체결 거래 기록 종류
     private List<ProductPriceWithSizeAndCount> sell_history; // 판매 입찰 기록
     private List<ProductPriceWithSizeAndCount> purchase_history; // 구매 입찰 기록
 

@@ -8,7 +8,7 @@
     <select id="getProductPurchaseHistory" resultType="ProductPriceWithSizeAndCount">
         select (select size from size WHERE no = p.size_no) as size,
                price,
-               (select COUNT(*) from purchase pp WHERE size_no = p.size_no AND price = p.price)
+               (select COUNT(*) from purchase pp WHERE size_no = p.size_no AND price = p.price) as count
         from purchase p
         WHERE size_no in (select no from size WHERE product_no = #{product_no})
         GROUP BY size_no, price

@@ -7,6 +7,7 @@ import com.model.kream.product.price.ProductPriceWithSize;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,11 +37,20 @@ public class ProductService {
             // 최근 거래가가 있고 그 직전의 거래 내역이 있을 때
             productDetail.setRecent_2nd_order_price(order_history.get(1).getPrice());
         }
-        productDetail.setPrice_history(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.NONE));
+        productDetail.setPrice_history(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.ALL));
+        productDetail.setOrder_history_date_range_type(DATE_RANGE_TYPE.ALL);
+        productDetail.setBrand(brandDao.getBrandByNo(productDetail.getProduct().getBrand_no()));
+        // SELL HISTORY O, PURCHASE HISTORY O, SIZE LIST O, WISH COUNT O
         productDetail.setSell_history(sellDao.getProductSellHistory(product_no));
         productDetail.setPurchase_history(purchaseDao.getProductPurchaseHistory(product_no));
-        // TODO SELL HISTORY O, PURCHASE HISTORY O, SIZE LIST, WISH COUNT
+        productDetail.setSizes(sizeDao.getProductSize(product_no));
+        productDetail.setWishes(wishDao.getProductWishCount(product_no));
         // 판매 입찰 및 구매 입찰은 사이즈 별 금액 별로 갯수를 가져와야함 O
         return productDetail;
+    }
+
+    @Transactional
+    public void updateProductViews(int product_no) {
+        productDao.updateProductViews(product_no);
     }
 }

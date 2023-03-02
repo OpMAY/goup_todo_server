@@ -24,4 +24,6 @@ public interface ProductMapper {
     List<ProductPriceWithSize> getProductOrderHistory(int product_no);
 
     List<ProductPriceHistory> getProductPriceHistory(@Param("product_no") int product_no, @Param("type") DATE_RANGE_TYPE type);
+
+    void updateProductViews(int no);
 }

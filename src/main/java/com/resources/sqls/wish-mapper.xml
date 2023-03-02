@@ -5,5 +5,29 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.WishMapper">
-
+    <select id="getProductWishCount" resultType="int">
+        select COUNT(*)
+        from wish
+        WHERE size_no in (select no from size WHERE product_no = #{product_no})
+    </select>
+    <select id="getUserWishes" resultType="Wish">
+        select *
+        from wish
+        WHERE user_no = #{user_no}
+    </select>
+    <insert id="insertUserWish" useGeneratedKeys="true" keyProperty="no">
+        insert into wish(user_no, size_no)
+        VALUES (#{user_no}, #{size_no})
+    </insert>
+    <delete id="deleteUserWishByNo">
+        delete
+        from wish
+        WHERE no = #{no}
+    </delete>
+    <delete id="deleteUserWishByUserNoAndSizeNo">
+        delete
+        from wish
+        WHERE user_no = #{user_no}
+          AND size_no = #{size_no}
+    </delete>
 </mapper>

@@ -50,4 +50,8 @@ public class ProductDao {
     public List<ProductPriceHistory> getProductPriceHistory(int product_no,  DATE_RANGE_TYPE type) {
         return mapper.getProductPriceHistory(product_no, type);
     }
+
+    public void updateProductViews(int no) {
+        mapper.updateProductViews(no);
+    }
 }
