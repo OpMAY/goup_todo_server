@@ -32,4 +32,6 @@ public interface ProductMapper {
     List<ProductMain> getMainProducts();
 
     List<ProductShop> getShopProducts();
+
+    Product getProductBySizeNo(int size_no);
 }

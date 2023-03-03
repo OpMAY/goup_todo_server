@@ -27,7 +27,6 @@ public class User extends RootUser {
     private LOGIN_TYPE login_type;
     private Date last_login_datetime;
     private MFile profile_img;
-    private Date updated_datetime;
     private String email;
     private String cash_receipt_type;
     private String cr_card_number;

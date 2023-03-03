@@ -4,7 +4,7 @@ import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.response.DefaultRes;
 import com.response.Message;
-import com.service.ProductService;
+import com.service.kream.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
