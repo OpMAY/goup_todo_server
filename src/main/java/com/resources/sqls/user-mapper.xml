@@ -10,6 +10,9 @@
                 javaType="com.model.common.MFile"/>
     </resultMap>
 
+
+
+    <!--List -->
     <select id="getProfileInfo" resultType="User" resultMap="user_map">
         select u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img
         from user u

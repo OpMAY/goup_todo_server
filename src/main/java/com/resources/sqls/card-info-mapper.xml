@@ -6,10 +6,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.CardInfoMapper">
 
+    <!--List -->
     <select id="getCardInfo" resultType="CardInfo">
         select *
         from card_info
-        where user_no = #{user_no}
+        where no = #{no}
     </select>
 
     <insert id="addCardInfo" useGeneratedKeys="true" keyProperty="no">

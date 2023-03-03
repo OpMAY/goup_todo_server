@@ -6,4 +6,45 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.NoticeMapper">
 
+    <!--List -->
+    <select id="getNotice" resultType="Notice">
+        select *
+        from notice
+        where no = #{no}
+    </select>
+
+    <insert id="addNotice" useGeneratedKeys="true" keyProperty="no">
+        insert into notice(title, content, reg_datetime, updated_datetime, flag)
+        values (#{title},
+                #{content},
+                now(),
+                now(),
+                #{flag})
+    </insert>
+
+    <update id="updateNotice">
+        update notice
+        set title=#{title},
+            content=#{content},
+            updated_datetime =now()
+
+        where no = #{no}
+    </update>
+
+    <delete id="deleteNotice">
+        update notice
+        set flag=#{flag}
+        where no = #{no}
+    </delete>
+
+    <select id="getNotices" resultType="Notice">
+        select *
+        from notice
+        ORDER BY reg_datetime DESC LIMIT 20 OFFSET #{offset}
+    </select>
+
+    <select id="getNoticePages" resultType="int">
+        select IF(count(*) = 0, 1, TRUNCATE((count(*) - 1) / 20, 0) + 1)
+        from notice
+    </select>
 </mapper>

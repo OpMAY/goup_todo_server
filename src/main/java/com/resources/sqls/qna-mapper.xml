@@ -6,4 +6,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.QnAMapper">
 
+    <!--List -->
+    <select id="getQna" resultType="Qna">
+        select *
+        from qna
+        where no = #{no} and type=#{type}
+    </select>
+
+
+
+
 </mapper>

@@ -6,9 +6,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.AddressMapper">
 
-        <select id="getMyAddresses" resultType="Address" >
-            select * from address where user_no=#{user_no} order by reg_datetime desc;
-        </select>
+    <select id="getMyAddresses" resultType="Address">
+        select *
+        from address
+        where user_no = #{user_no}
+        order by reg_datetime desc;
+    </select>
+
+    <select id="getDefaultAddress" resultType="Address">
+        select *
+        from address
+        where user_no = #{user_no}
+          and is_default_address = 1
+    </select>
 
 
     <insert id="registAddress" useGeneratedKeys="true" keyProperty="no">
@@ -42,6 +52,8 @@
         set is_default_address = false
         where user_no = #{user_no}
     </update>
+
+
 
     <delete id="deleteAddress">
         delete

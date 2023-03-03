@@ -6,7 +6,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.AccountInfoMapper">
 
-
+    <!--List -->
     <select id ="getAccountInfo" resultType="AccountInfo">
         select * from account_info where user_no =#{user_no}
     </select>
