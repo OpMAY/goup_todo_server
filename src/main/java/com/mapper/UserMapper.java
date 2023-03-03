@@ -21,9 +21,11 @@ public interface UserMapper {
 
     void updateSize(@Param("size") int size, @Param("no") int no);
 
-    void updateEmailAlarm(@Param("email_alarm") boolean email_alarm, @Param("no") int no);
+    void updateEmailAlarm(@Param("email_alarm") int email_alarm, @Param("no") int no);
 
     void updateReceiptInfo(User user);
 
     void updateProfileImage(@Param("profile_image") MFile profile_image, @Param("user_no")int user_no);
+
+
 }

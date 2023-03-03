@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -36,6 +34,10 @@ public class UserService {
         return userDao.getProfileInfo(user_no);
 
     }
+
+
+
+
 
     @Transactional
     public void registUser(User user, StyleUser styleUser) {
@@ -78,7 +80,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateEmailAlarm(boolean email_alarm, int user_no) {
+    public void updateEmailAlarm(int email_alarm, int user_no) {
         userDao.updateEmailAlarm(email_alarm, user_no);
     }
 
@@ -132,24 +134,26 @@ public class UserService {
     }
 
     @Transactional
-    public Message updateProfile(Map<String, Object> data, int no, Message message) {
+    public Message updateProfile(User user,Message message) {
+        int no = user.getNo();
+        Integer email_alarm = user.getEmail_alarm();
+        Integer size = user.getSize();
+        MultipartFile file = (MultipartFile) user.getProfile_img();
 
-        if (data.get("name") != null) {
-            this.updateUserName(data.get("name").toString(), no);
-        } else if (data.get("email") != null) {
-            this.updateEmail(data.get("email").toString(), no);
-        } else if (data.get("phone_number") != null) {
-            this.updatePhoneNumber(data.get("phone_number").toString(), no);
-        } else if (data.get("size") != null) {
-            Integer size = (Integer) data.get("size");
-            this.updateSize(size, no);
-        } else if (data.get("email_alarm") != null) {
-            Boolean email_alarm = (Boolean) data.get("email_alarm");
-            this.updateEmailAlarm(email_alarm, no);
-        } else if (data.get("profile_img") != null) {
-            MultipartFile file = (MultipartFile) data.get("profile_img");
-            this.updateProfileImage(file, no);
+
+        if (user.getName() != null) {
+            this.updateUserName(user.getName(),no);
+        } else if (user.getEmail() != null) {
+            this.updateEmail(user.getEmail(),no);
+        } else if (user.getPhone_number()!= null) {
+            this.updatePhoneNumber(user.getPhone_number(),no);
+        } else if (size != null) {
+            this.updateSize(size,no);
+        } else if (email_alarm!= null) {
+            this.updateEmailAlarm(email_alarm,no);
+        } else if (file != null) {
+            this.updateProfileImage(file,no);
         }
-        return message.put("USER", userDao.getProfileInfo(no));
+        return message.put("USER", userDao.getProfileInfo(user.getNo()));
     }
 }

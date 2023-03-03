@@ -6,9 +6,6 @@ import com.model.User;
 import com.model.common.MFile;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 
 @Repository
 public class UserDao {
@@ -43,7 +40,7 @@ public class UserDao {
         mapper.updateSize(size,user_no);
     }
 
-    public void updateEmailAlarm(boolean email_alarm,int user_no){
+    public void updateEmailAlarm(int email_alarm, int user_no){
         mapper.updateEmailAlarm(email_alarm,user_no);
     }
 
@@ -62,4 +59,6 @@ public class UserDao {
 
         mapper.deleteUser(no,user_flag);
     }
+
+
 }

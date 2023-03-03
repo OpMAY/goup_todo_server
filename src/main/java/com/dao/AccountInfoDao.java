@@ -6,6 +6,8 @@ import com.model.kream.user.account.AccountInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AccountInfoDao {
 
@@ -15,7 +17,7 @@ public class AccountInfoDao {
         this.mapper = sqlSession.getMapper(AccountInfoMapper.class);
     }
 
-    public AccountInfo getAccountInfo(int user_no){
+    public List<AccountInfo>  getAccountInfo(int user_no){
         return mapper.getAccountInfo(user_no);
     }
 
