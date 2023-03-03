@@ -47,7 +47,7 @@ public class ProductService {
 
     /**
      * TODO 0302 오후
-     * 1. Sell / Purchase / Order 등록
+     * 1. Sell / Purchase / Order 등록 O
      * 2. Product Filter (Multi-Select 가능)
      *    - 검색어
      *    - 카테고리
@@ -56,7 +56,24 @@ public class ProductService {
      *    - 신발 사이즈
      *    - 의류 사이즈
      *    - 가격
+     *    product
+     *      - en_name LIKE
+     *      - kor_name LIKE
+     *      - brand_no WHERE IN
+     *      - gender WHERE IN
+     *      - category shoe -> size
+     *      - category cloth -> size
+     *      - price range -> 최소 즉시 구매가 기준 (즉시 구매가 측정 불가면 뜨지 않음)
+     *    ORDERING
+     *      - 인기순 -> 판매량 많은 순
+     *      - 프리미엄 높은 순
+     *          - 출고가 대비 높은 금액에 팔리는 순
+     *      - 프리미엄 낮은 순
+     *          - 출고가 대비 낮은 금액에 팔리는 순
+     *      - 즉시 구매가 낮은/높은 순
+     *      - 발매일 순
      * **/
+
 
     /**
      * 판매 입찰 등록
@@ -80,6 +97,7 @@ public class ProductService {
      * 2. 유저 정보 확인
      * - 기본 유저 관련 예외처리
      **/
+    @Transactional
     public Message registerProductSell(Sell sell) {
         Message message = new Message();
         boolean pricing_check = sell.getTotal_price() == sell.getPrice() + sell.getInspection_price() + sell.getDelivery_price() + sell.getCommission();
@@ -183,6 +201,7 @@ public class ProductService {
      * 2. 유저 정보 확인
      * - 기본 유저 관련 예외처리
      * **/
+    @Transactional
     public Message registerProductPurchase(Purchase purchase) {
         Message message = new Message();
         if(purchase.getReceipt() != null) {

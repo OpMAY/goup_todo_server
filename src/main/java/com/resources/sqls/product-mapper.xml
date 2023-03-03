@@ -164,4 +164,50 @@
         from product
         WHERE no = (select product_no from size WHERE no = #{size_no})
     </select>
+    <select id="searchProductWithFilters" resultType="ProductShop" resultMap="ProductShop">
+        select no,
+               kor_name,
+               en_name,
+               brand_no,
+               brand_name,
+               gender,
+               category_no,
+               image,
+               price,
+               orders
+        from (select product.no,
+                     kor_name,
+                     en_name,
+                     brand_no,
+                     gender,
+                     category_no,
+                     brand.name                           as brand_name,
+                     JSON_EXTRACT(product.images, '$[0]') as image,
+                     MIN(sell.price)                      as price,
+#              (select JSON_ARRAYAGG(size) from size WHERE size.product_no = product.no) as size_json
+                     JSON_ARRAYAGG(s.size)                as size_json,
+                     (select COUNT(*)
+                      from sell
+                               left join `order` o2 on sell.no = o2.sell_no
+                               left join size s2 on sell.size_no = s2.no
+                               left join product p on s2.product_no = p.no
+                      WHERE o2.no is not null
+                        AND p.no = product.no)            as orders
+              from product
+                       left join brand on product.brand_no = brand.no
+                       left join size s on product.no = s.product_no
+                       left join sell on s.no = sell.size_no
+                       left join `order` o on sell.no = o.sell_no
+              WHERE o.no is null
+                AND sell.sell_type = 'AUCTION'
+                AND sell.s_bid_flag = true
+              GROUP BY product.no, size
+              order by size) as t
+        WHERE brand_no in (1)                                                                        # 브랜드
+          AND gender in (0, 1, 2)                                                                    # 성별
+          AND (category_no in (1) OR (select parent_no from category WHERE category_no = no) in (1)) # 카테고리
+          AND (en_name LIKE '%NAME%' OR kor_name LIKE '%NAME%')
+          AND ('225' MEMBER OF (size_json ->> '$') OR '230' MEMBER OF (size_json ->> '$'))
+        ORDER BY price;
+    </select>
 </mapper>
