@@ -32,12 +32,7 @@ public class UserService {
 
     public User getProfileInfo(int user_no) {
         return userDao.getProfileInfo(user_no);
-
     }
-
-
-
-
 
     @Transactional
     public void registUser(User user, StyleUser styleUser) {
@@ -52,7 +47,6 @@ public class UserService {
         styleUser.setName(user.getName());
         styleDao.registStyleUser(styleUser);
     }
-
 
     @Transactional
     public void updateEmail(String email, int user_no) {
@@ -106,7 +100,6 @@ public class UserService {
 
     }
 
-
     @Transactional
     public void deleteUser(int no) {
         /**
@@ -129,30 +122,27 @@ public class UserService {
 
             deletedUserDao.createDelUser(deletedUser);
         }
-
-
     }
 
     @Transactional
-    public Message updateProfile(User user,Message message) {
+    public Message updateProfile(User user, Message message) {
         int no = user.getNo();
         Integer email_alarm = user.getEmail_alarm();
         Integer size = user.getSize();
         MultipartFile file = (MultipartFile) user.getProfile_img();
 
-
         if (user.getName() != null) {
-            this.updateUserName(user.getName(),no);
+            this.updateUserName(user.getName(), no);
         } else if (user.getEmail() != null) {
-            this.updateEmail(user.getEmail(),no);
-        } else if (user.getPhone_number()!= null) {
-            this.updatePhoneNumber(user.getPhone_number(),no);
+            this.updateEmail(user.getEmail(), no);
+        } else if (user.getPhone_number() != null) {
+            this.updatePhoneNumber(user.getPhone_number(), no);
         } else if (size != null) {
-            this.updateSize(size,no);
-        } else if (email_alarm!= null) {
-            this.updateEmailAlarm(email_alarm,no);
+            this.updateSize(size, no);
+        } else if (email_alarm != null) {
+            this.updateEmailAlarm(email_alarm, no);
         } else if (file != null) {
-            this.updateProfileImage(file,no);
+            this.updateProfileImage(file, no);
         }
         return message.put("USER", userDao.getProfileInfo(user.getNo()));
     }

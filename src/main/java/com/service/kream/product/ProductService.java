@@ -73,6 +73,29 @@ public class ProductService {
      *      - 즉시 구매가 낮은/높은 순
      *      - 발매일 순
      * **/
+    public List<ProductShop> searchProductWithFilters(List<Integer> brand_list,
+                                                      List<Integer> gender_list,
+                                                      List<Integer> category_list,
+                                                      String keyword,
+                                                      List<String> size_list,
+                                                      Integer user_no) {
+        // TODO ordering filter
+        boolean filtered = !brand_list.isEmpty()
+                || !gender_list.isEmpty()
+                || !category_list.isEmpty()
+                || keyword != null
+                || !size_list.isEmpty();
+        List<ProductShop> result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
+        result.forEach(product -> {
+            product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
+            product.set_wish(wishDao.isUserWishProduct(product.getNo(), user_no));
+            product.setPrice(productDao.getProductLowestSellPrice(product.getNo()).getPrice());
+            product.setWishes(wishDao.getProductWishCount(product.getNo()));
+//            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
+//            product.setOrders(orderDao.getProductOrderCount(product.getNo()));
+        });
+        return result;
+    }
 
 
     /**
