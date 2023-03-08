@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -79,7 +80,8 @@ public class ProductService {
                                                       String keyword,
                                                       List<String> size_list,
                                                       Integer user_no,
-                                                      Integer cursor) {
+                                                      Integer cursor,
+                                                      String price) {
         // TODO ordering filter
         boolean filtered = (brand_list != null && !brand_list.isEmpty())
                 || (gender_list != null && !gender_list.isEmpty())
@@ -87,8 +89,6 @@ public class ProductService {
                 || keyword != null
                 || (size_list != null && !size_list.isEmpty());
         List<ProductShop> result;
-
-        log.info("sizes : {}", size_list);
 
         if (cursor != null && cursor != 0) {
             // TODO CURSOR
@@ -104,6 +104,26 @@ public class ProductService {
             product.setWishes(wishDao.getProductWishCount(product.getNo()));
 //            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
         });
+
+        if(price != null) {
+            int min_price = 0;
+            int max_price = 0;
+            if (price.indexOf("-") == 0) {
+                max_price = Integer.parseInt(price.substring(price.indexOf("-") + 1));
+            } else {
+                if (price.indexOf("-") + 1 == price.length()) {
+                    min_price = Integer.parseInt(price.substring(0, price.indexOf("-")));
+                } else {
+                    min_price = Integer.parseInt(price.substring(0, price.indexOf("-")));
+                    max_price = Integer.parseInt(price.substring(price.indexOf("-") + 1));
+                }
+            }
+            log.info("minPrice : {}, maxPrice : {}", min_price, max_price);
+            int finalMin_price = min_price;
+            int finalMax_price = max_price;
+            result = result.stream().filter(product ->
+                product.getPrice() != null && product.getPrice() >= finalMin_price && product.getPrice() <= finalMax_price).collect(Collectors.toList());
+        }
         return result;
     }
 
@@ -495,4 +515,5 @@ public class ProductService {
         }
         return products;
     }
+
 }

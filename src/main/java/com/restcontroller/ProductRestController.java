@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,13 +50,32 @@ public class ProductRestController {
                                          @RequestParam(value = "categories", required = false) List<Integer> categories,
                                          @RequestParam(value = "keyword", required = false) String keyword,
                                          @RequestParam(value = "size_list", required = false) List<String> sizes,
-                                         @RequestParam(value = "cursor", required = false) Integer cursor) {
+                                         @RequestParam(value = "cursor", required = false) Integer cursor,
+                                         @RequestParam(value = "price", required = false) String price) {
         Message message = new Message();
         int user_no = 1;
         // TODO CHECK PARAM LIST ACCEPTABLE
-        List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories, keyword, sizes, user_no, cursor);
-        message.put("products", n_products);
-        message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes));
+        if(price == null || priceFilters.contains(price)) {
+            List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories, keyword, sizes, user_no, cursor, price);
+            message.put("products", n_products);
+            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes));
+
+            // QUERY RETURN
+            Map<String, Object> queryMap = new HashMap<>();
+            queryMap.put("brand", brands);
+            queryMap.put("gender", genders);
+            queryMap.put("category", categories);
+            queryMap.put("keyword", keyword);
+            queryMap.put("size", sizes);
+            queryMap.put("cursor", cursor);
+            queryMap.put("price", price);
+            message.put("queries", queryMap);
+            message.put("status", true);
+        } else {
+            message.put("status", false);
+            message.put("error_msg", "가격 필터 설정 오류");
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -96,4 +115,5 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
+    private final List<String> priceFilters = new ArrayList<>(Arrays.asList("-100000", "100000-300000", "300000-500000", "500000-1000000", "1000000-3000000", "3000000-"));
 }
