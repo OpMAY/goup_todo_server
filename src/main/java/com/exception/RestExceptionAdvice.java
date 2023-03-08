@@ -106,6 +106,7 @@ public class RestExceptionAdvice {
 
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity handleNullPointerException(Exception e) {
+        e.printStackTrace();
         log.error("NullPointerException -> {}", e.getMessage());
         return new ResponseEntity(DefaultRes.res(HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.OK);
     }

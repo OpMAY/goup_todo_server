@@ -46,7 +46,7 @@ public class ProductService {
     private final SizeDao sizeDao;
 
     /**
-     * TODO 0302 오후
+     * 0302 오후
      * 1. Sell / Purchase / Order 등록 O
      * 2. Product Filter (Multi-Select 가능)
      *    - 검색어
@@ -72,29 +72,52 @@ public class ProductService {
      *          - 출고가 대비 낮은 금액에 팔리는 순
      *      - 즉시 구매가 낮은/높은 순
      *      - 발매일 순
-     * **/
+     **/
     public List<ProductShop> searchProductWithFilters(List<Integer> brand_list,
                                                       List<Integer> gender_list,
                                                       List<Integer> category_list,
                                                       String keyword,
                                                       List<String> size_list,
-                                                      Integer user_no) {
+                                                      Integer user_no,
+                                                      Integer cursor) {
         // TODO ordering filter
-        boolean filtered = !brand_list.isEmpty()
-                || !gender_list.isEmpty()
-                || !category_list.isEmpty()
+        boolean filtered = (brand_list != null && !brand_list.isEmpty())
+                || (gender_list != null && !gender_list.isEmpty())
+                || (category_list != null && !category_list.isEmpty())
                 || keyword != null
-                || !size_list.isEmpty();
-        List<ProductShop> result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
+                || (size_list != null && !size_list.isEmpty());
+        List<ProductShop> result;
+
+        log.info("sizes : {}", size_list);
+
+        if (cursor != null && cursor != 0) {
+            // TODO CURSOR
+            result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
+        } else {
+            result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
+        }
         result.forEach(product -> {
             product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
             product.set_wish(wishDao.isUserWishProduct(product.getNo(), user_no));
-            product.setPrice(productDao.getProductLowestSellPrice(product.getNo()).getPrice());
+            ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
+            product.setPrice(size != null ? size.getPrice() : null);
             product.setWishes(wishDao.getProductWishCount(product.getNo()));
 //            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
-//            product.setOrders(orderDao.getProductOrderCount(product.getNo()));
         });
         return result;
+    }
+
+    public int getProductCountViaSearch(List<Integer> brand_list,
+                                        List<Integer> gender_list,
+                                        List<Integer> category_list,
+                                        String keyword,
+                                        List<String> size_list) {
+        boolean filtered = (brand_list != null && !brand_list.isEmpty())
+                || (gender_list != null && !gender_list.isEmpty())
+                || (category_list != null && !category_list.isEmpty())
+                || keyword != null
+                || (size_list != null && !size_list.isEmpty());
+        return productDao.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
     }
 
 
@@ -223,25 +246,25 @@ public class ProductService {
      * -> delivery_infos, agrees => null check (receipt 는 1번에서 검증)
      * 2. 유저 정보 확인
      * - 기본 유저 관련 예외처리
-     * **/
+     **/
     @Transactional
     public Message registerProductPurchase(Purchase purchase) {
         Message message = new Message();
-        if(purchase.getReceipt() != null) {
-            if(bootPayService.verifyReceipt(purchase.getReceipt().getReceipt_bootpay())) {
+        if (purchase.getReceipt() != null) {
+            if (bootPayService.verifyReceipt(purchase.getReceipt().getReceipt_bootpay())) {
                 // 영수증 검증 완료
                 boolean pricing_check = purchase.getPrice() - purchase.getPoint() + purchase.getDelivery_price() + purchase.getCommission() == purchase.getTotal_price();
                 boolean required_info_check = (
                         purchase.getDelivery_info() != null
-                        && purchase.getDelivery_method() != null
-                        && purchase.getPurchase_agree() != null
-                        && purchase.getP_order_agree() != null
-                        && purchase.getPayment_method() != null
-                        );
-                if(pricing_check && required_info_check) {
+                                && purchase.getDelivery_method() != null
+                                && purchase.getPurchase_agree() != null
+                                && purchase.getP_order_agree() != null
+                                && purchase.getPayment_method() != null
+                );
+                if (pricing_check && required_info_check) {
                     Sell sell = sellDao.getProductSellForAuction(purchase.getSize_no(), purchase.getPrice());
-                    if(purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) {
-                        if(sell != null) {
+                    if (purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) {
+                        if (sell != null) {
                             purchase.setExpiration_days(0);
                             purchase.setExpiration_date(LocalDate.now());
                             purchaseDao.registerPurchase(purchase);
@@ -263,7 +286,7 @@ public class ProductService {
                         }
                     } else {
                         purchaseDao.registerPurchase(purchase);
-                        if(sell != null) {
+                        if (sell != null) {
                             Order order = new Order(
                                     sell.getNo(),
                                     purchase.getNo(),

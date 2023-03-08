@@ -74,4 +74,13 @@ public class ProductDao {
     public List<ProductShop> searchProductWithFilters(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
         return mapper.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
     }
+
+    public List<ProductShop> searchProductWithFiltersReload(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list, Integer cursor) {
+        cursor = 10 * (cursor - 1);
+        return mapper.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
+    }
+
+    public int getProductCountViaSearch(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
+        return mapper.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
+    }
 }
