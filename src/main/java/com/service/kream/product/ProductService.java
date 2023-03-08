@@ -106,23 +106,11 @@ public class ProductService {
         });
 
         if(price != null) {
-            int min_price = 0;
-            int max_price = 0;
-            if (price.indexOf("-") == 0) {
-                max_price = Integer.parseInt(price.substring(price.indexOf("-") + 1));
-            } else {
-                if (price.indexOf("-") + 1 == price.length()) {
-                    min_price = Integer.parseInt(price.substring(0, price.indexOf("-")));
-                } else {
-                    min_price = Integer.parseInt(price.substring(0, price.indexOf("-")));
-                    max_price = Integer.parseInt(price.substring(price.indexOf("-") + 1));
-                }
-            }
+            int min_price = this.getMinPriceFromPriceFilter(price);
+            int max_price = this.getMaxPriceFromPriceFilter(price);
             log.info("minPrice : {}, maxPrice : {}", min_price, max_price);
-            int finalMin_price = min_price;
-            int finalMax_price = max_price;
             result = result.stream().filter(product ->
-                product.getPrice() != null && product.getPrice() >= finalMin_price && product.getPrice() <= finalMax_price).collect(Collectors.toList());
+                product.getPrice() != null && product.getPrice() >= min_price && product.getPrice() <= max_price).collect(Collectors.toList());
         }
         return result;
     }
@@ -514,6 +502,14 @@ public class ProductService {
 //            product.setOrders(orderDao.getProductOrderCount(product.getNo()));
         }
         return products;
+    }
+
+    private int getMinPriceFromPriceFilter(String price_filter) {
+        return price_filter.indexOf("-") != 0 ? Integer.parseInt(price_filter.substring(0, price_filter.indexOf("-"))) : 0;
+    }
+
+    private int getMaxPriceFromPriceFilter(String price_filter) {
+        return price_filter.indexOf("-") == 0 || price_filter.indexOf("-") + 1 != price_filter.length() ? Integer.parseInt(price_filter.substring(price_filter.indexOf("-") + 1)) : 0;
     }
 
 }
