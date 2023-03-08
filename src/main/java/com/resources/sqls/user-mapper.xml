@@ -14,7 +14,7 @@
 
     <!--List -->
     <select id="getProfileInfo" resultType="User" resultMap="user_map">
-        select u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img
+        select u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img, u.user_flag
         from user u
         where no = #{no}
     </select>

@@ -2,6 +2,7 @@ package com.model.kream.point;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+
 public enum POINT_TYPE {
     ACCUMULATE("적립"), USED("사용"), EXPIRED("만료");
 

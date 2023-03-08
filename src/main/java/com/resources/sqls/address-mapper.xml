@@ -6,11 +6,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.AddressMapper">
 
+    <!-- List !-->
     <select id="getMyAddresses" resultType="Address">
         select *
         from address
         where user_no = #{user_no}
         order by reg_datetime desc;
+    </select>
+
+    <select id="getAddress" resultType="Address">
+        select *
+        from address
+        where no = #{no};
     </select>
 
     <select id="getDefaultAddress" resultType="Address">

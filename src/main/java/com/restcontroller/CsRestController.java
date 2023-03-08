@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,32 +30,40 @@ public class CsRestController {
 
 
 
-    @GetMapping("/notice/list")
-    public ResponseEntity getNotice(@RequestParam int page){
+    @GetMapping("/notice/{page}")
+    public ResponseEntity getNotice(@PathVariable int page){
         Message message = new Message();
-//        List<Notice> notices = noticeService.getNotices(page);
-        // Todo: list 형식으로 수정.
-
-//        message.put("notices",notices);
+        List<Notice> notices = noticeService.getNotices(page);
+        message.put("notices",notices);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
-    @GetMapping("/notice/list/detail")
-    public ResponseEntity getNoticeDetail(@RequestParam int no){
+    @GetMapping("/notice/detail/{no}")
+    public ResponseEntity getNoticeDetail(@PathVariable int no){
         Message message = new Message();
-
+        Notice notice = noticeService.getNotice(no);
+        Map<String,Object> map = new HashMap<>();
+        map.put("content",notice.getContent());
+        map.put("title",notice.getTitle());
+        map.put("reg_datetime",notice.getReg_datetime());
+        message.put("map",map);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
 
 
-    @GetMapping("/qna/list")
-    public ResponseEntity getQna(@RequestParam int no ,@RequestParam QNA_TYPE type) {
+    @GetMapping("/qna")
+    public ResponseEntity getQna(@RequestParam(value="type",required = false) QNA_TYPE type) {
         Message message = new Message();
+        List<Qna> qna ;
+        if(type != null){
+             qna= qnaService.getQna(type);
+        }else{
+             qna = qnaService.getAllQna();
+        }
 
-        Qna qna = qnaService.getQna(no,type);
         message.put("qna",qna);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 

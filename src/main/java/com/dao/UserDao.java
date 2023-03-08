@@ -48,8 +48,6 @@ public class UserDao {
         mapper.updateReceiptInfo(user);
     }
 
-
-
     public void updateProfileImage(MFile profile_image, int user_no  ){
         mapper.updateProfileImage(profile_image,user_no);
     }

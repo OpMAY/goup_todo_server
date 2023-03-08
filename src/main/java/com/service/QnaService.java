@@ -7,15 +7,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class QnaService {
     private final QnaDao qnaDao;
 
-    public Qna getQna(int no , QNA_TYPE type) {
-        return qnaDao.getQna(no,type);
+    public List<Qna> getQna( QNA_TYPE type) {
+        return qnaDao.getQna(type);
     }
 
 
+    public List<Qna> getAllQna() {
+        return qnaDao.getAllQna();
+    }
 }

@@ -51,11 +51,11 @@ public class UserRestController {
     private final LoginAPI loginAPI;
 
 
-    @GetMapping("/user/list")
-    public ResponseEntity getUserList(HttpServletRequest request, HttpServletResponse response, @PathVariable int no){
-        Message message  = new Message();
+    @GetMapping("/user/{no}")
+    public ResponseEntity getUserList(HttpServletRequest request, HttpServletResponse response, @PathVariable int no) {
+        Message message = new Message();
         User user = userService.getProfileInfo(no);
-        message.put("user",user);
+        message.put("user", user);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -75,12 +75,13 @@ public class UserRestController {
     }
 
 
-    @PutMapping("/profile")
-    public ResponseEntity userEdit(@RequestBody User user
+    @PutMapping("/profile/{no}")
+    public ResponseEntity userEdit(@RequestBody User  user, @PathVariable int no
     ) throws JsonProcessingException {
         Message message = new Message();
         userService.updateProfile(user, message);
-        message.put("status",true);
+        message.put("status", true);
+        message.put("user",user);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
@@ -89,139 +90,139 @@ public class UserRestController {
     public ResponseEntity userDelete(@PathVariable int no) {
         Message message = new Message();
         userService.deleteUser(no);
-        message.put("status",true);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-    }
-
-    @GetMapping("/address/list/{no}")
-    public ResponseEntity getAddresses(@PathVariable int no) {
-        Message message = new Message();
-        List<Address> address = addressService.getAddressInfo(no);
-        message.put("address",address);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-    }
-
-    @PostMapping("/address/regist")
-    public ResponseEntity registAddress(@RequestBody Address address){
-       Message message = new Message();
-       addressService.registAddress(address);
-       message.put("status",true);
-       return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-
-    }
-
-    @PutMapping("/address/{no}")
-    public ResponseEntity editAddress(@RequestBody Address address , @PathVariable int no){
-        Message message = new Message();
-        addressService.updateAddress(address);
-        message.put("status",true);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/address/{no}")
-    public ResponseEntity deleteAddress(@PathVariable int no){
-        Message message = new Message();
-        addressService.deleteAddress(no);
         message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @GetMapping("/account/list")
-    public ResponseEntity getAccountInfo(@RequestParam int user_no){
+    @GetMapping("/address/{user_no}")
+    public ResponseEntity getAddresses(@PathVariable int user_no) {
         Message message = new Message();
-        List<AccountInfo> accountInfo   = accountInfoService.getAccountInfo(user_no);
-        message.put("accountInfo",accountInfo);
+        List<Address> address = addressService.getAddressInfo(user_no);
+
+        message.put("address", address);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PostMapping("/account/regist")
-    public ResponseEntity registAccountInfo(@RequestBody AccountInfo accountInfo){
+    @PostMapping("/address")
+    public ResponseEntity registAddress(@RequestBody Address address) {
+        Message message = new Message();
+        addressService.registAddress(address);
+        message.put("status", true);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+
+    }
+
+    @PutMapping("/address/{no}")
+    public ResponseEntity editAddress(@RequestBody Address address, @PathVariable int no) {
+        Message message = new Message();
+        addressService.updateAddress(address);
+        message.put("status", true);
+        message.put("address",address);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK,message), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/address/{no}")
+    public ResponseEntity deleteAddress(@PathVariable int no) {
+
+        Message status = addressService.deleteAddress(no);
+
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, status, true), HttpStatus.OK);
+    }
+
+    @GetMapping("/account/{no}")
+    public ResponseEntity getAccountInfo(@PathVariable int no) {
+        Message message = new Message();
+        List<AccountInfo> accountInfo = accountInfoService.getAccountInfo(no);
+        message.put("accountInfo", accountInfo);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @PostMapping("/account")
+    public ResponseEntity registAccountInfo(@RequestBody AccountInfo accountInfo) {
         Message message = new Message();
         accountInfoService.registAccountInfo(accountInfo);
-        message.put("status",true);
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
     @PutMapping("/account/{user_no}")
-    public ResponseEntity editAccountInfo(@RequestBody AccountInfo accountInfo,@PathVariable int user_no){
+    public ResponseEntity editAccountInfo(@RequestBody AccountInfo accountInfo, @PathVariable int user_no) {
         Message message = new Message();
         accountInfoService.updateAccountInfo(accountInfo);
-        message.put("status",true);
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
     @DeleteMapping("/account/{user_no}")
-    public ResponseEntity deleteAccountInfo(@RequestParam int user_no){
+    public ResponseEntity deleteAccountInfo(@PathVariable int user_no) {
         Message message = new Message();
         accountInfoService.deleteAccountInfo(user_no);
-        message.put("status",true);
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
-    @GetMapping("/payment/list")
-    public ResponseEntity getListPayment(@RequestParam int no){
+    @GetMapping("/payment/{user_no}")
+    public ResponseEntity getListPayment(@PathVariable int user_no) {
         Message message = new Message();
-        List<CardInfo> cardInfo = cardInfoService.getCardInfo(no);
-        message.put("cardInfo",cardInfo);
+
+        List<CardInfo> cardInfo = cardInfoService.getCardInfo(user_no);
+        message.put("cardInfo", cardInfo);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
-    @PostMapping("/payment/regist")
-    public ResponseEntity registPayment(@RequestBody CardInfo cardInfo){
+    @PostMapping("/payment")
+    public ResponseEntity registPayment(@RequestBody CardInfo cardInfo) {
         Message message = new Message();
         cardInfoService.addCardInfo(cardInfo);
-        message.put("status",true);
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
     @DeleteMapping("/payment/{no}")
-    public ResponseEntity deleteCardInfo(@PathVariable int no){
+    public ResponseEntity deleteCardInfo(@PathVariable int no) {
         Message message = new Message();
         cardInfoService.deleteCardInfo(no);
-        message.put("status",true);
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @GetMapping("/receipt/list")
-    public ResponseEntity getReceiptList(@RequestParam int no){
+    @GetMapping("/receipt/{no}")
+    public ResponseEntity getReceiptList(@PathVariable int no) {
         Message message = new Message();
         User user = userService.getProfileInfo(no);
-        Map<String,Object> map = new HashMap<>();
-        map.put("cash_receipt_type",user.getCash_receipt_type());
-        map.put("cr_card_number",user.getCash_receipt_type());
-        map.put("cr_phone_number",user.getCash_receipt_type());
-        map.put("cr_alarm_agree",user.getCash_receipt_type());
+        Map<String, Object> map = new HashMap<>();
+        map.put("cash_receipt_type", user.getCash_receipt_type());
+        map.put("cr_card_number", user.getCash_receipt_type());
+        map.put("cr_phone_number", user.getCash_receipt_type());
+        map.put("cr_alarm_agree", user.getCash_receipt_type());
 
-        message.put("receiptInfo",map);
+        message.put("receiptInfo", map);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @GetMapping("/point/list")
-    public ResponseEntity getPointList(@RequestParam int no){
+    @GetMapping("/point/{no}")
+    public ResponseEntity getPointList(@PathVariable int no) {
         Message message = new Message();
 
         List<Point> point = pointService.getPoint(no);
-        message.put("point",point);
+        message.put("point", point);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
-    @PostMapping("/point/regist")
-    public ResponseEntity RegistPoint(@RequestBody Point point){
+    @PostMapping("/point")
+    public ResponseEntity RegistPoint(@RequestBody Point point) {
         Message message = new Message();
         pointService.registPoint(point);
-        message.put("status",true);
-
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
-
-
 
 
 }

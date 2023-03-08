@@ -13,10 +13,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class CardInfoService {
-    private CardInfoDao cardInfoDao;
+    private final CardInfoDao cardInfoDao;
 
-    public List<CardInfo> getCardInfo(int no) {
-        return cardInfoDao.getCardInfo(no);
+    public List<CardInfo> getCardInfo(int user_no) {
+        return cardInfoDao.getCardInfo(user_no);
     }
 
     public void addCardInfo(CardInfo cardInfo){

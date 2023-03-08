@@ -5,6 +5,7 @@ import com.dao.AddressDao;
 import com.dao.UserDao;
 import com.model.User;
 import com.model.kream.user.address.Address;
+import com.response.Message;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,14 @@ public class AddressService {
 
     private final UserDao userDao;
 
-    public List<Address> getAddressInfo(int no) {
-        return addressDao.getMyAddresses(no);
+    public Address getAddress(int no){
+        return addressDao.getAddress(no);
     }
+    public List<Address> getAddressInfo(int user_no) {
+        return addressDao.getMyAddresses(user_no);
+    }
+
+
 
     @Transactional
     /*   1. 해당 유저의 기본배송지가 true인 address 가져오기
@@ -32,7 +38,6 @@ public class AddressService {
 
     * */
     public void registAddress(Address address) {
-
         if (address.getIs_default_address() == 1) {
             addressDao.resetDefaultAddress(address);
         }
@@ -52,8 +57,19 @@ public class AddressService {
 
 
     @Transactional
-    public void deleteAddress(int no) {
-        addressDao.deleteAddress(no);
+    public Message deleteAddress(int no ) {
+        Message message = new Message();
+        Address address = this.getAddress(no);
+
+        if(address.getIs_default_address() == 0){
+            addressDao.deleteAddress(no);
+            message.put("status", true);
+        } else {
+            message.put("status",false);
+        }
+
+        return message;
+
     }
 
 
