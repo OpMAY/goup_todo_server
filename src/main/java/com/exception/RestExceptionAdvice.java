@@ -28,6 +28,13 @@ public class RestExceptionAdvice {
         log.info("RestExceptionAdvice Initialized -> {}", "com.restcontroller");
     }
 
+    @ExceptionHandler(HeaderAuthorizationTokenException.class)
+    protected ResponseEntity handleHeaderAuthorizationTokenException(HeaderAuthorizationTokenException e){
+        log.error("handleHeaderAuthorizationTokenException -> {}", e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity(DefaultRes.res(HttpStatus.UNAUTHORIZED), HttpStatus.OK);
+    }
+
     /**
      * JSON 파싱, 역파싱 관련 Exception 발생시
      */
@@ -106,6 +113,7 @@ public class RestExceptionAdvice {
 
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity handleNullPointerException(Exception e) {
+        e.printStackTrace();
         log.error("NullPointerException -> {}", e.getMessage());
         return new ResponseEntity(DefaultRes.res(HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.OK);
     }

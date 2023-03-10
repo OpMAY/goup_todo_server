@@ -17,4 +17,6 @@ public interface WishMapper {
     void deleteUserWishByUserNoAndSizeNo(@Param("user_no") int user_no, @Param("size_no") int size_no);
 
     boolean isUserWishProduct(@Param("product_no") int product_no, @Param("user_no") int user_no);
+
+    boolean isUserWishSize(@Param("user_no") int user_no, @Param("size_no") int size_no);
 }

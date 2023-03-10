@@ -40,4 +40,8 @@ public class WishDao {
     public boolean isUserWishProduct(int product_no, int user_no) {
         return mapper.isUserWishProduct(product_no, user_no);
     }
+
+    public boolean isUserWishSize(int user_no, int size_no) {
+        return mapper.isUserWishSize(user_no, size_no);
+    }
 }

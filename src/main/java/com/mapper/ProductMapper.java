@@ -32,4 +32,28 @@ public interface ProductMapper {
     List<ProductMain> getMainProducts();
 
     List<ProductShop> getShopProducts();
+
+    Product getProductBySizeNo(int size_no);
+
+    List<ProductShop> searchProductWithFilters(@Param("filtered") boolean filtered,
+                                               @Param("brand_list") List<Integer> brand_list,
+                                               @Param("gender_list") List<Integer> gender_list,
+                                               @Param("category_list") List<Integer> category_list,
+                                               @Param("keyword") String keyword,
+                                               @Param("size_list") List<String> size_list);
+
+    List<ProductShop> searchProductWithFiltersReload(@Param("filtered") boolean filtered,
+                                                     @Param("brand_list") List<Integer> brand_list,
+                                                     @Param("gender_list") List<Integer> gender_list,
+                                                     @Param("category_list") List<Integer> category_list,
+                                                     @Param("keyword") String keyword,
+                                                     @Param("size_list") List<String> size_list,
+                                                     @Param("cursor") Integer cursor);
+
+    int getProductCountViaSearch(@Param("filtered") boolean filtered,
+                                 @Param("brand_list") List<Integer> brand_list,
+                                 @Param("gender_list") List<Integer> gender_list,
+                                 @Param("category_list") List<Integer> category_list,
+                                 @Param("keyword") String keyword,
+                                 @Param("size_list") List<String> size_list);
 }

@@ -23,4 +23,27 @@
         ORDER BY price
         LIMIT 1
     </select>
+    <insert id="registerSell" useGeneratedKeys="true" keyProperty="no">
+        insert into sell(user_no, size_no, sell_agree, sell_type, expiration_date, expiration_days, price,
+                         inspection_price, delivery_price, commission, total_price, bank_info, recall_address_info,
+                         recall_method, cash_receipt, s_order_agree, reg_datetime, updated_datetime)
+        VALUES (#{user_no}, #{size_no}, #{sell_agree, typeHandler=com.middleware.JsonObjectTypeHandler}, #{sell_type},
+                #{expiration_date},
+                #{expiration_days}, #{price},
+                #{inspection_price}, #{delivery_price}, #{commission}, #{total_price},
+                #{bank_info, typeHandler=com.middleware.JsonObjectTypeHandler},
+                #{recall_address_info, typeHandler=com.middleware.JsonObjectTypeHandler},
+                #{recall_method}, #{cash_receipt, typeHandler=com.middleware.JsonObjectTypeHandler},
+                #{s_order_agree, typeHandler=com.middleware.JsonObjectTypeHandler}, NOW(), NOW())
+    </insert>
+    <select id="getProductSellForAuction" resultType="Sell">
+        select *
+        from sell
+                 left join `order` o on sell.no = o.sell_no
+        WHERE size_no = #{size_no}
+          AND price = #{price}
+          AND o.no is null
+        order by sell.reg_datetime
+        LIMIT 1;
+    </select>
 </mapper>

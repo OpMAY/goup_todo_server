@@ -82,7 +82,6 @@ public class UserRestController {
         userService.updateProfile(user, message);
         message.put("status", true);
         message.put("user",user);
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -98,7 +97,6 @@ public class UserRestController {
     public ResponseEntity getAddresses(@PathVariable int user_no) {
         Message message = new Message();
         List<Address> address = addressService.getAddressInfo(user_no);
-
         message.put("address", address);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
@@ -123,6 +121,7 @@ public class UserRestController {
 
     @DeleteMapping("/address/{no}")
     public ResponseEntity deleteAddress(@PathVariable int no) {
+
 
         Message status = addressService.deleteAddress(no);
 

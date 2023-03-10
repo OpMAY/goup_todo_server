@@ -13,6 +13,7 @@ public class ProductShop {
     private String en_name;
     private String kor_name;
     private Integer price;
+    private int category_no;
     private boolean is_wish;
     private int wishes;
     private int styles;
