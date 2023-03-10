@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("api/kream")
+@RequestMapping("/api/kream")
 public class CsRestController {
 
     private final NoticeService noticeService;
@@ -36,7 +36,6 @@ public class CsRestController {
         List<Notice> notices = noticeService.getNotices(page);
         message.put("notices",notices);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-
     }
 
     @GetMapping("/notice/detail/{no}")
