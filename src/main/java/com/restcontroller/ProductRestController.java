@@ -5,6 +5,7 @@ import com.model.kream.order.before.Sell;
 import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
+import com.model.kream.product.interactions.Wish;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.response.DefaultRes;
 import com.response.Message;
@@ -55,7 +56,7 @@ public class ProductRestController {
         Message message = new Message();
         int user_no = 1;
         // TODO CHECK PARAM LIST ACCEPTABLE
-        if(price == null || priceFilters.contains(price)) {
+        if (price == null || priceFilters.contains(price)) {
             List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories, keyword, sizes, user_no, cursor, price);
             message.put("products", n_products);
             message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes));
@@ -112,6 +113,29 @@ public class ProductRestController {
             List<ProductPriceWithSize> sizes = productService.getProductSizes(no, price_bool, sort_type);
             message.put("sizes", sizes);
         }
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/wish", method = RequestMethod.POST)
+    public ResponseEntity AddWish(@RequestBody Wish wish) {
+        Message message = new Message();
+        message.put("status", productService.addWish(wish));
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/wish/{no}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteWishByNo(@PathVariable int no) {
+        Message message = new Message();
+        productService.deleteUserWish(no);
+        message.put("status", true);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/wish/sep", method = RequestMethod.DELETE)
+    public ResponseEntity deleteUserWishByUserNoAndSizeNo(@RequestBody Wish wish) {
+        Message message = new Message();
+        productService.deleteUserWishByUserNoAndSizeNo(wish.getUser_no(), wish.getSize_no());
+        message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

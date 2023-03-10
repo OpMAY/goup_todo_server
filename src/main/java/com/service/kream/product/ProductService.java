@@ -14,6 +14,7 @@ import com.model.kream.product.ProductDetail;
 import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
+import com.model.kream.product.interactions.Wish;
 import com.model.kream.product.price.ProductPriceHistories;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
@@ -502,6 +503,26 @@ public class ProductService {
 //            product.setOrders(orderDao.getProductOrderCount(product.getNo()));
         }
         return products;
+    }
+
+    @Transactional
+    public boolean addWish(Wish wish) {
+        if(wishDao.isUserWishSize(wish.getUser_no(), wish.getSize_no())) {
+            return false;
+        } else {
+            wishDao.insertUserWish(wish);
+            return true;
+        }
+    }
+
+    @Transactional
+    public void deleteUserWish(int wish_no) {
+        wishDao.deleteUserWishByNo(wish_no);
+    }
+
+    @Transactional
+    public void deleteUserWishByUserNoAndSizeNo(int user_no, int size_no) {
+        wishDao.deleteUserWishByUserNoAndSizeNo(user_no, size_no);
     }
 
     private int getMinPriceFromPriceFilter(String price_filter) {
