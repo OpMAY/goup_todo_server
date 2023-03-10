@@ -13,6 +13,6 @@
     <select id="getBrandByProductNo" resultType="Brand">
         select *
         from brand
-        WHERE (select brand_no from product WHERE no = #{no})
+        WHERE brand.no = (select brand_no from product WHERE no = #{no})
     </select>
 </mapper>

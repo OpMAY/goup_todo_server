@@ -14,6 +14,7 @@ import com.model.kream.product.ProductDetail;
 import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
+import com.model.kream.product.interactions.Wish;
 import com.model.kream.product.price.ProductPriceHistories;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
@@ -29,6 +30,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,7 +48,7 @@ public class ProductService {
     private final SizeDao sizeDao;
 
     /**
-     * TODO 0302 오후
+     * 0302 오후
      * 1. Sell / Purchase / Order 등록 O
      * 2. Product Filter (Multi-Select 가능)
      *    - 검색어
@@ -72,29 +74,59 @@ public class ProductService {
      *          - 출고가 대비 낮은 금액에 팔리는 순
      *      - 즉시 구매가 낮은/높은 순
      *      - 발매일 순
-     * **/
+     **/
     public List<ProductShop> searchProductWithFilters(List<Integer> brand_list,
                                                       List<Integer> gender_list,
                                                       List<Integer> category_list,
                                                       String keyword,
                                                       List<String> size_list,
-                                                      Integer user_no) {
+                                                      Integer user_no,
+                                                      Integer cursor,
+                                                      String price) {
         // TODO ordering filter
-        boolean filtered = !brand_list.isEmpty()
-                || !gender_list.isEmpty()
-                || !category_list.isEmpty()
+        boolean filtered = (brand_list != null && !brand_list.isEmpty())
+                || (gender_list != null && !gender_list.isEmpty())
+                || (category_list != null && !category_list.isEmpty())
                 || keyword != null
-                || !size_list.isEmpty();
-        List<ProductShop> result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
+                || (size_list != null && !size_list.isEmpty());
+        List<ProductShop> result;
+
+        if (cursor != null && cursor != 0) {
+            // TODO CURSOR
+            result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
+        } else {
+            result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
+        }
         result.forEach(product -> {
             product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
             product.set_wish(wishDao.isUserWishProduct(product.getNo(), user_no));
-            product.setPrice(productDao.getProductLowestSellPrice(product.getNo()).getPrice());
+            ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
+            product.setPrice(size != null ? size.getPrice() : null);
             product.setWishes(wishDao.getProductWishCount(product.getNo()));
 //            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
-//            product.setOrders(orderDao.getProductOrderCount(product.getNo()));
         });
+
+        if(price != null) {
+            int min_price = this.getMinPriceFromPriceFilter(price);
+            int max_price = this.getMaxPriceFromPriceFilter(price);
+            log.info("minPrice : {}, maxPrice : {}", min_price, max_price);
+            result = result.stream().filter(product ->
+                product.getPrice() != null && product.getPrice() >= min_price && product.getPrice() <= max_price).collect(Collectors.toList());
+        }
         return result;
+    }
+
+    public int getProductCountViaSearch(List<Integer> brand_list,
+                                        List<Integer> gender_list,
+                                        List<Integer> category_list,
+                                        String keyword,
+                                        List<String> size_list) {
+        boolean filtered = (brand_list != null && !brand_list.isEmpty())
+                || (gender_list != null && !gender_list.isEmpty())
+                || (category_list != null && !category_list.isEmpty())
+                || keyword != null
+                || (size_list != null && !size_list.isEmpty());
+        return productDao.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
     }
 
 
@@ -223,25 +255,25 @@ public class ProductService {
      * -> delivery_infos, agrees => null check (receipt 는 1번에서 검증)
      * 2. 유저 정보 확인
      * - 기본 유저 관련 예외처리
-     * **/
+     **/
     @Transactional
     public Message registerProductPurchase(Purchase purchase) {
         Message message = new Message();
-        if(purchase.getReceipt() != null) {
-            if(bootPayService.verifyReceipt(purchase.getReceipt().getReceipt_bootpay())) {
+        if (purchase.getReceipt() != null) {
+            if (bootPayService.verifyReceipt(purchase.getReceipt().getReceipt_bootpay())) {
                 // 영수증 검증 완료
                 boolean pricing_check = purchase.getPrice() - purchase.getPoint() + purchase.getDelivery_price() + purchase.getCommission() == purchase.getTotal_price();
                 boolean required_info_check = (
                         purchase.getDelivery_info() != null
-                        && purchase.getDelivery_method() != null
-                        && purchase.getPurchase_agree() != null
-                        && purchase.getP_order_agree() != null
-                        && purchase.getPayment_method() != null
-                        );
-                if(pricing_check && required_info_check) {
+                                && purchase.getDelivery_method() != null
+                                && purchase.getPurchase_agree() != null
+                                && purchase.getP_order_agree() != null
+                                && purchase.getPayment_method() != null
+                );
+                if (pricing_check && required_info_check) {
                     Sell sell = sellDao.getProductSellForAuction(purchase.getSize_no(), purchase.getPrice());
-                    if(purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) {
-                        if(sell != null) {
+                    if (purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) {
+                        if (sell != null) {
                             purchase.setExpiration_days(0);
                             purchase.setExpiration_date(LocalDate.now());
                             purchaseDao.registerPurchase(purchase);
@@ -263,7 +295,7 @@ public class ProductService {
                         }
                     } else {
                         purchaseDao.registerPurchase(purchase);
-                        if(sell != null) {
+                        if (sell != null) {
                             Order order = new Order(
                                     sell.getNo(),
                                     purchase.getNo(),
@@ -334,9 +366,9 @@ public class ProductService {
         ProductPriceHistories priceHistories = new ProductPriceHistories();
         priceHistories.setHistory_month(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.MONTHLY));
         priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.QUARTER));
-        priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.HALF));
-        priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.YEARLY));
-        priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.ALL));
+        priceHistories.setHistory_half(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.HALF));
+        priceHistories.setHistory_year(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.YEARLY));
+        priceHistories.setHistory_all(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.ALL));
         productDetail.setPrice_history(priceHistories);
 
         // Product Brand Set
@@ -472,4 +504,33 @@ public class ProductService {
         }
         return products;
     }
+
+    @Transactional
+    public boolean addWish(Wish wish) {
+        if(wishDao.isUserWishSize(wish.getUser_no(), wish.getSize_no())) {
+            return false;
+        } else {
+            wishDao.insertUserWish(wish);
+            return true;
+        }
+    }
+
+    @Transactional
+    public void deleteUserWish(int wish_no) {
+        wishDao.deleteUserWishByNo(wish_no);
+    }
+
+    @Transactional
+    public void deleteUserWishByUserNoAndSizeNo(int user_no, int size_no) {
+        wishDao.deleteUserWishByUserNoAndSizeNo(user_no, size_no);
+    }
+
+    private int getMinPriceFromPriceFilter(String price_filter) {
+        return price_filter.indexOf("-") != 0 ? Integer.parseInt(price_filter.substring(0, price_filter.indexOf("-"))) : 0;
+    }
+
+    private int getMaxPriceFromPriceFilter(String price_filter) {
+        return price_filter.indexOf("-") == 0 || price_filter.indexOf("-") + 1 != price_filter.length() ? Integer.parseInt(price_filter.substring(price_filter.indexOf("-") + 1)) : 0;
+    }
+
 }

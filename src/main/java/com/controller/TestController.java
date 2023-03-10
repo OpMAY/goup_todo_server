@@ -28,15 +28,35 @@ public class TestController {
     private final UserDao userDao;
 
     public static void main(String[] args) {
-        EncryptionService encryptionService = new EncryptionService();
-        System.out.println((encryptionService.encryptAES("jdbc:mysql://goup.cc5p1zh5h1ho.ap-northeast-2.rds.amazonaws.com:3306/goup", false)));
+//        EncryptionService encryptionService = new EncryptionService();
+//        System.out.println((encryptionService.encryptAES("jdbc:mysql://goup.cc5p1zh5h1ho.ap-northeast-2.rds.amazonaws.com:3306/goup", false)));
+
+        String filter2 = "100000-300000";
+        String filter3 = "3000000-";
+        String filter = "-100000";
+        String f = filter3;
+        System.out.println(f.indexOf("-") + 1 == f.length());
+        if (f.indexOf("-") == 0) {
+            int min_price = 0;
+            int max_price = Integer.parseInt(filter.substring(f.indexOf("-") + 1));
+            System.out.println(min_price + " ~ " + max_price);
+        } else {
+            if (f.indexOf("-") + 1 == f.length()) {
+                int min_price = Integer.parseInt(f.substring(0, f.indexOf("-")));
+                System.out.println(min_price);
+            } else {
+                int min_price = Integer.parseInt(f.substring(0, f.indexOf("-")));
+                int max_price = Integer.parseInt(f.substring(f.indexOf("-") + 1));
+                System.out.println(min_price + " ~ " + max_price);
+            }
+        }
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView home() {
 
         userDao.getProfileInfo(1);
-        log.info("{}",userDao.getProfileInfo(1));
+        log.info("{}", userDao.getProfileInfo(1));
         return new ModelAndView("sample");
     }
 
@@ -84,7 +104,7 @@ public class TestController {
 
     /**
      * Test Websocket
-     * */
+     */
     @RequestMapping(value = "/test/websocket", method = RequestMethod.GET)
     public ModelAndView testWebsocket(HttpServletRequest request) {
         return new ModelAndView("test/websocket-test");
@@ -97,7 +117,6 @@ public class TestController {
     public ModelAndView test(HttpServletRequest request) {
         return new ModelAndView("test/login-test");
     }
-
 
 
 }
