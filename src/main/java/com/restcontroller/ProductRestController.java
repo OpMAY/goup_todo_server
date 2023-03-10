@@ -26,7 +26,7 @@ import java.util.*;
 public class ProductRestController {
     private final ProductService productService;
 
-    @RequestMapping(value = "/detail/{no}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{no}", method = RequestMethod.GET)
     public ResponseEntity getProductDetail(@PathVariable int no) {
         Message message = new Message();
         message.put("product", productService.getProductDetail(no));
@@ -138,6 +138,12 @@ public class ProductRestController {
         message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
+
+    /**
+     * TODO NOT Done
+     * 1. 스타일 관련
+     * 2.
+     **/
 
     private final List<String> priceFilters = new ArrayList<>(Arrays.asList("-100000", "100000-300000", "300000-500000", "500000-1000000", "1000000-3000000", "3000000-"));
 }

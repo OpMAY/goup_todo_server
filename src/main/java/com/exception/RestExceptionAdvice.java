@@ -28,6 +28,13 @@ public class RestExceptionAdvice {
         log.info("RestExceptionAdvice Initialized -> {}", "com.restcontroller");
     }
 
+    @ExceptionHandler(HeaderAuthorizationTokenException.class)
+    protected ResponseEntity handleHeaderAuthorizationTokenException(HeaderAuthorizationTokenException e){
+        log.error("handleHeaderAuthorizationTokenException -> {}", e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity(DefaultRes.res(HttpStatus.UNAUTHORIZED), HttpStatus.OK);
+    }
+
     /**
      * JSON 파싱, 역파싱 관련 Exception 발생시
      */

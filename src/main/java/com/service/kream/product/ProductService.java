@@ -366,9 +366,9 @@ public class ProductService {
         ProductPriceHistories priceHistories = new ProductPriceHistories();
         priceHistories.setHistory_month(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.MONTHLY));
         priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.QUARTER));
-        priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.HALF));
-        priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.YEARLY));
-        priceHistories.setHistory_quarter(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.ALL));
+        priceHistories.setHistory_half(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.HALF));
+        priceHistories.setHistory_year(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.YEARLY));
+        priceHistories.setHistory_all(productDao.getProductPriceHistory(product_no, DATE_RANGE_TYPE.ALL));
         productDetail.setPrice_history(priceHistories);
 
         // Product Brand Set

@@ -1,5 +1,8 @@
 package com.interceptor;
 
+import com.exception.HeaderAuthorizationTokenException;
+import com.exception.enums.BaseExceptionType;
+import com.exception.enums.GlobalExceptionType;
 import com.util.Encryption.EncryptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class RestInterceptor  extends HandlerInterceptorAdapter {
+public class RestInterceptor extends HandlerInterceptorAdapter {
     @Value("${GOUP.ACCESS.KEY}")
     private String accessKey;
     private final EncryptionService encryptionService;
@@ -28,20 +31,17 @@ public class RestInterceptor  extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String authorization = request.getHeader("Authorization");
-//        if(authorization != null && authorization.contains("bearer ")) {
-//            String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
-//            if(encryptionService.decryptGoupJWT(token)) {
-//                return true;
-//            } else {
-//                response.sendError(401);
-//                return false;
-//            }
-//        } else {
-//            response.sendError(401);
-//            return false;
-//        }
-        return true;
+        String authorization = request.getHeader("Authorization");
+        if(authorization != null && authorization.contains("bearer ")) {
+            String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
+            if(encryptionService.decryptGoupJWT(token)) {
+                return true;
+            } else {
+                throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
+            }
+        } else {
+            throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
+        }
     }
 
     @Override

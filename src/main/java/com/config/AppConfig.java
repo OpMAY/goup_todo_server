@@ -206,8 +206,7 @@ public class AppConfig implements WebApplicationInitializer, SchedulingConfigure
                 .excludePathPatterns("/files/**");
         registry.addInterceptor(restInterceptor).order(3)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth")
-                .excludePathPatterns("/api/token");
+                .excludePathPatterns("/api/auth");
         /*registry.addInterceptor(authInterceptor).order(3)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/test/jwt")

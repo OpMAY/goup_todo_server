@@ -46,19 +46,6 @@ public class BaseRestController {
         }
     }
 
-    @RequestMapping(value = "/token", method = RequestMethod.GET)
-    public ResponseEntity getToken(HttpServletRequest request, @RequestParam("key") String key) {
-        Message message = new Message();
-        String result = encryptionService.encryptAES(key, true);
-        if (taskDao.checkUserExists(result)) {
-            message.put("status", false);
-        } else {
-            message.put("status", true);
-            message.put("token", result);
-        }
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/sns/key/{type}", method = RequestMethod.POST)
     public ResponseEntity getSnsKey(@PathVariable String type) {
         Message message = new Message();
