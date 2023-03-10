@@ -6,15 +6,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.CardInfoMapper">
 
+
+
+
     <!--List -->
     <select id="getCardInfo" resultType="CardInfo">
         select *
         from card_info
-        where no = #{no}
+        where user_no = #{user_no}
     </select>
 
     <insert id="addCardInfo" useGeneratedKeys="true" keyProperty="no">
-        insert into card_info(user_no, card_company, card_number, `card_expiration _date`, birth_date, password)
+        insert into card_info(user_no, card_company, card_number,card_expiration_date,birth_date,password,reg_datetime,updated_datetime)
         values (#{user_no},
                 #{card_company},
                 #{card_number},

@@ -5,8 +5,9 @@ import com.model.kream.user.address.Address;
 import java.util.List;
 
 public interface AddressMapper {
-    public List<Address> getMyAddresses(int no);
+    public List<Address> getMyAddresses(int user_no);
 
+    public Address getAddress(int no);
     public void registAddress(Address address);
 
     public void updateAddress(Address address);
@@ -16,4 +17,7 @@ public interface AddressMapper {
     public Address getDefaultAddress(int no, int is_default_address);
 
     void resetDefaultAddress(Address address);
+
+
+
 }

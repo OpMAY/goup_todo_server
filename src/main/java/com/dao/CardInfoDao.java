@@ -3,10 +3,11 @@ package com.dao;
 import com.mapper.CardInfoMapper;
 import com.model.kream.user.account.CardInfo;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Repository
 public class CardInfoDao {
 
     private CardInfoMapper mapper;
@@ -15,15 +16,15 @@ public class CardInfoDao {
         this.mapper = sqlSession.getMapper(CardInfoMapper.class);
     }
 
-    public List<CardInfo> getCardInfo(int no) {
-        return mapper.getCardInfo(no);
+    public List<CardInfo> getCardInfo(int user_no) {
+        return mapper.getCardInfo(user_no);
     }
 
-    @Transactional
+
     public void addCardInfo(CardInfo cardInfo){
         mapper.addCardInfo(cardInfo);
     }
-    @Transactional
+
     public void deleteCardInfo(int no) {
         mapper.deleteCardInfo(no);
     }

@@ -40,6 +40,7 @@
     <select id="getNotices" resultType="Notice">
         select *
         from notice
+        where flag =1
         ORDER BY reg_datetime DESC LIMIT 20 OFFSET #{offset}
     </select>
 

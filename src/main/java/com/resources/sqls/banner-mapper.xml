@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.BannerMapper">
+
+
+
+
+    <!--List -->
+    <select id="getBanner" resultType="Banner">
+        select * from banner where banner_flag = true ORDER BY reg_datetime desc ;
+    </select>
+
+
+
+
+
+
+</mapper>

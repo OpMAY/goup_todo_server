@@ -51,7 +51,7 @@ public class UserRestController {
     private final LoginAPI loginAPI;
 
 
-    @GetMapping("/user/list")
+    @GetMapping("/user/{no}")
     public ResponseEntity getUserList(HttpServletRequest request, HttpServletResponse response, @PathVariable int no) {
         Message message = new Message();
         User user = userService.getProfileInfo(no);
@@ -75,13 +75,13 @@ public class UserRestController {
     }
 
 
-    @PutMapping("/profile")
-    public ResponseEntity userEdit(@RequestBody User user
+    @PutMapping("/profile/{no}")
+    public ResponseEntity userEdit(@RequestBody User  user, @PathVariable int no
     ) throws JsonProcessingException {
         Message message = new Message();
         userService.updateProfile(user, message);
         message.put("status", true);
-
+        message.put("user",user);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -93,15 +93,15 @@ public class UserRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @GetMapping("/address/list/{no}")
-    public ResponseEntity getAddresses(@PathVariable int no) {
+    @GetMapping("/address/{user_no}")
+    public ResponseEntity getAddresses(@PathVariable int user_no) {
         Message message = new Message();
-        List<Address> address = addressService.getAddressInfo(no);
+        List<Address> address = addressService.getAddressInfo(user_no);
         message.put("address", address);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PostMapping("/address/regist")
+    @PostMapping("/address")
     public ResponseEntity registAddress(@RequestBody Address address) {
         Message message = new Message();
         addressService.registAddress(address);
@@ -115,26 +115,28 @@ public class UserRestController {
         Message message = new Message();
         addressService.updateAddress(address);
         message.put("status", true);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK), HttpStatus.OK);
+        message.put("address",address);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK,message), HttpStatus.OK);
     }
 
     @DeleteMapping("/address/{no}")
     public ResponseEntity deleteAddress(@PathVariable int no) {
-        Message message = new Message();
-        addressService.deleteAddress(no);
-        message.put("status", true);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+
+
+        Message status = addressService.deleteAddress(no);
+
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, status, true), HttpStatus.OK);
     }
 
-    @GetMapping("/account/list")
-    public ResponseEntity getAccountInfo(@RequestParam int user_no) {
+    @GetMapping("/account/{no}")
+    public ResponseEntity getAccountInfo(@PathVariable int no) {
         Message message = new Message();
-        List<AccountInfo> accountInfo = accountInfoService.getAccountInfo(user_no);
+        List<AccountInfo> accountInfo = accountInfoService.getAccountInfo(no);
         message.put("accountInfo", accountInfo);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PostMapping("/account/regist")
+    @PostMapping("/account")
     public ResponseEntity registAccountInfo(@RequestBody AccountInfo accountInfo) {
         Message message = new Message();
         accountInfoService.registAccountInfo(accountInfo);
@@ -152,7 +154,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/account/{user_no}")
-    public ResponseEntity deleteAccountInfo(@RequestParam int user_no) {
+    public ResponseEntity deleteAccountInfo(@PathVariable int user_no) {
         Message message = new Message();
         accountInfoService.deleteAccountInfo(user_no);
         message.put("status", true);
@@ -160,16 +162,17 @@ public class UserRestController {
 
     }
 
-    @GetMapping("/payment/list")
-    public ResponseEntity getListPayment(@RequestParam int no) {
+    @GetMapping("/payment/{user_no}")
+    public ResponseEntity getListPayment(@PathVariable int user_no) {
         Message message = new Message();
-        List<CardInfo> cardInfo = cardInfoService.getCardInfo(no);
+
+        List<CardInfo> cardInfo = cardInfoService.getCardInfo(user_no);
         message.put("cardInfo", cardInfo);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
-    @PostMapping("/payment/regist")
+    @PostMapping("/payment")
     public ResponseEntity registPayment(@RequestBody CardInfo cardInfo) {
         Message message = new Message();
         cardInfoService.addCardInfo(cardInfo);
@@ -185,8 +188,8 @@ public class UserRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @GetMapping("/receipt/list")
-    public ResponseEntity getReceiptList(@RequestParam int no) {
+    @GetMapping("/receipt/{no}")
+    public ResponseEntity getReceiptList(@PathVariable int no) {
         Message message = new Message();
         User user = userService.getProfileInfo(no);
         Map<String, Object> map = new HashMap<>();
@@ -200,8 +203,8 @@ public class UserRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @GetMapping("/point/list")
-    public ResponseEntity getPointList(@RequestParam int no) {
+    @GetMapping("/point/{no}")
+    public ResponseEntity getPointList(@PathVariable int no) {
         Message message = new Message();
 
         List<Point> point = pointService.getPoint(no);
@@ -211,12 +214,11 @@ public class UserRestController {
 
     }
 
-    @PostMapping("/point/regist")
+    @PostMapping("/point")
     public ResponseEntity RegistPoint(@RequestBody Point point) {
         Message message = new Message();
         pointService.registPoint(point);
         message.put("status", true);
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }

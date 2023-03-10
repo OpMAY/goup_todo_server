@@ -15,8 +15,11 @@ public class AddressDao {
         this.mapper = sqlSession.getMapper(AddressMapper.class);
     }
 
-    public List<Address> getMyAddresses(int no){
-        return mapper.getMyAddresses(no);
+    public Address getAddress(int no){
+        return mapper.getAddress(no);
+    }
+    public List<Address> getMyAddresses(int user_no){
+        return mapper.getMyAddresses(user_no);
     }
 
     public Address getDefaultAddress(int no, int is_default_address){
@@ -39,4 +42,6 @@ public class AddressDao {
     public void resetDefaultAddress(Address address) {
         mapper.resetDefaultAddress(address);
     }
+
+
 }

@@ -23,11 +23,13 @@ public class NoticeService {
     }
 
 
-//    public List<Notice> getNotices(int page) {
-//        if (page <= 0) {
-//            page = 1;
-//        }
-//        List<Notice> notices = noticeDao.getNotices(page);
-//    }
+    public List<Notice> getNotices(int page) {
+        if (page <= 0) {
+            page = 1;
+        }
+         List<Notice> notices = noticeDao.getNotices(page);
+
+        return notices;
+    }
 
 }

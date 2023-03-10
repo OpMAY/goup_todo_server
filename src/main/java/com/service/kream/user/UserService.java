@@ -7,6 +7,7 @@ import com.dao.StyleDao;
 import com.dao.UserDao;
 import com.model.User;
 import com.model.common.MFile;
+import com.model.kream.user.LOGIN_TYPE;
 import com.model.kream.user.delete.DeletedUser;
 import com.model.kream.user.style.StyleUser;
 import com.response.Message;
@@ -125,11 +126,12 @@ public class UserService {
     }
 
     @Transactional
-    public Message updateProfile(User user, Message message) {
+    public Message updateProfile(User user,Message message) {
         int no = user.getNo();
         Integer email_alarm = user.getEmail_alarm();
         Integer size = user.getSize();
         MultipartFile file = (MultipartFile) user.getProfile_img();
+        LOGIN_TYPE login_type = user.getLogin_type();
 
         if (user.getName() != null) {
             this.updateUserName(user.getName(), no);

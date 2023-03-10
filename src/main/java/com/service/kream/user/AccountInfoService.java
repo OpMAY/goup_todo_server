@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountInfoService {
 
-    private AccountInfoDao accountInfoDao;
+    private final AccountInfoDao accountInfoDao;
 
     public List<AccountInfo> getAccountInfo(int user_no){
        return accountInfoDao.getAccountInfo(user_no);

@@ -10,10 +10,16 @@
     <select id="getQna" resultType="Qna">
         select *
         from qna
-        where no = #{no} and type=#{type}
+        where type = #{type}
+        order by reg_datetime desc
     </select>
 
-
+    <select id="getAllQna" resultType="Qna">
+        select *
+        from qna
+        where flag = 1
+        order by reg_datetime desc
+    </select>
 
 
 </mapper>

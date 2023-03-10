@@ -6,6 +6,8 @@ import com.model.kream.cs.Qna;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class QnaDao {
     private QnAMapper mapper;
@@ -14,10 +16,12 @@ public class QnaDao {
         this.mapper = sqlSession.getMapper(QnAMapper.class);
     }
 
-    public Qna getQna(int no, QNA_TYPE type){
-       return mapper.getQna(no,type);
+    public List<Qna> getQna(QNA_TYPE type){
+       return mapper.getQna(type);
     }
 
 
-
+    public List<Qna> getAllQna() {
+        return mapper.getAllQna();
+    }
 }
