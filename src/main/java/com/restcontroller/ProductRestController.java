@@ -1,5 +1,6 @@
 package com.restcontroller;
 
+import com.exception.ContentsException;
 import com.model.kream.order.before.Purchase;
 import com.model.kream.order.before.Sell;
 import com.model.kream.product.ProductMain;
@@ -83,6 +84,11 @@ public class ProductRestController {
     @RequestMapping(value = "/order/sell", method = RequestMethod.POST)
     public ResponseEntity RegisterProductSell(@RequestBody Sell sell) {
         Message message = productService.registerProductSell(sell);
+        if(sell == null || sell.getNo()==0){
+            throw new ContentsException();
+        }else{
+
+        }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

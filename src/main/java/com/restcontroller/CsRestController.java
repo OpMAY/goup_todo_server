@@ -1,5 +1,7 @@
 package com.restcontroller;
 
+import com.exception.ContentsException;
+import com.exception.HeaderAuthorizationTokenException;
 import com.model.kream.cs.Notice;
 import com.model.kream.cs.QNA_TYPE;
 import com.model.kream.cs.Qna;
@@ -56,11 +58,13 @@ public class CsRestController {
     @GetMapping("/qna")
     public ResponseEntity getQna(@RequestParam(value="type",required = false) QNA_TYPE type) {
         Message message = new Message();
+
         List<Qna> qna ;
         if(type != null){
              qna= qnaService.getQna(type);
         }else{
              qna = qnaService.getAllQna();
+
         }
 
         message.put("qna",qna);
@@ -71,6 +75,7 @@ public class CsRestController {
     @GetMapping("/qna/list/detail")
     public ResponseEntity getQnaDetail (@RequestParam int no,  Pageable page){
         Message message = new Message();
+
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 

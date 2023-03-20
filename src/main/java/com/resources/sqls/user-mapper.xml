@@ -19,6 +19,13 @@
         where no = #{no}
     </select>
 
+    <select id="getUserbyToken" resultType="User" resultMap="user_map">
+        select u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img, u.user_flag,u.access_token
+        from user u
+        where access_token = #{access_token}
+
+    </select>
+
 
     <insert id="registUser" useGeneratedKeys="true" keyProperty="no">
         insert into user(name, access_token, phone_number, size, point, email_alarm, zipcode, address, address_detail,

@@ -59,4 +59,7 @@ public class UserDao {
     }
 
 
+    public User getUserbyToken(String access_token) {
+        return  mapper.getUserbyToken(access_token);
+    }
 }
