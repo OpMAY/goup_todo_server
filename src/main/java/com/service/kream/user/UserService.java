@@ -36,7 +36,7 @@ public class UserService {
     }
 
     @Transactional
-    public void registUser(User user, StyleUser styleUser) {
+    public User registUser(User user, StyleUser styleUser) {
         /**
          *  1. user Table data insert
          *  2. style_user Table data insert
@@ -44,9 +44,13 @@ public class UserService {
         String randomId = UUID.randomUUID().toString();
         userDao.registUser(user);
 
+        User result = userDao.getProfileInfo(user.getNo());
+
         styleUser.setProfile_name(randomId);
         styleUser.setName(user.getName());
-        styleDao.registStyleUser(styleUser);
+//        styleDao.registStyleUser(styleUser);
+
+        return result;
     }
 
     @Transactional
@@ -147,5 +151,13 @@ public class UserService {
             this.updateProfileImage(file, no);
         }
         return message.put("USER", userDao.getProfileInfo(user.getNo()));
+    }
+
+    public boolean checkUserExists(LOGIN_TYPE login_type, String access_token) {
+        return userDao.checkUserExists(login_type, access_token);
+    }
+
+    public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
+        return userDao.getUserByLoginInfo(login_type, access_token);
     }
 }

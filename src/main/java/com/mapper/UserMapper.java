@@ -2,6 +2,7 @@ package com.mapper;
 
 import com.model.User;
 import com.model.common.MFile;
+import com.model.kream.user.LOGIN_TYPE;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
@@ -28,4 +29,7 @@ public interface UserMapper {
     void updateProfileImage(@Param("profile_image") MFile profile_image, @Param("user_no")int user_no);
 
 
+    boolean checkUserExists(@Param("login_type") LOGIN_TYPE login_type, @Param("access_token") String access_token);
+
+    User getUserByLoginInfo(@Param("login_type") LOGIN_TYPE login_type, @Param("access_token") String access_token);
 }

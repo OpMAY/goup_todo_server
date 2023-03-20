@@ -4,6 +4,7 @@ package com.dao;
 import com.mapper.UserMapper;
 import com.model.User;
 import com.model.common.MFile;
+import com.model.kream.user.LOGIN_TYPE;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -54,9 +55,15 @@ public class UserDao {
 
 
     public void deletedUser(int no,int user_flag) {
-
         mapper.deleteUser(no,user_flag);
     }
 
+    public boolean checkUserExists(LOGIN_TYPE login_type, String access_token) {
+        return mapper.checkUserExists(login_type, access_token);
+    }
 
+
+    public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
+        return mapper.getUserByLoginInfo(login_type, access_token);
+    }
 }
