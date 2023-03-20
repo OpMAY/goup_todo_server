@@ -34,16 +34,6 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ResponseEntity getProductMain(HttpServletRequest request) {
-        Message message = new Message();
-        // TODO Type 별 products => Main Controller 로 빠질 예정
-        List<ProductMain> products = productService.getMainProducts(0);
-        message.put("products", products);
-        message.put("last_idx", products.size() > 0 ? products.get(products.size() - 1).getNo() : 0);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/shop", method = RequestMethod.GET)
     public ResponseEntity getProductShop(HttpServletRequest request,
                                          @RequestParam(value = "brands", required = false) List<Integer> brands,

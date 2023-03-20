@@ -5,18 +5,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.BannerMapper">
-
-
+    <resultMap id="Banner" type="com.model.kream.home.Banner">
+        <result column="banner_image" property="banner_image" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
 
 
     <!--List -->
-    <select id="getBanner" resultType="Banner">
-        select * from banner where banner_flag = true ORDER BY reg_datetime desc ;
+    <select id="getBanner" resultType="Banner" resultMap="Banner">
+        select *
+        from banner
+        where banner_flag = true
+        ORDER BY reg_datetime desc;
     </select>
-
-
-
-
 
 
 </mapper>

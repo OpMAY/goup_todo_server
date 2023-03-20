@@ -31,8 +31,6 @@ public interface ProductMapper {
 
     List<ProductMain> getMainProducts();
 
-    List<ProductShop> getShopProducts();
-
     Product getProductBySizeNo(int size_no);
 
     List<ProductShop> searchProductWithFilters(@Param("filtered") boolean filtered,
@@ -56,4 +54,8 @@ public interface ProductMapper {
                                  @Param("category_list") List<Integer> category_list,
                                  @Param("keyword") String keyword,
                                  @Param("size_list") List<String> size_list);
+
+    List<ProductMain> getMainPopularProducts();
+
+    List<ProductMain> getMainRecentProducts();
 }

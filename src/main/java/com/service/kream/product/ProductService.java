@@ -480,30 +480,30 @@ public class ProductService {
         productDao.updateProductViews(product_no);
     }
 
-    public List<ProductMain> getMainProducts(int user_no) {
+    public List<ProductMain> getPopularProducts(int user_no) {
         // TODO user_no exist?
-        List<ProductMain> products = productDao.getMainProducts();
-        for (ProductMain product : products) {
+        List<ProductMain> popular_products = productDao.getMainPopularProducts();
+        for (ProductMain product : popular_products) {
             product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
             product.set_wish(wishDao.isUserWishProduct(product.getNo(), user_no));
-            product.setPrice(productDao.getProductLowestSellPrice(product.getNo()).getPrice());
+            ProductPriceWithSize price = productDao.getProductLowestSellPrice(product.getNo());
+            product.setPrice(price != null ? price.getPrice() : null);
         }
-        return products;
+        return popular_products;
     }
 
-    public List<ProductShop> getShopProducts(int user_no) {
+    public List<ProductMain> getRecentProducts(int user_no) {
         // TODO user_no exist?
-        List<ProductShop> products = productDao.getShopProducts();
-        for (ProductShop product : products) {
+        List<ProductMain> recent_products = productDao.getMainRecentProducts();
+        for (ProductMain product : recent_products) {
             product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
             product.set_wish(wishDao.isUserWishProduct(product.getNo(), user_no));
-            product.setPrice(productDao.getProductLowestSellPrice(product.getNo()).getPrice());
-            product.setWishes(wishDao.getProductWishCount(product.getNo()));
-//            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
-//            product.setOrders(orderDao.getProductOrderCount(product.getNo()));
+            ProductPriceWithSize price = productDao.getProductLowestSellPrice(product.getNo());
+            product.setPrice(price != null ? price.getPrice() : null);
         }
-        return products;
+        return recent_products;
     }
+
 
     @Transactional
     public boolean addWish(Wish wish) {
