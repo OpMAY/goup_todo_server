@@ -14,6 +14,7 @@ import com.model.kream.product.ProductDetail;
 import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
+import com.model.kream.product.interactions.PRODUCT_UPDATE_TYPE;
 import com.model.kream.product.interactions.Wish;
 import com.model.kream.product.price.ProductPriceHistories;
 import com.model.kream.product.price.ProductPriceWithSize;
@@ -39,6 +40,7 @@ public class ProductService {
     private final BootPayService bootPayService;
     private final ProductDao productDao;
     private final UserDao userDao;
+    private final CategoryDao categoryDao;
     private final OrderDao orderDao;
     private final SellDao sellDao;
     private final PurchaseDao purchaseDao;
@@ -51,29 +53,29 @@ public class ProductService {
      * 0302 오후
      * 1. Sell / Purchase / Order 등록 O
      * 2. Product Filter (Multi-Select 가능)
-     *    - 검색어
-     *    - 카테고리
-     *    - 브랜드
-     *    - 성별
-     *    - 신발 사이즈
-     *    - 의류 사이즈
-     *    - 가격
-     *    product
-     *      - en_name LIKE
-     *      - kor_name LIKE
-     *      - brand_no WHERE IN
-     *      - gender WHERE IN
-     *      - category shoe -> size
-     *      - category cloth -> size
-     *      - price range -> 최소 즉시 구매가 기준 (즉시 구매가 측정 불가면 뜨지 않음)
-     *    ORDERING
-     *      - 인기순 -> 판매량 많은 순
-     *      - 프리미엄 높은 순
-     *          - 출고가 대비 높은 금액에 팔리는 순
-     *      - 프리미엄 낮은 순
-     *          - 출고가 대비 낮은 금액에 팔리는 순
-     *      - 즉시 구매가 낮은/높은 순
-     *      - 발매일 순
+     * - 검색어
+     * - 카테고리
+     * - 브랜드
+     * - 성별
+     * - 신발 사이즈
+     * - 의류 사이즈
+     * - 가격
+     * product
+     * - en_name LIKE
+     * - kor_name LIKE
+     * - brand_no WHERE IN
+     * - gender WHERE IN
+     * - category shoe -> size
+     * - category cloth -> size
+     * - price range -> 최소 즉시 구매가 기준 (즉시 구매가 측정 불가면 뜨지 않음)
+     * ORDERING
+     * - 인기순 -> 판매량 많은 순
+     * - 프리미엄 높은 순
+     * - 출고가 대비 높은 금액에 팔리는 순
+     * - 프리미엄 낮은 순
+     * - 출고가 대비 낮은 금액에 팔리는 순
+     * - 즉시 구매가 낮은/높은 순
+     * - 발매일 순
      **/
     public List<ProductShop> searchProductWithFilters(List<Integer> brand_list,
                                                       List<Integer> gender_list,
@@ -106,12 +108,12 @@ public class ProductService {
 //            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
         });
 
-        if(price != null) {
+        if (price != null) {
             int min_price = this.getMinPriceFromPriceFilter(price);
             int max_price = this.getMaxPriceFromPriceFilter(price);
             log.info("minPrice : {}, maxPrice : {}", min_price, max_price);
             result = result.stream().filter(product ->
-                product.getPrice() != null && product.getPrice() >= min_price && product.getPrice() <= max_price).collect(Collectors.toList());
+                    product.getPrice() != null && product.getPrice() >= min_price && product.getPrice() <= max_price).collect(Collectors.toList());
         }
         return result;
     }
@@ -507,7 +509,7 @@ public class ProductService {
 
     @Transactional
     public boolean addWish(Wish wish) {
-        if(wishDao.isUserWishSize(wish.getUser_no(), wish.getSize_no())) {
+        if (wishDao.isUserWishSize(wish.getUser_no(), wish.getSize_no())) {
             return false;
         } else {
             wishDao.insertUserWish(wish);
@@ -523,6 +525,85 @@ public class ProductService {
     @Transactional
     public void deleteUserWishByUserNoAndSizeNo(int user_no, int size_no) {
         wishDao.deleteUserWishByUserNoAndSizeNo(user_no, size_no);
+    }
+
+    /**
+     * ADMINs
+     **/
+
+
+    @Transactional
+    public Message registerProduct(Product product) {
+        // BRAND, CATEGORY EXISTS
+        // NAME duplicate check
+        Message message = new Message();
+        if (brandDao.getBrandByNo(product.getBrand_no()) != null
+                && categoryDao.getCategoryByNo(product.getCategory_no()) != null) {
+            if (!productDao.checkProductNameDuplicate(product.getEn_name(), product.getKor_name())) {
+                productDao.registerProduct(product);
+                message.put("status", true);
+                message.put("product", product);
+            } else {
+                message.put("status", false);
+                message.put("error_message", "동일한 이름의 상품이 존재합니다.");
+            }
+        } else {
+            message.put("status", false);
+            message.put("error_message", "카테고리나 브랜드 설정이 올바른지 확인하세요.");
+        }
+        return message;
+    }
+
+    @Transactional
+    public Message updateProduct(PRODUCT_UPDATE_TYPE type, Product product) {
+        Message message = new Message();
+        message.put("status", true);
+        Product origin_product = productDao.getProductByNo(product.getNo());
+        if (origin_product != null) {
+            switch (type) {
+                case EN_NAME:
+                    origin_product.setEn_name(product.getEn_name());
+                    productDao.updateProduct(origin_product);
+                    break;
+                case KOR_NAME:
+                    origin_product.setKor_name(product.getKor_name());
+                    productDao.updateProduct(origin_product);
+                    break;
+                case GENDER:
+                    origin_product.setGender(product.getGender());
+                    productDao.updateProduct(origin_product);
+                    break;
+                case PRODUCT_INFO:
+                    origin_product.setProduct_info(product.getProduct_info());
+                    productDao.updateProduct(origin_product);
+                    break;
+                case IMAGE:
+                    origin_product.setImages(product.getImages());
+                    productDao.updateProduct(origin_product);
+                    break;
+                case FLAG:
+                    productDao.updateProductFlag(product.getNo());
+                    break;
+                default:
+                    message.put("status", false);
+                    message.put("error_message", "type 설정 error");
+                    break;
+            }
+        } else {
+            message.put("status", false);
+            message.put("error_message", "target product가 없습니다.");
+        }
+        return message;
+    }
+
+    @Transactional
+    public boolean deleteProduct(int no) {
+        if (productDao.checkProductHasTransaction(no)) {
+            return false;
+        } else {
+            productDao.deleteProduct(no);
+            return true;
+        }
     }
 
     private int getMinPriceFromPriceFilter(String price_filter) {

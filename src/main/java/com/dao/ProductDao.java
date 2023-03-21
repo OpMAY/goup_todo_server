@@ -88,4 +88,28 @@ public class ProductDao {
     public List<ProductMain> getMainRecentProducts() {
         return mapper.getMainRecentProducts();
     }
+
+    public void registerProduct(Product product) {
+        mapper.registerProduct(product);
+    }
+
+    public void updateProductFlag(int no) {
+        mapper.updateProductFlag(no);
+    }
+
+    public void updateProduct(Product product) {
+        mapper.updateProduct(product);
+    }
+
+    public void deleteProduct(int no) {
+        mapper.deleteProduct(no);
+    }
+
+    public boolean checkProductHasTransaction(int no) {
+        return mapper.checkProductHasTransaction(no);
+    }
+
+    public boolean checkProductNameDuplicate(String en_name, String kor_name) {
+        return mapper.checkProductNameDuplicate(en_name, kor_name);
+    }
 }

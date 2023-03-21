@@ -58,4 +58,16 @@ public interface ProductMapper {
     List<ProductMain> getMainPopularProducts();
 
     List<ProductMain> getMainRecentProducts();
+
+    void registerProduct(Product product);
+
+    void updateProductFlag(int no);
+
+    void updateProduct(Product product);
+
+    void deleteProduct(int no);
+
+    boolean checkProductHasTransaction(int no);
+
+    boolean checkProductNameDuplicate(String en_name, String kor_name);
 }

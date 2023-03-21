@@ -27,7 +27,6 @@
             #{no}
         </foreach>
     </select>
-
     <!-- 판매 화면에서 사이즈 별 구매 입찰 최대 금액 가져오기 => 거래 생성 안된 부분으로 -->
     <select id="getProductPurchasePrices" resultType="ProductPriceWithSize">
         select product.no,
@@ -44,7 +43,6 @@
         group by size
         order by size;
     </select>
-
     <!-- 구매 화면에서 사이즈 별 구매 입찰 최대 금액 가져오기 (거래 생성 안된 부분으로) -->
     <select id="getProductSellPrices" resultType="ProductPriceWithSize">
         select product.no,
@@ -61,7 +59,6 @@
         group by size
         order by size;
     </select>
-
     <!-- 판매 입찰 현황 내역 중 가장 낮은 금액 가져오기 -->
     <select id="getProductLowestSellPrice" resultType="ProductPriceWithSize">
         select *
@@ -78,7 +75,6 @@
               order by size) as t
         WHERE t.price is not null;
     </select>
-
     <!--  구매 입찰 현황 내역 중 가장 높은 금액 가져오기  -->
     <select id="getProductHighestPurchasePrice" resultType="ProductPriceWithSize">
         select *
@@ -95,7 +91,6 @@
               order by size) as t
         WHERE price is not null;
     </select>
-
     <!-- 상품 거래 내역에 관한 것-->
     <select id="getProductOrderHistory" resultType="ProductPriceWithSize">
         select size, s.price, o.reg_datetime
@@ -109,7 +104,6 @@
         GROUP BY o.reg_datetime, o.no
         ORDER BY o.reg_datetime DESC;
     </select>
-
     <!--  기간 별 거래 내역 금액  -->
     <select id="getProductPriceHistory" resultType="ProductPriceHistory">
         select price, target_date
@@ -143,7 +137,6 @@
         ORDER BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') DESC) as t
         WHERE order_number = 1;
     </select>
-
     <update id="updateProductViews">
         update product
         SET views = views + 1
@@ -433,5 +426,40 @@
                 # 사이즈
             </if>
         </if>
+    </select>
+    <insert id="registerProduct" useGeneratedKeys="true" keyProperty="no">
+        insert into product(price, en_name, gender, is_direct, product_info, kor_name, product_yn, brand_no,
+                            is_one_size, category_no, views, images, reg_datetime, updated_datetime)
+        VALUES (0, #{en_name}, #{gender}, false, #{product_info, typeHandler=com.middleware.JsonObjectTypeHandler},
+                #{kor_name}, true, #{brand_no}, #{is_one_size}, #{category_no}, 0,
+                #{images, typeHandler=com.middleware.JsonArrayObjectTypeHandler}, now(), now())
+    </insert>
+    <update id="updateProductFlag">
+        update product
+        SET product_yn       = !product_yn,
+            updated_datetime = now()
+        WHERE no = #{no}
+    </update>
+    <update id="updateProduct">
+        update product
+        SET en_name          = #{en_name},
+            gender           = #{gender},
+            product_info     = #{product_info, typeHandler=com.middleware.JsonObjectTypeHandler},
+            is_one_size      = #{is_one_size},
+            images           = #{images, typeHandler=com.middleware.JsonArrayObjectTypeHandler},
+            updated_datetime = now()
+        WHERE no = #{no}
+    </update>
+    <delete id="deleteProduct">
+        delete
+        from product
+        WHERE no = #{no}
+    </delete>
+    <select id="checkProductHasTransaction" resultType="_boolean">
+        select EXISTS(select * from sell WHERE size_no in (select no from size WHERE product_no = #{no})) OR
+               EXISTS(select * from purchase WHERE size_no in (select no from size WHERE product_no = #{no}))
+    </select>
+    <select id="checkProductNameDuplicate" resultType="_boolean">
+        select EXISTS(select * from product WHERE en_name = #{en_name} or kor_name = #{kor_name})
     </select>
 </mapper>
