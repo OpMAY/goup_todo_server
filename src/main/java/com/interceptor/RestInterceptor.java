@@ -31,18 +31,23 @@ public class RestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String authorization = request.getHeader("Authorization");
-//        if(authorization != null && authorization.contains("bearer ")) {
-//            String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
-//            if(encryptionService.decryptGoupJWT(token)) {
-//                return true;
-//            } else {
+        String authorization = request.getHeader("authorization");
+        log.info("interceptor authorization header : {}", authorization);
+        if(authorization != null && authorization.contains("bearer ")) {
+            String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
+            if(encryptionService.decryptGoupJWT(token)) {
+                return true;
+            } else {
 //                throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
-//            }
-//        } else {
+                response.sendError(401);
+                return false;
+            }
+        } else {
 //            throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
-//        }
-        return true;
+            response.sendError(401);
+            return false;
+        }
+//        return true;
     }
 
     @Override

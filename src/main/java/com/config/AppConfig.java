@@ -207,9 +207,9 @@ public class AppConfig implements WebApplicationInitializer, SchedulingConfigure
                 .addPathPatterns("/**")
                 .excludePathPatterns("/resources/**")
                 .excludePathPatterns("/files/**");
-//        registry.addInterceptor(restInterceptor).order(3)
-//                .addPathPatterns("/api/**")
-//                .excludePathPatterns("/api/auth");
+        registry.addInterceptor(restInterceptor).order(3)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/auth");
 //        registry.addInterceptor(loginInterceptor).order(4)
 //                .addPathPatterns("/api/kream/my")
 //                .addPathPatterns("/order/sell")
