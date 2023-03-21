@@ -11,10 +11,9 @@
     </resultMap>
 
 
-
     <!--List -->
     <select id="getProfileInfo" resultType="User" resultMap="user_map">
-        select u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img, u.user_flag
+        select u.no, u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img, u.user_flag
         from user u
         where no = #{no}
     </select>
@@ -101,9 +100,20 @@
 
 
     <update id="deleteUser">
-        update user set user_flag =#{user_flag}
+        update user
+        set user_flag =#{user_flag}
         where no = #{no}
     </update>
 
+    <select id="checkUserExists" resultType="_boolean">
+        select EXISTS(select * from user WHERE access_token = #{access_token} AND login_type = #{login_type})
+    </select>
+
+    <select id="getUserByLoginInfo" resultType="User" resultMap="user_map">
+        select *
+        from user
+        WHERE access_token = #{access_token}
+          and login_type = #{login_type}
+    </select>
 
 </mapper>

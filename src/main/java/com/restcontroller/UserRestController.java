@@ -5,6 +5,7 @@ import com.exception.ContentsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.model.User;
 import com.model.kream.point.Point;
+import com.model.kream.user.LOGIN_TYPE;
 import com.model.kream.user.account.AccountInfo;
 import com.model.kream.user.account.CardInfo;
 import com.model.kream.user.address.Address;
@@ -61,28 +62,39 @@ public class UserRestController {
 
     }
 
-    @RequestMapping(value = "/join", method = RequestMethod.GET)
-    public ResponseEntity join(HttpServletRequest request) {
+    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    public ResponseEntity join(HttpServletRequest request, @RequestBody User user_model) {
         Message message = new Message();
 
-        User user = loginAPI.apiLoginInit(request);
+
+
+        boolean exist = userService.checkUserExists(user_model.getLogin_type(), user_model.getAccess_token());
+        User user = new User();
+//        User user = loginAPI.apiLoginInit(request);
         StyleUser styleUser = new StyleUser();
-
-        userService.registUser(user, styleUser);
-
-        message.put("user", user);
-        message.put("styleUser", styleUser);
+        if(user_model.getLogin_type() != null && user_model.getAccess_token() != null) {
+            if (!exist) {
+                user = userService.registUser(user_model, styleUser);
+            } else {
+                user = userService.getUserByLoginInfo(user_model.getLogin_type(), user_model.getAccess_token());
+            }
+            message.put("user", user);
+            message.put("status", true);
+        } else {
+            message.put("status", false);
+        }
+//        message.put("styleUser", styleUser);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
 
     @PutMapping("/profile/{no}")
-    public ResponseEntity userEdit(@RequestBody User  user, @PathVariable int no
+    public ResponseEntity userEdit(@RequestBody User user, @PathVariable int no
     ) throws JsonProcessingException {
         Message message = new Message();
         userService.updateProfile(user, message);
         message.put("status", true);
-        message.put("user",user);
+        message.put("user", user);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

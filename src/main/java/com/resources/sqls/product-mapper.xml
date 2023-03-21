@@ -154,10 +154,26 @@
         from product
         # TODO 조건 추가
     </select>
-    <select id="getShopProducts" resultType="ProductShop" resultMap="ProductShop">
+    <select id="getMainPopularProducts" resultType="ProductMain" resultMap="ProductMain">
+        select no,
+               en_name                                                                as name,
+               JSON_EXTRACT(images, '$[0]')                                           as image,
+               (select COUNT(*)
+                from wish
+                WHERE size_no in (select no from size WHERE product_no = product.no)) as wishes,
+               (select COUNT(*)
+                from `purchase`
+                WHERE size_no in (select no from size WHERE product_no = product.no)) as purchases,
+               views
+        from product
+        ORDER BY views DESC, wishes DESC, purchases DESC
+        LIMIT 12
+    </select>
+    <select id="getMainRecentProducts" resultType="ProductMain" resultMap="ProductMain">
         select no, en_name, kor_name, JSON_EXTRACT(images, '$[0]') as image
         from product
-        # TODO 조건 추가
+        order by reg_datetime DESC
+        LIMIT 12
     </select>
     <select id="getProductBySizeNo" resultType="Product">
         select *

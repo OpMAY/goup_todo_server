@@ -63,9 +63,6 @@ public class ProductDao {
         return mapper.getMainProducts();
     }
 
-    public List<ProductShop> getShopProducts() {
-        return mapper.getShopProducts();
-    }
 
     public Product getProductBySizeNo(int size_no) {
         return mapper.getProductBySizeNo(size_no);
@@ -82,5 +79,13 @@ public class ProductDao {
 
     public int getProductCountViaSearch(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
         return mapper.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
+    }
+
+    public List<ProductMain> getMainPopularProducts() {
+        return mapper.getMainPopularProducts();
+    }
+
+    public List<ProductMain> getMainRecentProducts() {
+        return mapper.getMainRecentProducts();
     }
 }
