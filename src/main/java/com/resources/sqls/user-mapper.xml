@@ -105,6 +105,8 @@
         where no = #{no}
     </update>
 
+
+
     <select id="checkUserExists" resultType="_boolean">
         select EXISTS(select * from user WHERE access_token = #{access_token} AND login_type = #{login_type})
     </select>

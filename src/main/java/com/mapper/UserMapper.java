@@ -33,4 +33,6 @@ public interface UserMapper {
     boolean checkUserExists(@Param("login_type") LOGIN_TYPE login_type, @Param("access_token") String access_token);
 
     User getUserByLoginInfo(@Param("login_type") LOGIN_TYPE login_type, @Param("access_token") String access_token);
+
+
 }

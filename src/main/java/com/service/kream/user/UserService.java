@@ -165,4 +165,8 @@ public class UserService {
     public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
         return userDao.getUserByLoginInfo(login_type, access_token);
     }
+
+    public void userSuspended(int no,int user_flag) {
+         userDao.userSuspended(no,user_flag);
+    }
 }

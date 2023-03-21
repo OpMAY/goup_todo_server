@@ -70,4 +70,8 @@ public class UserDao {
     public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
         return mapper.getUserByLoginInfo(login_type, access_token);
     }
+
+    public void userSuspended(int no,int user_flag) {
+         mapper.deleteUser(no,user_flag);
+    }
 }
