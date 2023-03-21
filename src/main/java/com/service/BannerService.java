@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -17,5 +18,26 @@ public class BannerService {
 
     public List<Banner> getBanner(){
         return bannerDao.getBanner();
+    }
+
+    public void registBanner(Banner banner){
+        bannerDao.registBanner(banner);
+    }
+
+    public void editBanner(Map<String, Object> data , Banner banner) {
+            data.put("no",banner.getNo());
+            data.put("banner_image",banner.getBanner_image());
+            data.put("banner_flag",banner.getBanner_flag());
+            data.put("click_to_url",banner.getClick_to_url());
+            data.put("reg_datetime",banner.getReg_datetime());
+            data.put("update_datetime",banner.getUpdated_datetime());
+
+            bannerDao.editBanner(data);
+
+
+    }
+
+    public void deleteBanner(int no) {
+        bannerDao.deleteBanner(no);
     }
 }
