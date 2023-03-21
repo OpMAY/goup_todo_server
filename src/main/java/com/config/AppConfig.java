@@ -190,6 +190,9 @@ public class AppConfig implements WebApplicationInitializer, SchedulingConfigure
     @Autowired
     private RestInterceptor restInterceptor;
 
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(logInterceptor).order(0)
@@ -204,9 +207,15 @@ public class AppConfig implements WebApplicationInitializer, SchedulingConfigure
                 .addPathPatterns("/**")
                 .excludePathPatterns("/resources/**")
                 .excludePathPatterns("/files/**");
-        registry.addInterceptor(restInterceptor).order(3)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth");
+//        registry.addInterceptor(restInterceptor).order(3)
+//                .addPathPatterns("/api/**")
+//                .excludePathPatterns("/api/auth");
+//        registry.addInterceptor(loginInterceptor).order(4)
+//                .addPathPatterns("/api/kream/my")
+//                .addPathPatterns("/order/sell")
+//                .addPathPatterns("/order/purchase")
+//                .addPathPatterns("/wish/*");
+
         /*registry.addInterceptor(authInterceptor).order(3)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/test/jwt")

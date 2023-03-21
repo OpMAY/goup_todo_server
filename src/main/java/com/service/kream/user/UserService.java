@@ -32,7 +32,12 @@ public class UserService {
 
 
     public User getProfileInfo(int user_no) {
+
         return userDao.getProfileInfo(user_no);
+    }
+
+    public User getUserbyToken(String access_token){
+        return userDao.getUserbyToken(access_token);
     }
 
     @Transactional

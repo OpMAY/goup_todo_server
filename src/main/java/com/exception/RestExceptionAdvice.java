@@ -35,6 +35,20 @@ public class RestExceptionAdvice {
         return new ResponseEntity(DefaultRes.res(HttpStatus.UNAUTHORIZED), HttpStatus.OK);
     }
 
+    @ExceptionHandler(LoginTokenException.class)
+    protected ResponseEntity handleLoginTokenException(LoginTokenException e){
+        log.error("handleLoginTokenException -> {}", e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity(DefaultRes.res(HttpStatus.NOT_FOUND), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(ContentsException.class)
+    protected ResponseEntity handlerContentsException(ContentsException e){
+        log.error("ContentException -> {}",e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity(DefaultRes.res(HttpStatus.NO_CONTENT),HttpStatus.OK);
+    }
+
     /**
      * JSON 파싱, 역파싱 관련 Exception 발생시
      */

@@ -28,6 +28,7 @@ public interface UserMapper {
 
     void updateProfileImage(@Param("profile_image") MFile profile_image, @Param("user_no")int user_no);
 
+    User getUserbyToken(String access_token);
 
     boolean checkUserExists(@Param("login_type") LOGIN_TYPE login_type, @Param("access_token") String access_token);
 

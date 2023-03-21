@@ -1,6 +1,7 @@
 package com.restcontroller;
 
 import com.api.LoginAPI;
+import com.exception.ContentsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.model.User;
 import com.model.kream.point.Point;
@@ -116,8 +117,13 @@ public class UserRestController {
     @PostMapping("/address")
     public ResponseEntity registAddress(@RequestBody Address address) {
         Message message = new Message();
-        addressService.registAddress(address);
-        message.put("status", true);
+        if(address.getNo() == 0){
+            throw new ContentsException();
+        } else{
+            addressService.registAddress(address);
+            message.put("status", true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -125,10 +131,15 @@ public class UserRestController {
     @PutMapping("/address/{no}")
     public ResponseEntity editAddress(@RequestBody Address address, @PathVariable int no) {
         Message message = new Message();
-        addressService.updateAddress(address);
-        message.put("status", true);
-        message.put("address", address);
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message), HttpStatus.OK);
+        if(address.getNo() == 0){
+            throw new ContentsException();
+        } else{
+            addressService.updateAddress(address);
+            message.put("status", true);
+            message.put("address",address);
+        }
+
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK,message), HttpStatus.OK);
     }
 
     @DeleteMapping("/address/{no}")
@@ -151,8 +162,13 @@ public class UserRestController {
     @PostMapping("/account")
     public ResponseEntity registAccountInfo(@RequestBody AccountInfo accountInfo) {
         Message message = new Message();
-        accountInfoService.registAccountInfo(accountInfo);
-        message.put("status", true);
+        if(accountInfo == null || accountInfo.getUser_no()==0){
+            throw new ContentsException();
+        }else{
+            accountInfoService.registAccountInfo(accountInfo);
+            message.put("status", true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -160,8 +176,14 @@ public class UserRestController {
     @PutMapping("/account/{user_no}")
     public ResponseEntity editAccountInfo(@RequestBody AccountInfo accountInfo, @PathVariable int user_no) {
         Message message = new Message();
-        accountInfoService.updateAccountInfo(accountInfo);
-        message.put("status", true);
+
+        if(accountInfo == null || accountInfo.getUser_no()==0){
+            throw new ContentsException();
+        }else{
+            accountInfoService.updateAccountInfo(accountInfo);
+            message.put("status", true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -187,8 +209,13 @@ public class UserRestController {
     @PostMapping("/payment")
     public ResponseEntity registPayment(@RequestBody CardInfo cardInfo) {
         Message message = new Message();
-        cardInfoService.addCardInfo(cardInfo);
-        message.put("status", true);
+        if(cardInfo == null || cardInfo.getNo()==0){
+            throw new ContentsException();
+        }else{
+            cardInfoService.addCardInfo(cardInfo);
+            message.put("status", true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -229,8 +256,13 @@ public class UserRestController {
     @PostMapping("/point")
     public ResponseEntity RegistPoint(@RequestBody Point point) {
         Message message = new Message();
-        pointService.registPoint(point);
-        message.put("status", true);
+        if(point == null || point.getNo()==0){
+            throw new ContentsException();
+        }else{
+            pointService.registPoint(point);
+            message.put("status", true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }

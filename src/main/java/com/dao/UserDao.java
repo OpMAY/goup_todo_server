@@ -63,6 +63,10 @@ public class UserDao {
     }
 
 
+    public User getUserbyToken(String access_token) {
+        return  mapper.getUserbyToken(access_token);
+    }
+    
     public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
         return mapper.getUserByLoginInfo(login_type, access_token);
     }
