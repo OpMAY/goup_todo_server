@@ -6,6 +6,7 @@ import com.model.kream.cs.Qna;
 import com.model.kream.home.Banner;
 import com.model.kream.point.Point;
 import com.model.kream.product.Product;
+import com.model.kream.product.ProductAdmin;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
@@ -42,7 +43,7 @@ public class AdminController {
 
     @RequestMapping(value = "/product/list", method = RequestMethod.GET)
     public ModelAndView products() {
-        List<Product> products = productService.getAllProducts();
+        List<ProductAdmin> products = productService.getAdminProducts();
         ModelAndView VIEW = new ModelAndView("admin/product/product-list");
         VIEW.addObject("products", products);
         return VIEW;

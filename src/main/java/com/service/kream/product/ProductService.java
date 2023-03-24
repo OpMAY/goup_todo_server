@@ -9,10 +9,8 @@ import com.model.kream.order.before.Purchase;
 import com.model.kream.order.before.Sell;
 import com.model.kream.order.before.sub.purchase.PURCHASE_TYPE;
 import com.model.kream.order.before.sub.sell.SELL_TYPE;
-import com.model.kream.product.Product;
-import com.model.kream.product.ProductDetail;
-import com.model.kream.product.ProductMain;
-import com.model.kream.product.ProductShop;
+import com.model.kream.product.*;
+import com.model.kream.product.category.Category;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
 import com.model.kream.product.interactions.PRODUCT_UPDATE_TYPE;
 import com.model.kream.product.interactions.Wish;
@@ -614,7 +612,23 @@ public class ProductService {
         return price_filter.indexOf("-") == 0 || price_filter.indexOf("-") + 1 != price_filter.length() ? Integer.parseInt(price_filter.substring(price_filter.indexOf("-") + 1)) : 0;
     }
 
-    public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
+    public List<ProductAdmin> getAdminProducts() {
+        List<Product> products = productDao.getAllProducts();
+        List<ProductAdmin> result = new ArrayList<>();
+        for(Product product : products) {
+            ProductAdmin admin = new ProductAdmin();
+            admin.setProduct(product);
+            admin.setBrand(brandDao.getBrandByNo(product.getBrand_no()));
+            Category category = categoryDao.getCategoryByNo(product.getCategory_no());
+            admin.setCategory(category);
+            if(category.getParent_no() != 0) {
+                admin.setUpperCategory(categoryDao.getCategoryByNo(category.getParent_no()));
+            }
+            ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
+            admin.setPrice(size != null ? size.getPrice() : null);
+            admin.setWishes(wishDao.getProductWishCount(product.getNo()));
+            result.add(admin);
+        }
+        return result;
     }
 }
