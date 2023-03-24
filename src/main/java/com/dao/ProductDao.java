@@ -112,4 +112,8 @@ public class ProductDao {
     public boolean checkProductNameDuplicate(String en_name, String kor_name) {
         return mapper.checkProductNameDuplicate(en_name, kor_name);
     }
+
+    public List<Product> getAllProducts() {
+        return mapper.getAllProducts();
+    }
 }

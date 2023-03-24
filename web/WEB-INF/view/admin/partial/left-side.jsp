@@ -49,10 +49,10 @@
                     <div class="collapse" id="sidebarEcommerce">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="ecommerce-dashboard.html">상품 목록</a>
+                                <a href="/admin/product/list">상품 목록</a>
                             </li>
                             <li>
-                                <a href="ecommerce-products.html">상품 등록</a>
+                                <a href="/admin/product/register">상품 등록</a>
                             </li>
                         </ul>
                     </div>
