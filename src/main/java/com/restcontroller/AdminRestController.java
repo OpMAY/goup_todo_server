@@ -3,6 +3,7 @@ package com.restcontroller;
 import com.exception.ContentsException;
 import com.model.kream.cs.Notice;
 import com.model.kream.home.Banner;
+import com.model.kream.point.Point;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
@@ -78,9 +79,12 @@ public class AdminRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PutMapping("/user/{no")
-    public ResponseEntity adminUserPoint(@PathVariable int no,@RequestParam int point) {
+    @PutMapping("/user/{no}")
+    public ResponseEntity givePoint(@PathVariable int no,@RequestParam int point) {
         Message message = new Message();
+        Point pointData = pointService.getPointData(no);
+        pointService.editPoint(pointData.getUser_no(),pointData.getPoint() + point);
+
 
         message.put("status",true);
 

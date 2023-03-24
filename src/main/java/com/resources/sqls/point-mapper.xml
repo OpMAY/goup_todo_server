@@ -8,6 +8,10 @@
     <select id="getPoint" resultType="Point">
         select * from point where no=#{no}
     </select>
+
+    <select id="getPointData">
+        select * from point where no=#{no}
+    </select>
     <insert id="addPoint" useGeneratedKeys="true" keyProperty="no">
         insert into point( user_no, point, type, used_point, flag, reg_datetime, updated_datetime)
         values (
@@ -20,5 +24,13 @@
                    now()
                )
     </insert>
+
+    <update id="editPoint">
+        update point set point = #{point},
+                     updated_datetime = now()
+                     where user_no =#{user_no}
+
+
+    </update>
 
 </mapper>

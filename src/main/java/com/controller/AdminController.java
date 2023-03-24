@@ -1,6 +1,8 @@
 package com.controller;
 
+import com.model.User;
 import com.model.kream.home.Banner;
+import com.model.kream.point.Point;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
@@ -28,9 +30,25 @@ public class AdminController {
     @GetMapping("/banner")
     public ModelAndView getBanner(){
         Message message = new Message();
-        List<Banner> banners = bannerService.getBanner();
+        ModelAndView view = new ModelAndView("/admin");
+
+        List<Banner> banners = bannerService.getAllBanner();
+        view.addObject("banners", banners);
+
         message.put("banners",banners);
-        return new ModelAndView("/");
+
+        return view;
+    }
+
+    @GetMapping("/user")
+    public ModelAndView getUser(){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("/admin");
+
+        List<User> users = userService.getAllUser();
+        view.addObject("users",users);
+
+        return  view;
     }
 
 

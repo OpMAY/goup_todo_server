@@ -11,7 +11,7 @@
 
 
     <!--List -->
-    <select id="getBanner" resultType="Banner" resultMap="Banner">
+    <select id="getAllBanner" resultType="Banner" resultMap="Banner">
         select *
         from banner
         where banner_flag = true

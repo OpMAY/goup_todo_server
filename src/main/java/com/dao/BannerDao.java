@@ -20,8 +20,8 @@ public class BannerDao {
         this.mapper = sqlSession.getMapper(BannerMapper.class);
     }
 
-    public List<Banner> getBanner(){
-        return mapper.getBanner();
+    public List<Banner> getAllBanner(){
+        return mapper.getAllBanner();
     }
 
     public void registBanner(Banner banner){

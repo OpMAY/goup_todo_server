@@ -5,6 +5,7 @@ import com.model.kream.home.Banner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -16,14 +17,16 @@ public class BannerService {
 
     private  final BannerDao bannerDao;
 
-    public List<Banner> getBanner(){
-        return bannerDao.getBanner();
+    public List<Banner> getAllBanner(){
+        return bannerDao.getAllBanner();
     }
 
+    @Transactional
     public void registBanner(Banner banner){
         bannerDao.registBanner(banner);
     }
 
+    @Transactional
     public void editBanner(Map<String, Object> data , Banner banner) {
             data.put("no",banner.getNo());
             data.put("banner_image",banner.getBanner_image());
@@ -37,6 +40,7 @@ public class BannerService {
 
     }
 
+    @Transactional
     public void deleteBanner(int no) {
         bannerDao.deleteBanner(no);
     }

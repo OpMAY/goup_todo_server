@@ -25,7 +25,7 @@ public class HomeController {
     @GetMapping("/banner")
     public ResponseEntity getBanner(){
         Message message =new Message();
-        List<Banner> bannerList = bannerService.getBanner();
+        List<Banner> bannerList = bannerService.getAllBanner();
         message.put("bannerlist",bannerList);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);

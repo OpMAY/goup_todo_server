@@ -246,7 +246,7 @@ public class UserRestController {
     public ResponseEntity getPointList(@PathVariable int no) {
         Message message = new Message();
 
-        List<Point> point = pointService.getPoint(no);
+        Point point = pointService.getPointData(no);
         message.put("point", point);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);

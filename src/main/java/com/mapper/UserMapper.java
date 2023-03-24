@@ -5,6 +5,8 @@ import com.model.common.MFile;
 import com.model.kream.user.LOGIN_TYPE;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserMapper {
     User getProfileInfo(int no);
 
@@ -35,4 +37,5 @@ public interface UserMapper {
     User getUserByLoginInfo(@Param("login_type") LOGIN_TYPE login_type, @Param("access_token") String access_token);
 
 
+    List<User> getAllUser();
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface BannerMapper {
 
-    List<Banner> getBanner();
+    List<Banner> getAllBanner();
 
     void registBanner(Banner banner);
 

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -32,4 +33,15 @@ public class NoticeService {
         return notices;
     }
 
+    public void addNotice(Notice notice){
+        noticeDao.addNotice(notice);
+    }
+
+    public void updateNotice(Map<String,Object> data) {
+        noticeDao.updateNotice(data);
+    }
+
+    public void deleteNotice(int no) {
+        noticeDao.deleteNotice(no);
+    }
 }
