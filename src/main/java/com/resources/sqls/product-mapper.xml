@@ -462,4 +462,9 @@
     <select id="checkProductNameDuplicate" resultType="_boolean">
         select EXISTS(select * from product WHERE en_name = #{en_name} or kor_name = #{kor_name})
     </select>
+    <select id="getAllProducts" resultType="Product" resultMap="Product">
+        select *
+        from product
+        ORDER BY reg_datetime DESC
+    </select>
 </mapper>

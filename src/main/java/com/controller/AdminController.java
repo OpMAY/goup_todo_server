@@ -5,11 +5,13 @@ import com.model.kream.cs.Notice;
 import com.model.kream.cs.Qna;
 import com.model.kream.home.Banner;
 import com.model.kream.point.Point;
+import com.model.kream.product.Product;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
 import com.service.NoticeService;
 import com.service.QnaService;
+import com.service.kream.product.ProductService;
 import com.service.kream.user.PointService;
 import com.service.kream.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +35,19 @@ public class AdminController {
     private final NoticeService noticeService;
     private final QnaService qnaService;
 
+    private final ProductService productService;
+
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public ModelAndView dashboard() {
         return new ModelAndView("admin/dashboard-4");
+    }
+
+    @RequestMapping(value = "/product/list", method = RequestMethod.GET)
+    public ModelAndView products() {
+        List<Product> products = productService.getAllProducts();
+        ModelAndView VIEW = new ModelAndView("admin/product/product-list");
+        VIEW.addObject("products", products);
+        return VIEW;
     }
 
     @GetMapping("/banner")
