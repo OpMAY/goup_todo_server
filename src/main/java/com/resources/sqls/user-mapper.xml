@@ -11,7 +11,7 @@
     </resultMap>
 
 
-    <!--List -->
+
     <select id="getProfileInfo" resultType="User" resultMap="user_map">
         select u.no, u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img, u.user_flag
         from user u
@@ -105,6 +105,8 @@
         where no = #{no}
     </update>
 
+
+
     <select id="checkUserExists" resultType="_boolean">
         select EXISTS(select * from user WHERE access_token = #{access_token} AND login_type = #{login_type})
     </select>
@@ -115,5 +117,11 @@
         WHERE access_token = #{access_token}
           and login_type = #{login_type}
     </select>
+
+<!--    <List>-->
+    <select id="getAllUser">
+        select * from user order by reg_datetime desc;
+    </select>
+
 
 </mapper>

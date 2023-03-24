@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class NoticeDao {
@@ -25,8 +26,17 @@ public class NoticeDao {
         return mapper.getNotices(offset);
     }
 
-    public int getNoticePages() {
-        return mapper.getNoticePages();
+
+    public void addNotice(Notice notice) {
+        mapper.addNotice(notice);
+    }
+
+    public void updateNotice(Map<String,Object> data) {
+        mapper.updateNotice(data);
+    }
+
+    public void deleteNotice(int no) {
+        mapper.deleteNotice(no);
     }
 }
 

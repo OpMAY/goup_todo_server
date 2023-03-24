@@ -15,12 +15,22 @@ import java.util.List;
 public class PointService {
     private final PointDao pointDao;
 
-    public List<Point> getPoint(int no) {
-        return pointDao.getPoint(no);
+    public List<Point> getPoint(int user_no ) {
+        return pointDao.getPoint(user_no);
+    }
+
+    public Point getPointData(int no){
+        return pointDao.getPointData(no);
     }
 
     @Transactional
     public void registPoint(Point point) {
         pointDao.registPoint(point);
+    }
+
+    @Transactional
+    public void editPoint(int user_no,int point) {
+
+        pointDao.editPoint(user_no,point);
     }
 }

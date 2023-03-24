@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -15,12 +16,38 @@ import java.util.List;
 public class QnaService {
     private final QnaDao qnaDao;
 
-    public List<Qna> getQna( QNA_TYPE type) {
-        return qnaDao.getQna(type);
+    public List<Qna> getQnaByType( QNA_TYPE type) {
+        return qnaDao.getQnaByType(type);
     }
 
 
     public List<Qna> getAllQna() {
         return qnaDao.getAllQna();
     }
+
+    public Qna getQnaData(int no) {
+        return qnaDao.getQnaData(no);
+    }
+
+    public void addQna(Qna qna){
+        qnaDao.addQna(qna);
+    }
+
+    public void updateQna(Map<String,Object> data, Qna qna){
+        data.put("no",qna.getNo());
+        data.put("title",qna.getTitle());
+        data.put("content",qna.getContent());
+        data.put("type",qna.getType());
+        data.put("updated_datetime",qna.getUpdated_datetime());
+
+        qnaDao.updateQna(data);
+
+
+    }
+
+    public void deleteQna(int no) {
+        qnaDao.deleteQna(no);
+    }
+
+
 }

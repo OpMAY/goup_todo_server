@@ -20,12 +20,21 @@ public class PointDao {
         mapper.addPoint(point);
     }
 
-    public List<Point> getPoint(int no) {
-        return mapper.getPoint(no);
+    public List<Point> getPoint(int user_no) {
+        return mapper.getPoint(user_no);
+    }
+
+    public Point getPointData(int no){
+        return mapper.getPointData(no);
     }
 
 
    public void registPoint(Point point) {
         mapper.addPoint(point);
+    }
+
+    public void editPoint(int user_no, int point) {
+
+        mapper.editPoint(user_no,point);
     }
 }

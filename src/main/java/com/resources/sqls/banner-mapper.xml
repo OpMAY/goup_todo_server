@@ -11,12 +11,37 @@
 
 
     <!--List -->
-    <select id="getBanner" resultType="Banner" resultMap="Banner">
+    <select id="getAllBanner" resultType="Banner" resultMap="Banner">
         select *
         from banner
         where banner_flag = true
         ORDER BY reg_datetime desc;
     </select>
+
+    <insert id="registBanner" useGeneratedKeys="true" keyProperty="no">
+        insert into banner(banner_image,banner_flag,click_to_url,reg_datetime,update_datetime)
+        values (#{banner_image,typeHandler=JsonObjectTypeHandler},
+                #{banner_flag},
+                #{click_to_url},
+                now(),
+                now())
+    </insert>
+
+
+    <update id="editBanner" parameterType="map">
+        UPDATE banner
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="banner_image !=null">banner_image=#{banner_image,typeHandler=JsonObjectTypeHandler},</if>
+            <if test="banner_flag != null">banner_flag=#{banner_flag},</if>
+            <if test="click_to_url !=null">click_to_url=#{click_to_url}</if>
+            <if test="update_datetime != null">update_datetime=now()</if>
+        </trim>
+        where no = #{no}
+    </update>
+
+    <delete id="deleteBanner">
+        delete from banner where no=#{no}
+    </delete>
 
 
 </mapper>

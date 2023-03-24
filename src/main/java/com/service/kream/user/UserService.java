@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -164,5 +165,13 @@ public class UserService {
 
     public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
         return userDao.getUserByLoginInfo(login_type, access_token);
+    }
+
+    public void userSuspended(int no,int user_flag) {
+         userDao.userSuspended(no,user_flag);
+    }
+
+    public List<User> getAllUser() {
+        return userDao.getAllUser();
     }
 }

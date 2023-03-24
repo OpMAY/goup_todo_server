@@ -8,6 +8,8 @@ import com.model.kream.user.LOGIN_TYPE;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserDao {
 
@@ -69,5 +71,13 @@ public class UserDao {
     
     public User getUserByLoginInfo(LOGIN_TYPE login_type, String access_token) {
         return mapper.getUserByLoginInfo(login_type, access_token);
+    }
+
+    public void userSuspended(int no,int user_flag) {
+         mapper.deleteUser(no,user_flag);
+    }
+
+    public List<User> getAllUser() {
+        return mapper.getAllUser();
     }
 }

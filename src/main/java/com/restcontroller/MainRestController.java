@@ -29,7 +29,7 @@ public class MainRestController {
     public ResponseEntity getProductMain(HttpServletRequest request) {
         Message message = new Message();
         // TODO Type 별 products => Main Controller 로 빠질 예정
-        List<Banner> banners = bannerService.getBanner();
+        List<Banner> banners = bannerService.getAllBanner();
         List<ProductMain> popular_products = productService.getPopularProducts(0);
         List<ProductMain> recent_products = productService.getRecentProducts(0);
         message.put("popular_products", popular_products);

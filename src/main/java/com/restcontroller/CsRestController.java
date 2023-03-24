@@ -61,7 +61,7 @@ public class CsRestController {
 
         List<Qna> qna ;
         if(type != null){
-             qna= qnaService.getQna(type);
+             qna= qnaService.getQnaByType(type);
         }else{
              qna = qnaService.getAllQna();
 
@@ -80,6 +80,8 @@ public class CsRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
+
+
 
 
 

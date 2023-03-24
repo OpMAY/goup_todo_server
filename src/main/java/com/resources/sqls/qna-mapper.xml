@@ -7,7 +7,7 @@
 <mapper namespace="com.mapper.QnAMapper">
 
     <!--List -->
-    <select id="getQna" resultType="Qna">
+    <select id="getQnaByType" resultType="Qna">
         select *
         from qna
         where type = #{type}
@@ -20,6 +20,37 @@
         where flag = 1
         order by reg_datetime desc
     </select>
+
+    <select id="getQnaData" resultType="Qna">
+        select * from qna where no=#{no}
+    </select>
+
+    <insert id="addQna" useGeneratedKeys="true" keyProperty="no">
+        insert into qna (title, content, type, reg_datetime, updated_datetime, flag)
+
+        values (#{title},
+                #{content},
+                #{type},
+                now(),
+                now());
+    </insert>
+
+
+
+    <update id="updateQna" parameterType="map">
+        UPDATE qna
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title !=null">title=#{title},</if>
+            <if test="content != null">content=#{content},</if>
+            <if test="flag !=null">flag=#{flag}</if>
+            <if test="update_datetime != null">update_datetime=now()</if>
+        </trim>
+        where no = #{no}
+    </update>
+
+    <delete id="deleteQna">
+        delete from qna where no=#{no}
+    </delete>
 
 
 </mapper>
