@@ -32,23 +32,24 @@ public class RestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(!request.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            String authorization = request.getHeader("authorization");
-            log.info("interceptor authorization header : {}", authorization);
-            if(authorization != null && authorization.contains("bearer ")) {
-                String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
-                if(encryptionService.decryptGoupJWT(token)) {
-                    return true;
-                } else {
-                    throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
-                }
-            } else {
-                throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
+//        if(!request.getMethod().equals(RequestMethod.OPTIONS.name())) {
+//            String authorization = request.getHeader("authorization");
+//            log.info("interceptor authorization header : {}", authorization);
+//            if(authorization != null && authorization.contains("bearer ")) {
+//                String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
+//                if(encryptionService.decryptGoupJWT(token)) {
+//                    return true;
+//                } else {
+//                    throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
+//                }
+//            } else {
+//                throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
+////            return true;
+//            }
+//        } else {
 //            return true;
-            }
-        } else {
-            return true;
-        }
+//        }
+        return true;
     }
 
     @Override
