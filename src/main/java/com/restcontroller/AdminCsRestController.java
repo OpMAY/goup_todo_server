@@ -33,16 +33,12 @@ public class AdminCsRestController {
     }
 
     @PutMapping("/notice/{no}")
-    public ResponseEntity registNotice(@PathVariable int no  ){
+    public ResponseEntity editNotice(@PathVariable int no  ){
         Message message  = new Message();
         Notice notice = noticeService.getNotice(no);
-
         Map<String,Object> data = new HashMap<>();
-        data.put("no",notice.getNo());
-        data.put("title",notice.getTitle());
-        data.put("content",notice.getContent());
-        data.put("flag",notice.isFlag());
-        noticeService.updateNotice(data);
+
+        noticeService.updateNotice(data,notice);
         message.put("notice",true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
@@ -70,15 +66,10 @@ public class AdminCsRestController {
     public ResponseEntity updateQna(@PathVariable int no){
         Qna qna = qnaService.getQnaData(no);
         Message message  = new Message();
-
         Map<String, Object> data = new HashMap<>();
-        data.put("no",qna.getNo());
-        data.put("title",qna.getTitle());
-        data.put("content",qna.getContent());
-        data.put("type",qna.getType());
-        data.put("updated_datetime",qna.getUpdated_datetime());
 
-        qnaService.updateQna(data);
+
+        qnaService.updateQna(data,qna);
         message.put("notice",true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
