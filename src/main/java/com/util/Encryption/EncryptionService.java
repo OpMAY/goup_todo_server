@@ -10,6 +10,7 @@ import com.exception.enums.GlobalExceptionType;
 import com.model.jwt.RootUser;
 import com.util.Constant;
 import com.util.TimeFormatter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import java.util.Base64;
 import java.util.HashMap;
 
 @Service
+@Slf4j
 public class EncryptionService implements Encrypt {
     @Value("${GOUP.ACCESS.KEY}")
     private String accessKey;
@@ -123,8 +125,8 @@ public class EncryptionService implements Encrypt {
                 .withIssuer("auth0")
                 .build(); //Reusable verifier instance
         DecodedJWT jwt = verifier.verify(encryptedJWT);
-        if(jwt != null && jwt.getClaim(JWTEnum.TOKEN.name()) != null) {
-            if(jwt.getClaim(JWTEnum.TOKEN.name()).toString().equals(accessKey)) {
+        if (jwt != null && jwt.getClaim(JWTEnum.TOKEN.name()) != null) {
+            if (jwt.getClaim(JWTEnum.TOKEN.name()).asString().equals(accessKey)) {
                 return !jwt.getExpiresAt().before(TimeFormatter.LongTimeStamp(0));
             } else {
                 return false;

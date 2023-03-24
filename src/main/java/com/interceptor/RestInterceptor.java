@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -31,23 +32,24 @@ public class RestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String authorization = request.getHeader("authorization");
-        log.info("interceptor authorization header : {}", authorization);
-        if(authorization != null && authorization.contains("bearer ")) {
-            String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
-            if(encryptionService.decryptGoupJWT(token)) {
-                return true;
-            } else {
+//        if(!request.getMethod().equals(RequestMethod.OPTIONS.name())) {
+//            String authorization = request.getHeader("authorization");
+//            log.info("interceptor authorization header : {}", authorization);
+//            if(authorization != null && authorization.contains("bearer ")) {
+//                String token = authorization.substring(authorization.indexOf("bearer") + "bearer".length() + 1);
+//                if(encryptionService.decryptGoupJWT(token)) {
+//                    return true;
+//                } else {
+//                    throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
+//                }
+//            } else {
 //                throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
-                response.sendError(401);
-                return false;
-            }
-        } else {
-//            throw new HeaderAuthorizationTokenException(GlobalExceptionType.TOKEN_EXCEPTION);
-            response.sendError(401);
-            return false;
-        }
-//        return true;
+////            return true;
+//            }
+//        } else {
+//            return true;
+//        }
+        return true;
     }
 
     @Override

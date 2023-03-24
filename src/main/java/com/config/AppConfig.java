@@ -101,8 +101,10 @@ public class AppConfig implements WebApplicationInitializer, SchedulingConfigure
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
+        log.info("corsRegistry init");
         corsRegistry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000");
+        log.info("corsRegistry initialized : {}", corsRegistry);
     }
 
     @Override
