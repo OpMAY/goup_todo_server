@@ -614,4 +614,7 @@ public class ProductService {
         return price_filter.indexOf("-") == 0 || price_filter.indexOf("-") + 1 != price_filter.length() ? Integer.parseInt(price_filter.substring(price_filter.indexOf("-") + 1)) : 0;
     }
 
+    public List<Product> getAllProducts() {
+        return productDao.getAllProducts();
+    }
 }
