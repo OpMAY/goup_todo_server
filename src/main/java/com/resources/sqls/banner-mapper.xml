@@ -14,7 +14,6 @@
     <select id="getAllBanner" resultType="Banner" resultMap="Banner">
         select *
         from banner
-        where banner_flag = true
         ORDER BY reg_datetime desc;
     </select>
 

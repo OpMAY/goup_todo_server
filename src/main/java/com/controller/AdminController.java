@@ -4,8 +4,6 @@ import com.model.User;
 import com.model.kream.cs.Notice;
 import com.model.kream.cs.Qna;
 import com.model.kream.home.Banner;
-import com.model.kream.point.Point;
-import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
 import com.service.NoticeService;
@@ -14,8 +12,6 @@ import com.service.kream.user.PointService;
 import com.service.kream.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,17 +34,18 @@ public class AdminController {
         return new ModelAndView("admin/dashboard-4");
     }
 
-    @GetMapping("/banner")
+    @RequestMapping(value = "/banners", method = RequestMethod.GET)
     public ModelAndView getBanner(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
+        ModelAndView view = new ModelAndView("admin/banner/banners");
 
-        List<Banner> banners = bannerService.getAllBanner();
-        view.addObject("banners", banners);
-
-        message.put("banners",banners);
-
+        List<Banner> bannerList = bannerService.getAllBanner();
+        view.addObject("bannerList", bannerList);
+//
+        message.put("bannerList",bannerList);
+//
         return view;
+
     }
 
     @GetMapping("/user")

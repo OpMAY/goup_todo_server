@@ -24,14 +24,14 @@
                 </li>
                 <li>
                     <a href="#sidebarBanner" data-bs-toggle="collapse">
-                        <i data-feather="shopping-cart"></i>
+                        <i data-feather="flag"></i>
                         <span> 배너 </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="sidebarBanner">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="ecommerce-dashboard.html">배너 목록</a>
+                                <a href="banners">배너 목록</a>
                             </li>
                             <li>
                                 <a href="ecommerce-products.html">배너 등록</a>
@@ -74,7 +74,7 @@
 
                 <li>
                     <a href="#sidebarUser" data-bs-toggle="collapse">
-                        <i data-feather="shopping-cart"></i>
+                        <i data-feather="users"></i>
                         <span> 사용자 </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -93,7 +93,7 @@
 
                 <li>
                     <a href="#sidebarCs" data-bs-toggle="collapse">
-                        <i data-feather="shopping-cart"></i>
+                        <i data-feather="aperture"></i>
                         <span> 고객센터 </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -108,7 +108,7 @@
                         </ul>
                     </div>
                 </li>
-
+            </ul>
 
         </div>
         <!-- End Sidebar -->
