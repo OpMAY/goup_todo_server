@@ -33,6 +33,11 @@ public class AdminController {
     private final NoticeService noticeService;
     private final QnaService qnaService;
 
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    public ModelAndView dashboard() {
+        return new ModelAndView("admin/dashboard-4");
+    }
+
     @GetMapping("/banner")
     public ModelAndView getBanner(){
         Message message = new Message();

@@ -30,12 +30,12 @@ public class AdminRestController {
     private final PointService pointService;
 
 
-    @PostMapping(value="/banner")
+    @PostMapping(value = "/banner")
     public ResponseEntity registBanner(@RequestBody Banner banner) {
         Message message = new Message();
-        if(banner.getNo() ==0){
+        if (banner.getNo() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
             bannerService.registBanner(banner);
             message.put("status", true);
         }
@@ -44,19 +44,17 @@ public class AdminRestController {
     }
 
     @PutMapping("/banner/{no}")
-    public ResponseEntity editBanner(@RequestBody Banner banner,@PathVariable int no) {
+    public ResponseEntity editBanner(@RequestBody Banner banner, @PathVariable int no) {
         Message message = new Message();
-        if(banner.getNo() ==0){
+        if (banner.getNo() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
             Map<String, Object> map = new HashMap<>();
-            bannerService.editBanner(map,banner);
+            bannerService.editBanner(map, banner);
             message.put("status", true);
         }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
-
-
 
 
     @DeleteMapping("/banner/{no}")
@@ -64,7 +62,7 @@ public class AdminRestController {
         Message message = new Message();
 
         bannerService.deleteBanner(no);
-        message.put("status",true);
+        message.put("status", true);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
@@ -73,20 +71,20 @@ public class AdminRestController {
     public ResponseEntity userSuspended(@PathVariable int no) {
         Message message = new Message();
 
-        userService.userSuspended(no,0);
-        message.put("status",true);
+        userService.userSuspended(no, 0);
+        message.put("status", true);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PutMapping("/user/{no}")
-    public ResponseEntity givePoint(@PathVariable int no,@RequestParam int point) {
+    @PutMapping("/user/point/{no}")
+    public ResponseEntity givePoint(@PathVariable int no, @RequestParam int point) {
         Message message = new Message();
         Point pointData = pointService.getPointData(no);
-        pointService.editPoint(pointData.getUser_no(),pointData.getPoint() + point);
+        pointService.editPoint(pointData.getUser_no(), pointData.getPoint() + point);
 
 
-        message.put("status",true);
+        message.put("status", true);
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
