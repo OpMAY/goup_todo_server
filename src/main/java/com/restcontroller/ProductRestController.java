@@ -90,6 +90,7 @@ public class ProductRestController {
 
     @RequestMapping(value = "/size/{no}", method = RequestMethod.GET)
     public ResponseEntity GetProductSizes(@PathVariable Integer no,
+                                          @RequestParam(value = "user_no", required = false) int user_no,
                                           @RequestParam(value = "is_price", required = false) String is_price,
                                           @RequestParam(value = "type", required = false) String type) {
         Message message = new Message();
@@ -106,7 +107,7 @@ public class ProductRestController {
         if (price_bool && sort_type == null) {
             return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
         } else {
-            List<ProductPriceWithSize> sizes = productService.getProductSizes(no, price_bool, sort_type);
+            List<ProductPriceWithSize> sizes = productService.getProductSizes(no, user_no, price_bool, sort_type);
             message.put("sizes", sizes);
         }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);

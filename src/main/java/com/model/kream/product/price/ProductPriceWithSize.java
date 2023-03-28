@@ -10,4 +10,5 @@ public class ProductPriceWithSize {
     private String size;
     private Integer price;
     private LocalDate reg_datetime;
+    private boolean is_wish;
 }

@@ -48,7 +48,15 @@ public class AdminController {
         VIEW.addObject("products", products);
         return VIEW;
     }
-    
+
+    @RequestMapping(value = "/product/detail/{no}", method = RequestMethod.GET)
+    public ModelAndView productDetail(@PathVariable int no) {
+        ProductAdmin productAdmin = productService.getAdminProduct(no);
+        ModelAndView VIEW = new ModelAndView("admin/product/detail");
+        VIEW.addObject("product", productAdmin);
+        return VIEW;
+    }
+
     @RequestMapping(value = "/banners", method = RequestMethod.GET)
     public ModelAndView getBanner(){
         Message message = new Message();

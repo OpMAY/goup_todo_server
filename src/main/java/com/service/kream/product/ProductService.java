@@ -387,7 +387,7 @@ public class ProductService {
     }
 
     // A and B
-    public List<ProductPriceWithSize> getProductSizes(int product_no, boolean is_price, PRODUCT_TRANSACTION_TYPE type) {
+    public List<ProductPriceWithSize> getProductSizes(int product_no, int user_no, boolean is_price, PRODUCT_TRANSACTION_TYPE type) {
         // Prices Per Size Setting
         // 사이즈 조회 시 나오는 가격은 구매 기준 가격이므로 등록된 판매 입찰가 기준으로 가격을 첵정
         List<ProductPriceWithSize> detailSizes = new ArrayList<>();
@@ -412,6 +412,9 @@ public class ProductService {
                 detailSize.setPrice(type.equals(PRODUCT_TRANSACTION_TYPE.PURCHASE) ?
                         sellDao.getSizeProductSellLowestPrice(size.getNo()) :
                         purchaseDao.getSizeProductPurchaseHighestPrice(size.getNo()));
+            }
+            if(user_no != 0) {
+                detailSize.set_wish(wishDao.isUserWishSize(user_no, size.getNo()));
             }
             detailSizes.add(detailSize);
         });
@@ -630,5 +633,21 @@ public class ProductService {
             result.add(admin);
         }
         return result;
+    }
+
+    public ProductAdmin getAdminProduct(int no) {
+        Product product = productDao.getProductByNo(no);
+        ProductAdmin admin = new ProductAdmin();
+        admin.setProduct(product);
+        admin.setBrand(brandDao.getBrandByNo(product.getBrand_no()));
+        Category category = categoryDao.getCategoryByNo(product.getCategory_no());
+        admin.setCategory(category);
+        if(category.getParent_no() != 0) {
+            admin.setUpperCategory(categoryDao.getCategoryByNo(category.getParent_no()));
+        }
+        ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
+        admin.setPrice(size != null ? size.getPrice() : null);
+        admin.setWishes(wishDao.getProductWishCount(product.getNo()));
+        return admin;
     }
 }
