@@ -44,4 +44,8 @@ public class WishDao {
     public boolean isUserWishSize(int user_no, int size_no) {
         return mapper.isUserWishSize(user_no, size_no);
     }
+
+    public void resetUserProductWishes(int user_no, int product_no) {
+        mapper.resetUserProductWishes(user_no, product_no);
+    }
 }

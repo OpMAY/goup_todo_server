@@ -413,7 +413,7 @@ public class ProductService {
                         sellDao.getSizeProductSellLowestPrice(size.getNo()) :
                         purchaseDao.getSizeProductPurchaseHighestPrice(size.getNo()));
             }
-            if(user_no != 0) {
+            if (user_no != 0) {
                 detailSize.set_wish(wishDao.isUserWishSize(user_no, size.getNo()));
             }
             detailSizes.add(detailSize);
@@ -618,13 +618,13 @@ public class ProductService {
     public List<ProductAdmin> getAdminProducts() {
         List<Product> products = productDao.getAllProducts();
         List<ProductAdmin> result = new ArrayList<>();
-        for(Product product : products) {
+        for (Product product : products) {
             ProductAdmin admin = new ProductAdmin();
             admin.setProduct(product);
             admin.setBrand(brandDao.getBrandByNo(product.getBrand_no()));
             Category category = categoryDao.getCategoryByNo(product.getCategory_no());
             admin.setCategory(category);
-            if(category.getParent_no() != 0) {
+            if (category.getParent_no() != 0) {
                 admin.setUpperCategory(categoryDao.getCategoryByNo(category.getParent_no()));
             }
             ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
@@ -642,12 +642,25 @@ public class ProductService {
         admin.setBrand(brandDao.getBrandByNo(product.getBrand_no()));
         Category category = categoryDao.getCategoryByNo(product.getCategory_no());
         admin.setCategory(category);
-        if(category.getParent_no() != 0) {
+        if (category.getParent_no() != 0) {
             admin.setUpperCategory(categoryDao.getCategoryByNo(category.getParent_no()));
         }
         ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
         admin.setPrice(size != null ? size.getPrice() : null);
         admin.setWishes(wishDao.getProductWishCount(product.getNo()));
         return admin;
+    }
+
+    @Transactional
+    public boolean handleWishes(int user_no, int product_no, List<Wish> wishes) {
+        wishDao.resetUserProductWishes(user_no, product_no);
+        if(wishes.size() > 0) {
+            for(Wish wish : wishes) {
+                wishDao.insertUserWish(wish);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

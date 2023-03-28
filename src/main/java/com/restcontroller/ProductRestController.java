@@ -74,9 +74,9 @@ public class ProductRestController {
     @RequestMapping(value = "/order/sell", method = RequestMethod.POST)
     public ResponseEntity RegisterProductSell(@RequestBody Sell sell) {
         Message message = productService.registerProductSell(sell);
-        if(sell == null || sell.getNo()==0){
+        if (sell == null || sell.getNo() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
 
         }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
@@ -90,7 +90,7 @@ public class ProductRestController {
 
     @RequestMapping(value = "/size/{no}", method = RequestMethod.GET)
     public ResponseEntity GetProductSizes(@PathVariable Integer no,
-                                          @RequestParam(value = "user_no", required = false) int user_no,
+                                          @RequestParam(value = "user_no", required = false) Integer user_no,
                                           @RequestParam(value = "is_price", required = false) String is_price,
                                           @RequestParam(value = "type", required = false) String type) {
         Message message = new Message();
@@ -104,7 +104,7 @@ public class ProductRestController {
                 }
             }
         }
-        if (price_bool && sort_type == null) {
+        if ((price_bool && sort_type == null) || user_no == null) {
             return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
         } else {
             List<ProductPriceWithSize> sizes = productService.getProductSizes(no, user_no, price_bool, sort_type);
@@ -114,10 +114,18 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/wish", method = RequestMethod.POST)
-    public ResponseEntity AddWish(@RequestBody Wish wish) {
+    public ResponseEntity AddWish(@RequestBody Map<String, Object> body) {
         Message message = new Message();
-        message.put("status", productService.addWish(wish));
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+        List<Wish> wishes = (List<Wish>) body.get("wishes");
+        Integer user_no = (Integer) body.get("user_no");
+        Integer product_no = (Integer) body.get("product_no");
+        if (wishes.size() > 0) {
+            message.put("status", productService.handleWishes(user_no, product_no, wishes));
+            return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
+        }
+
     }
 
     @RequestMapping(value = "/wish/{no}", method = RequestMethod.DELETE)
