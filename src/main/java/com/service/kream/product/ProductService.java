@@ -14,6 +14,7 @@ import com.model.kream.product.category.Category;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
 import com.model.kream.product.interactions.PRODUCT_UPDATE_TYPE;
 import com.model.kream.product.interactions.Wish;
+import com.model.kream.product.interactions.WishRequest;
 import com.model.kream.product.price.ProductPriceHistories;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
@@ -652,8 +653,9 @@ public class ProductService {
     }
 
     @Transactional
-    public boolean handleWishes(int user_no, int product_no, List<Wish> wishes) {
-        wishDao.resetUserProductWishes(user_no, product_no);
+    public boolean handleWishes(WishRequest wishRequest) {
+        wishDao.resetUserProductWishes(wishRequest.getUser_no(), wishRequest.getProduct_no());
+        List<Wish> wishes = wishRequest.getWishes();
         if(wishes.size() > 0) {
             for(Wish wish : wishes) {
                 wishDao.insertUserWish(wish);

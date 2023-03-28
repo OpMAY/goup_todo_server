@@ -7,6 +7,7 @@ import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
 import com.model.kream.product.interactions.Wish;
+import com.model.kream.product.interactions.WishRequest;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.response.DefaultRes;
 import com.response.Message;
@@ -114,18 +115,10 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/wish", method = RequestMethod.POST)
-    public ResponseEntity AddWish(@RequestBody Map<String, Object> body) {
+    public ResponseEntity AddWish(@RequestBody WishRequest wishRequest) {
         Message message = new Message();
-        List<Wish> wishes = (List<Wish>) body.get("wishes");
-        Integer user_no = (Integer) body.get("user_no");
-        Integer product_no = (Integer) body.get("product_no");
-        if (wishes.size() > 0) {
-            message.put("status", productService.handleWishes(user_no, product_no, wishes));
-            return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
-        }
-
+        message.put("status", productService.handleWishes(wishRequest));
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/wish/{no}", method = RequestMethod.DELETE)
