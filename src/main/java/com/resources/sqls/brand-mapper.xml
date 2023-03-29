@@ -15,4 +15,9 @@
         from brand
         WHERE brand.no = (select brand_no from product WHERE no = #{no})
     </select>
+    <select id="getAllBrands" resultType="Brand">
+        select *
+        from brand
+        order by name
+    </select>
 </mapper>

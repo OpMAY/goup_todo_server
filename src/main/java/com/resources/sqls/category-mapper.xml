@@ -10,4 +10,12 @@
         from category
         WHERE no = #{no}
     </select>
+    <select id="getCategoryFilters" resultType="CategoryFilter">
+        select no,
+               name,
+               parent_no,
+               IF(parent_no is not null, (select name from category WHERE no = c.parent_no), null) as parent_name
+        from category c
+        WHERE parent_no is not null
+    </select>
 </mapper>

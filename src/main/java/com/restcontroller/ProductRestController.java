@@ -72,6 +72,13 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/shop/filter", method = RequestMethod.GET)
+    public ResponseEntity getShopFilters() {
+        Message message = new Message();
+        message.put("filters", productService.getShopFilters());
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/order/sell", method = RequestMethod.POST)
     public ResponseEntity RegisterProductSell(@RequestBody Sell sell) {
         Message message = productService.registerProductSell(sell);

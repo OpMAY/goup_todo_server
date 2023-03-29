@@ -665,4 +665,11 @@ public class ProductService {
             return false;
         }
     }
+
+    public ProductShopFilter getShopFilters() {
+        ProductShopFilter productShopFilter = new ProductShopFilter();
+        productShopFilter.setBrands(brandDao.getAllBrands());
+        productShopFilter.setCategories(categoryDao.getCategoryFilters());
+        return productShopFilter;
+    }
 }
