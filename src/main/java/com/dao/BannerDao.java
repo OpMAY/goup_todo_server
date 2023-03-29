@@ -24,6 +24,10 @@ public class BannerDao {
         return mapper.getAllBanner();
     }
 
+    public Banner getBanner(int no) {
+        return mapper.getBanner(no);
+    }
+
     public void registBanner(Banner banner){
         mapper.registBanner(banner);
     }
@@ -39,4 +43,6 @@ public class BannerDao {
     public void deleteBanner(int no) {
         mapper.deleteBanner(no);
     }
+
+
 }
