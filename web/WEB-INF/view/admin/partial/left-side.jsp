@@ -31,10 +31,10 @@
                     <div class="collapse" id="sidebarBanner">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="banners">배너 목록</a>
+                                <a href="/admin/banner/list">배너 목록</a>
                             </li>
                             <li>
-                                <a href="ecommerce-products.html">배너 등록</a>
+                                <a href="/admin/banner/add">배너 등록</a>
                             </li>
                         </ul>
                     </div>

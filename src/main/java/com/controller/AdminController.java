@@ -48,24 +48,47 @@ public class AdminController {
         return VIEW;
     }
     
-    @RequestMapping(value = "/banners", method = RequestMethod.GET)
+    @RequestMapping(value = "/banner/list", method = RequestMethod.GET)
     public ModelAndView getBanner(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("admin/banner/banners");
+        ModelAndView view = new ModelAndView("admin/banner/banner-list");
 
-        List<Banner> bannerList = bannerService.getAllBanner();
-        view.addObject("bannerList", bannerList);
+        List<Banner> banner = bannerService.getAllBanner();
+        view.addObject("banner", banner);
 //
-        message.put("bannerList",bannerList);
+        message.put("banner",banner);
 //
         return view;
 
     }
 
-    @GetMapping("/user")
+    @RequestMapping(value = "/banner-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView getDetailBanner(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/banner/detail");
+
+        Banner banner = bannerService.getBanner(no);
+        view.addObject("banner", banner);
+//
+        message.put("banner",banner);
+//
+        return view;
+
+    }
+
+    @RequestMapping(value = "/banner/add", method = RequestMethod.GET)
+    public ModelAndView addBanner(){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/banner/add");
+
+        return view;
+
+    }
+
+    @GetMapping("/user/list")
     public ModelAndView getUser(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
+        ModelAndView view = new ModelAndView("/admin/user/user-list");
 
         List<User> users = userService.getAllUser();
         view.addObject("users",users);

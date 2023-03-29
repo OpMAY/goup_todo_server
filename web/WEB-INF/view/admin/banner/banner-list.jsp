@@ -102,10 +102,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="banner" items="${banners}" varStatus="status">
+                                    <c:forEach var="banner" items="${banner}" varStatus="status">
                                         <tr>
                                             <td>${status.count}</td>
-                                            <td><a href="banners/detail/${banner.no}">
+                                            <td><a href="/admin/banner-detail/${banner.no}">
                                                 <img src= ${banner.banner_image.url} alt="banner-img" height="32" /></a></td>
 
                                             <td>${banner.banner_flag}</td>
@@ -114,10 +114,9 @@
                                             <td>${banner.updated_datetime}</td>
                                             <td>
 
-                                                    <button type="button"
-                                                            class="btn btn-primary rounded-pill waves-effect waves-light" >
+                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >
+                                                        <a href="/admin/banner-detail/${banner.no}"></a>
                                                         상세 보기
-
                                                     </button>
                                                 </a>
                                             </td>
