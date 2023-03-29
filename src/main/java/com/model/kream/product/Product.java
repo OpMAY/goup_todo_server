@@ -15,6 +15,7 @@ public class Product extends Time {
     private String en_name;
     private String kor_name;
     private int gender;
+    private int views;
     // BOOLEANS
     private boolean is_one_size;
     private boolean is_direct;

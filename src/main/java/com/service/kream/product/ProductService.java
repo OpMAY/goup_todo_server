@@ -92,7 +92,7 @@ public class ProductService {
                 || (size_list != null && !size_list.isEmpty());
         List<ProductShop> result;
 
-        if (cursor != null && cursor != 0) {
+        if (cursor != null && (cursor != 0 && cursor != 1)) {
             // TODO CURSOR
             result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
         } else {
@@ -649,6 +649,12 @@ public class ProductService {
         ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
         admin.setPrice(size != null ? size.getPrice() : null);
         admin.setWishes(wishDao.getProductWishCount(product.getNo()));
+        List<ProductPriceWithSize> order_history = productDao.getProductOrderHistory(no);
+        admin.setOrders(order_history.size());
+        // 판매 입찰 및 구매 입찰은 사이즈 별 금액 별로 갯수를 가져와야함 O
+        admin.setSells(sellDao.getProductSellHistory(no).size());
+        admin.setPurchases(purchaseDao.getProductPurchaseHistory(no).size());
+        admin.setSizes(sizeDao.getProductSize(no));
         return admin;
     }
 

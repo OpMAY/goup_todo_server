@@ -104,7 +104,115 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="mb-3">
-                                                <h5 class="page-title">상품 기본 정보</h5>
+                                                <h4 class="page-title">상품 기본 정보</h4>
+                                            </div>
+                                            <div class="row row-cols-6">
+                                                <div class="col">
+                                                    <h5>브랜드</h5>
+                                                    <h6>${product.brand.name}</h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>카테고리</h5>
+                                                    <h6>${product.upperCategory.name} > ${product.category.name}</h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>모델 번호</h5>
+                                                    <h6>${product.product.product_info.model_code != null ? product.product.product_info.model_code : '-'}</h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>출시 일자</h5>
+                                                    <h6>${product.product.product_info.released_date != null ? product.product.product_info.released_date : '-'}</h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>색상</h5>
+                                                    <h6>${product.product.product_info.color != null ? product.product.product_info.color : '-'}</h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>출시 가격</h5>
+                                                    <h6><custom:formatPrice value="${product.product.product_info.released_price}" additional="원"/></h6>
+                                                </div>
+                                            </div>
+                                            <div class="row row-cols-2">
+                                                <div class="col">
+                                                    <h5>상품 이미지</h5>
+                                                    <div id="carouselExampleControls" style="max-width: 480px;max-height: 480px" class="carousel slide" data-bs-ride="carousel">
+                                                        <div class="carousel-inner" role="listbox">
+                                                            <c:forEach items="${product.product.images}" varStatus="varStatus" var="image">
+                                                                <div class="carousel-item <c:if test="${varStatus.first}">active</c:if>">
+                                                                    <img class="d-block img-fluid" src="${image.url}" alt="" height="480
+">
+                                                                </div>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Previous</span>
+                                                        </a>
+                                                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Next</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <h5>사이즈 목록</h5>
+                                                    <c:choose>
+                                                        <c:when test="${product.sizes.size() > 1}">
+                                                            <c:forEach var="size" items="${product.sizes}">
+                                                                <button type="button" class="btn mb-1 btn-outline-dark waves-effect waves-light" disabled>${size.size}</button>
+                                                            </c:forEach>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <button type="button" class="btn btn-outline-dark waves-effect waves-light" disabled>ONE SIZE</button>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <h4 class="page-title">상품 거래 정보</h4>
+                                            </div>
+                                            <div class="row row-cols-4">
+                                                <div class="col">
+                                                    <h5>구매 입찰 횟수</h5>
+                                                    <h6><custom:formatPrice value="${product.purchases}" additional="회"/></h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>판매 입찰 횟수</h5>
+                                                    <h6><custom:formatPrice value="${product.sells}" additional="회"/></h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>거래 횟수</h5>
+                                                    <h6><custom:formatPrice value="${product.orders}" additional="회"/></h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>현재 최저 구매가</h5>
+                                                    <h6><custom:formatPrice value="${product.price}" additional="원"/></h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <h4 class="page-title">상품 관심 정보</h4>
+                                            </div>
+                                            <div class="row row-cols-3">
+                                                <div class="col">
+                                                    <h5>관심 상품 횟수</h5>
+                                                    <h6><custom:formatPrice value="${product.wishes}" additional="회"/></h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>조회수</h5>
+                                                    <h6><custom:formatPrice value="${product.product.views}" additional="회"/></h6>
+                                                </div>
+                                                <div class="col">
+                                                    <h5>스타일 작성 횟수</h5>
+                                                    <h6><custom:formatPrice value="0" additional="회"/></h6>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
