@@ -9,5 +9,7 @@ public interface CategoryMapper {
 
     Category getCategoryByNo(int no);
 
-    List<CategoryFilter> getCategoryFilters();
+    List<Category> getParentCategories();
+
+    List<Category> getChildrenCategories(int parent_no);
 }

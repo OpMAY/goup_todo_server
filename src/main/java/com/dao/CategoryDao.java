@@ -20,7 +20,11 @@ public class CategoryDao {
         return mapper.getCategoryByNo(no);
     }
 
-    public List<CategoryFilter> getCategoryFilters() {
-        return mapper.getCategoryFilters();
+    public List<Category> getParentCategories() {
+        return mapper.getParentCategories();
+    }
+
+    public List<Category> getChildrenCategories(int parent_no) {
+        return mapper.getChildrenCategories(parent_no);
     }
 }

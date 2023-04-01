@@ -11,6 +11,7 @@ import com.model.kream.order.before.sub.purchase.PURCHASE_TYPE;
 import com.model.kream.order.before.sub.sell.SELL_TYPE;
 import com.model.kream.product.*;
 import com.model.kream.product.category.Category;
+import com.model.kream.product.category.CategoryFilter;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
 import com.model.kream.product.interactions.PRODUCT_UPDATE_TYPE;
 import com.model.kream.product.interactions.Wish;
@@ -675,7 +676,16 @@ public class ProductService {
     public ProductShopFilter getShopFilters() {
         ProductShopFilter productShopFilter = new ProductShopFilter();
         productShopFilter.setBrands(brandDao.getAllBrands());
-        productShopFilter.setCategories(categoryDao.getCategoryFilters());
+        List<Category> parents = categoryDao.getParentCategories();
+        List<CategoryFilter> filters = new ArrayList<>();
+        for(Category category : parents) {
+            CategoryFilter categoryFilter = new CategoryFilter();
+            categoryFilter.setNo(category.getNo());
+            categoryFilter.setName(category.getName());
+            categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));
+            filters.add(categoryFilter);
+        }
+        productShopFilter.setCategories(filters);
         return productShopFilter;
     }
 }
