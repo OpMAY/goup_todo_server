@@ -108,7 +108,8 @@
                       <div class="col-md-4">
                         <div class="mb-3">
                           <label for="billing-state" class="form-label">CLICK TO URL</label>
-                          <input class="form-control" type="text" placeholder= "${banner.click_to_url}" id="billing-state" />
+                          <input  class="form-control" type="text" placeholder= "${banner.click_to_url}" id="billing-state" />
+
                         </div>
                       </div>
 
@@ -134,7 +135,7 @@
                       <br><br><br><br><br><br><br><br>
 
                       <div class="col-sm-6">
-                        <a href="ecommerce-checkout.html" class="btn btn-success">
+                        <a href="ecommerce-checkout.html" class="btn btn-success" onclick="addBanner()">
                           <i class="mdi mdi-pencil me-1"></i> 등록 완료 </a>
                       </div> <!-- end col -->
                     </div>
@@ -208,6 +209,23 @@
 
 <script src="/resources/admin/assets/js/pages/datatables.init.js"></script>
 <script src="/resources/admin/assets/libs/dropzone/min/dropzone.min.js"></script>
+<script>
+    function addBanner(){
+        $.ajax({
+            url:"/api/kream/admin/banner",
+            type:"POST",
+            data:{
+
+            },
+            success: function (data){
+
+            },
+            error: function (request,status,error){
+
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

@@ -113,12 +113,9 @@
                                             <td>${banner.reg_datetime}</td>
                                             <td>${banner.updated_datetime}</td>
                                             <td>
-
-                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >
-                                                        <a href="/admin/banner-detail/${banner.no}"></a>
-                                                        상세 보기
-                                                    </button>
-                                                </a>
+                                                <a href="/admin/banner-detail/${banner.no}">
+                                                            <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >상세 보기</button>
+                                                        </a>
                                             </td>
 
                                         </tr>

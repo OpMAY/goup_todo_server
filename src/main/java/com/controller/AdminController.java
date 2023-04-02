@@ -88,12 +88,26 @@ public class AdminController {
     @GetMapping("/user/list")
     public ModelAndView getUser(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin/user/user-list");
+        ModelAndView view = new ModelAndView("admin/user/user-list");
 
-        List<User> users = userService.getAllUser();
-        view.addObject("users",users);
+        List<User> user = userService.getAllUser();
+        view.addObject("user",user);
 
         return  view;
+    }
+
+    @RequestMapping(value = "/user-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView getDetailUser(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/user/detail");
+
+        User user = userService.getProfileInfo(no);
+        view.addObject("user", user);
+//
+        message.put("user",user);
+//
+        return view;
+
     }
 
     @GetMapping("/notice")

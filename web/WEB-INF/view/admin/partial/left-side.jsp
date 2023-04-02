@@ -81,7 +81,7 @@
                     <div class="collapse" id="sidebarUser">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="ecommerce-dashboard.html">사용자 목록</a>
+                                <a href="/admin/user/list">사용자 목록</a>
                             </li>
                             <li>
                                 <a href="ecommerce-products.html">정지된 사용자</a>
