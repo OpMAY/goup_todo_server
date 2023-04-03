@@ -23,6 +23,8 @@
           type="text/css"/>
     <!-- third party css end -->
 
+    <link href="/resources/admin/assets/libs/dropify/css/dropify.min.css" rel="stylesheet" type="text/css"/>
+
     <!-- App css -->
     <link href="/resources/admin/assets/css/config/default/bootstrap.min.css" rel="stylesheet" type="text/css"
           id="bs-default-stylesheet"/>
@@ -38,7 +40,9 @@
     <link href="/resources/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <style>
         .table-text-overflow {
-            overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -87,7 +91,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-<%--                                <h4 class="header-title">${bannerList.size()} 개의 상품</h4>--%>
+                                <%--                                <h4 class="header-title">${bannerList.size()} 개의 상품</h4>--%>
                                 <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                     <thead>
                                     <tr>
@@ -107,22 +111,27 @@
                                         <tr>
                                             <td>${status.count}</td>
                                             <td><a href="/admin/banner-detail/${banner.no}">
-                                                <img src= ${banner.banner_image.url} alt="banner-img" height="32" /></a></td>
-
+                                                <img src=${banner.banner_image.url} alt="banner-img" height="32"/></a>
+                                            </td>
                                             <td>${banner.banner_flag}</td>
--                                           <td>${banner.click_to_url}</td>
+                                            <td>${banner.click_to_url}</td>
                                             <td>${banner.reg_datetime}</td>
                                             <td>${banner.updated_datetime}</td>
-
                                             <td>
-                                                <a href="javascript:void(0)" class="action-icon"data-bs-toggle="modal" data-bs-target="#custom-modal" d> <i class="mdi mdi-square-edit-outline"></i></a>
-                                                <a href="javascript:void(0);" class="action-icon" data-bs-toggle="modal" data-bs-target="custom-modal"> <i class="mdi mdi-delete"></i></a>
-<%--                                                <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#custom-modal">--%>
-<%--                                                    <i class="mdi mdi-plus-circle me-1"></i> Add New</button>--%>
+                                                <a href="javascript:void(0)" class="_edit action-icon" data-no="${banner.no}" data-bs-toggle="modal"
+                                                   data-bs-target="#custom-modal"> <i
+                                                        class="mdi mdi-square-edit-outline"></i></a>
+                                                <a href="javascript:void(0);" class="action-icon" data-bs-toggle="modal"
+                                                   data-bs-target="custom-modal"> <i class="mdi mdi-delete"></i></a>
+                                                    <%--                                                <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#custom-modal">--%>
+                                                    <%--                                                    <i class="mdi mdi-plus-circle me-1"></i> Add New</button>--%>
                                             </td>
                                             <td>
                                                 <a href="/admin/banner-detail/${banner.no}">
-                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >상세 보기</button>
+                                                    <button type="button"
+                                                            class="btn btn-primary rounded-pill waves-effect waves-light">
+                                                        상세 보기
+                                                    </button>
                                                 </a>
                                             </td>
 
@@ -162,24 +171,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body p-4">
-                <form>
-                    <div class="mb-3">
-                        <label for="click_to_url" class="form-label">이동 url 주소</label>
-                        <input type="text" class="form-control" id="click_to_url" placeholder="Enter click_to_url">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-check-label" for="banner_flag">해당 배너 사용 여부</label>
-                        <input type="checkbox" class="form-check-input" id="banner_flag">
-                    </div>
+                 <input type="file" data-plugins="dropify">
+
+                <div class="mb-3">
+                    <label for="click_to_url" class="form-label">이동 url 주소</label>
+                    <input type="text" class="form-control" id="click_to_url" placeholder="Enter click_to_url">
+                </div>
+                <div class="mb-3">
+                    <label class="form-check-label" for="banner_flag">해당 배너 사용 여부</label>
+                    <input type="checkbox" class="form-check-input" id="banner_flag">
+                </div>
 
 
-
-
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success waves-effect waves-light">Edit Save</button>
-                        <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">Continue</button>
-                    </div>
-                </form>
+                <div class="text-end">
+                    <button type="button" id="edit-banner" class="btn btn-success waves-effect waves-light">수정하기</button>
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">
+                        닫기
+                    </button>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -208,10 +217,103 @@
 <script src="/resources/admin/assets/libs/pdfmake/build/pdfmake.min.js"></script>
 <script src="/resources/admin/assets/libs/pdfmake/build/vfs_fonts.js"></script>
 <!-- third party js ends -->
+<script src="/resources/admin/assets/libs/dropify/js/dropify.min.js"></script>
 
 <script src="/resources/admin/assets/js/pages/datatables.init.js"></script>
 
+<script>
+    $('[data-plugins="dropify"]').length && $('[data-plugins="dropify"]').dropify({
+        messages: {
+            default: "Drag and drop a file here or click",
+            replace: "Drag and drop or click to replace",
+            remove: "Remove",
+            error: "Ooops, something wrong appended."
+        }, error: {fileSize: "The file size is too big (1M max)."}
+    });
 
+    $('._edit').on('click', function () {
+        let no = $(this).data().no;
+        $.ajax({
+            url: "/api/kream/admin/banner/" + no,
+            type: "get",
+            success: function (data) {
+                console.log("성공" + data );
+                console.log(data.data);
+                // IMAGE
+                let input = $('#custom-modal').find('input[data-plugins="dropify"]');
+                input.parent().remove();
+                $('#custom-modal').find('.modal-body').prepend('<input type="file" data-plugins="dropify" data-default-file="' + data.data.banner.banner_image.url + '">');
+                let after = $('#custom-modal').find('input[data-plugins="dropify"]');
+                after.dropify({
+                    messages: {
+                        default: "Drag and drop a file here or click",
+                        replace: "Drag and drop or click to replace",
+                        remove: "Remove",
+                        error: "Ooops, something wrong appended."
+                    }, error: {fileSize: "The file size is too big (1M max)."}
+                });
+
+                // CLICK_TO_URL
+                $('#custom-modal').find('#click_to_url').val(data.data.banner.click_to_url);
+                // BANNER FLAG
+                $('#custom-modal').find('#banner_flag').attr('checked', data.data.banner.banner_flag)
+
+                $('#custom-modal').find('#edit-banner').data('no', no);
+            },
+            error: function (request, status, error, data) {
+                console.log("실패"  );
+            }
+        });
+    })
+
+    async function objectFileUpload(url, object, file) {
+        function apiFetch(file) {
+            const formData = new FormData();
+            formData.append('object', object);
+            formData.append('file', file);
+            let requestOptions = {
+                method: 'PUT',
+                body: formData,
+            };
+            const response = fetch(url, requestOptions);
+            return response.then(res => res.json());
+        }
+
+        let result;
+        try {
+            result = await apiFetch(file);
+            return result;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    $('#edit-banner').on('click', function () {
+        let no = $(this).data().no;
+        let modal = $('#custom-modal');
+
+        let fileInput = modal.find('input[type=file]');
+        console.log(fileInput[0].files);
+        let url = modal.find('#click_to_url');
+        let flag = modal.find('#banner_flag');
+
+        const formData = new FormData();
+        let object = {};
+        object.click_to_url = url.val();
+        object.banner_flag = flag.is(':checked');
+        console.log(object)
+
+        if(fileInput[0].files && fileInput[0].files.length > 0) {
+            object.file = fileInput[0].files[0];
+            console.log("hasfile : ", fileInput[0].files[0]);
+        }
+
+        formData.append("banner", object);
+        objectFileUpload('/api/kream/admin/banner/' + no, object, fileInput[0].files[0]).then((res) => {
+            console.log(res);
+        })
+    })
+</script>
 
 </body>
 </html>

@@ -14,7 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,16 +48,31 @@ public class AdminRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PutMapping("/banner/{no}")
-    public ResponseEntity editBanner(@RequestBody Banner banner, @PathVariable int no) {
+    @PutMapping(value = "/banner/{no}", consumes = "multipart/form-data")
+    public ResponseEntity editBanner(HttpServletRequest request, @RequestBody Map<String, Object> body,  @PathVariable int no) throws ServletException, IOException {
         Message message = new Message();
-        if (banner.getNo() == 0) {
-            throw new ContentsException();
-        } else {
-            Map<String, Object> map = new HashMap<>();
-            bannerService.editBanner(map, banner);
-            message.put("status", true);
-        }
+        log.info("banner : {}", body);
+        MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
+        Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
+        log.info("fileMap : {}", fileMap);
+//        if (banner.getNo() == 0) {
+//            throw new ContentsException();
+//        } else {
+//            Map<String, Object> map = new HashMap<>();
+//            log.info("banner : {}", banner);
+//            MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
+//            Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
+//            log.info("fileMap : {}",fileMap);
+////            bannerService.editBanner(map, banner);
+//            message.put("status", true);
+//        }
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @GetMapping("/banner/{no}")
+    public ResponseEntity getBannerDetail(@PathVariable int no) {
+        Message message = new Message();
+        message.put("banner", bannerService.getBanner(no));
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
