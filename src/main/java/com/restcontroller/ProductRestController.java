@@ -7,6 +7,7 @@ import com.model.kream.product.ProductMain;
 import com.model.kream.product.ProductShop;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
 import com.model.kream.product.interactions.Wish;
+import com.model.kream.product.interactions.WishRequest;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.response.DefaultRes;
 import com.response.Message;
@@ -71,12 +72,19 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/shop/filter", method = RequestMethod.GET)
+    public ResponseEntity getShopFilters() {
+        Message message = new Message();
+        message.put("filters", productService.getShopFilters());
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/order/sell", method = RequestMethod.POST)
     public ResponseEntity RegisterProductSell(@RequestBody Sell sell) {
         Message message = productService.registerProductSell(sell);
-        if(sell == null || sell.getNo()==0){
+        if (sell == null || sell.getNo() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
 
         }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
@@ -90,6 +98,7 @@ public class ProductRestController {
 
     @RequestMapping(value = "/size/{no}", method = RequestMethod.GET)
     public ResponseEntity GetProductSizes(@PathVariable Integer no,
+                                          @RequestParam(value = "user_no", required = false) Integer user_no,
                                           @RequestParam(value = "is_price", required = false) String is_price,
                                           @RequestParam(value = "type", required = false) String type) {
         Message message = new Message();
@@ -103,19 +112,19 @@ public class ProductRestController {
                 }
             }
         }
-        if (price_bool && sort_type == null) {
+        if ((price_bool && sort_type == null) || user_no == null) {
             return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
         } else {
-            List<ProductPriceWithSize> sizes = productService.getProductSizes(no, price_bool, sort_type);
+            List<ProductPriceWithSize> sizes = productService.getProductSizes(no, user_no, price_bool, sort_type);
             message.put("sizes", sizes);
         }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/wish", method = RequestMethod.POST)
-    public ResponseEntity AddWish(@RequestBody Wish wish) {
+    public ResponseEntity AddWish(@RequestBody WishRequest wishRequest) {
         Message message = new Message();
-        message.put("status", productService.addWish(wish));
+        message.put("status", productService.handleWishes(wishRequest));
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

@@ -9,13 +9,14 @@ import com.model.kream.order.before.Purchase;
 import com.model.kream.order.before.Sell;
 import com.model.kream.order.before.sub.purchase.PURCHASE_TYPE;
 import com.model.kream.order.before.sub.sell.SELL_TYPE;
-import com.model.kream.product.Product;
-import com.model.kream.product.ProductDetail;
-import com.model.kream.product.ProductMain;
-import com.model.kream.product.ProductShop;
+import com.model.kream.product.*;
+import com.model.kream.product.brand.Brand;
+import com.model.kream.product.category.Category;
+import com.model.kream.product.category.CategoryFilter;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
 import com.model.kream.product.interactions.PRODUCT_UPDATE_TYPE;
 import com.model.kream.product.interactions.Wish;
+import com.model.kream.product.interactions.WishRequest;
 import com.model.kream.product.price.ProductPriceHistories;
 import com.model.kream.product.price.ProductPriceWithSize;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
@@ -93,7 +94,7 @@ public class ProductService {
                 || (size_list != null && !size_list.isEmpty());
         List<ProductShop> result;
 
-        if (cursor != null && cursor != 0) {
+        if (cursor != null && (cursor != 0 && cursor != 1)) {
             // TODO CURSOR
             result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
         } else {
@@ -389,7 +390,7 @@ public class ProductService {
     }
 
     // A and B
-    public List<ProductPriceWithSize> getProductSizes(int product_no, boolean is_price, PRODUCT_TRANSACTION_TYPE type) {
+    public List<ProductPriceWithSize> getProductSizes(int product_no, int user_no, boolean is_price, PRODUCT_TRANSACTION_TYPE type) {
         // Prices Per Size Setting
         // 사이즈 조회 시 나오는 가격은 구매 기준 가격이므로 등록된 판매 입찰가 기준으로 가격을 첵정
         List<ProductPriceWithSize> detailSizes = new ArrayList<>();
@@ -414,6 +415,9 @@ public class ProductService {
                 detailSize.setPrice(type.equals(PRODUCT_TRANSACTION_TYPE.PURCHASE) ?
                         sellDao.getSizeProductSellLowestPrice(size.getNo()) :
                         purchaseDao.getSizeProductPurchaseHighestPrice(size.getNo()));
+            }
+            if (user_no != 0) {
+                detailSize.set_wish(wishDao.isUserWishSize(user_no, size.getNo()));
             }
             detailSizes.add(detailSize);
         });
@@ -614,7 +618,79 @@ public class ProductService {
         return price_filter.indexOf("-") == 0 || price_filter.indexOf("-") + 1 != price_filter.length() ? Integer.parseInt(price_filter.substring(price_filter.indexOf("-") + 1)) : 0;
     }
 
-    public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
+    public List<ProductAdmin> getAdminProducts() {
+        List<Product> products = productDao.getAllProducts();
+        List<ProductAdmin> result = new ArrayList<>();
+        for (Product product : products) {
+            ProductAdmin admin = new ProductAdmin();
+            admin.setProduct(product);
+            admin.setBrand(brandDao.getBrandByNo(product.getBrand_no()));
+            Category category = categoryDao.getCategoryByNo(product.getCategory_no());
+            admin.setCategory(category);
+            if (category.getParent_no() != 0) {
+                admin.setUpperCategory(categoryDao.getCategoryByNo(category.getParent_no()));
+            }
+            ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
+            admin.setPrice(size != null ? size.getPrice() : null);
+            admin.setWishes(wishDao.getProductWishCount(product.getNo()));
+            result.add(admin);
+        }
+        return result;
+    }
+
+    public ProductAdmin getAdminProduct(int no) {
+        Product product = productDao.getProductByNo(no);
+        ProductAdmin admin = new ProductAdmin();
+        admin.setProduct(product);
+        admin.setBrand(brandDao.getBrandByNo(product.getBrand_no()));
+        Category category = categoryDao.getCategoryByNo(product.getCategory_no());
+        admin.setCategory(category);
+        if (category.getParent_no() != 0) {
+            admin.setUpperCategory(categoryDao.getCategoryByNo(category.getParent_no()));
+        }
+        ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
+        admin.setPrice(size != null ? size.getPrice() : null);
+        admin.setWishes(wishDao.getProductWishCount(product.getNo()));
+        List<ProductPriceWithSize> order_history = productDao.getProductOrderHistory(no);
+        admin.setOrders(order_history.size());
+        // 판매 입찰 및 구매 입찰은 사이즈 별 금액 별로 갯수를 가져와야함 O
+        admin.setSells(sellDao.getProductSellHistory(no).size());
+        admin.setPurchases(purchaseDao.getProductPurchaseHistory(no).size());
+        admin.setSizes(sizeDao.getProductSize(no));
+        return admin;
+    }
+
+    @Transactional
+    public boolean handleWishes(WishRequest wishRequest) {
+        wishDao.resetUserProductWishes(wishRequest.getUser_no(), wishRequest.getProduct_no());
+        List<Wish> wishes = wishRequest.getWishes();
+        if(wishes.size() > 0) {
+            for(Wish wish : wishes) {
+                wishDao.insertUserWish(wish);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public ProductShopFilter getShopFilters() {
+        ProductShopFilter productShopFilter = new ProductShopFilter();
+        productShopFilter.setBrands(brandDao.getAllBrands());
+        List<Category> parents = categoryDao.getParentCategories();
+        List<CategoryFilter> filters = new ArrayList<>();
+        for(Category category : parents) {
+            CategoryFilter categoryFilter = new CategoryFilter();
+            categoryFilter.setNo(category.getNo());
+            categoryFilter.setName(category.getName());
+            categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));
+            filters.add(categoryFilter);
+        }
+        productShopFilter.setCategories(filters);
+        return productShopFilter;
+    }
+
+    public List<Brand> getBrands() {
+        return brandDao.getAllBrands();
     }
 }

@@ -39,4 +39,10 @@
     <select id="isUserWishSize" resultType="_boolean">
         select EXISTS(select * from wish where user_no = #{user_no} AND size_no = #{size_no})
     </select>
+    <delete id="resetUserProductWishes">
+        delete
+        from wish
+        WHERE user_no = #{user_no}
+          AND size_no in (select no from size WHERE product_no = #{product_no})
+    </delete>
 </mapper>

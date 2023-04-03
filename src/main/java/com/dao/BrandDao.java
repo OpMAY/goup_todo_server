@@ -5,6 +5,8 @@ import com.model.kream.product.brand.Brand;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class BrandDao {
     private BrandMapper mapper;
@@ -19,5 +21,9 @@ public class BrandDao {
 
     public Brand getBrandByProductNo(int no) {
         return mapper.getBrandByProductNo(no);
+    }
+
+    public List<Brand> getAllBrands() {
+        return mapper.getAllBrands();
     }
 }

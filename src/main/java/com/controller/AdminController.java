@@ -6,6 +6,7 @@ import com.model.kream.cs.Qna;
 import com.model.kream.home.Banner;
 import com.model.kream.point.Point;
 import com.model.kream.product.Product;
+import com.model.kream.product.ProductAdmin;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
@@ -42,12 +43,27 @@ public class AdminController {
 
     @RequestMapping(value = "/product/list", method = RequestMethod.GET)
     public ModelAndView products() {
-        List<Product> products = productService.getAllProducts();
+        List<ProductAdmin> products = productService.getAdminProducts();
         ModelAndView VIEW = new ModelAndView("admin/product/product-list");
         VIEW.addObject("products", products);
         return VIEW;
     }
-    
+
+    @RequestMapping(value = "/product/detail/{no}", method = RequestMethod.GET)
+    public ModelAndView productDetail(@PathVariable int no) {
+        ProductAdmin productAdmin = productService.getAdminProduct(no);
+        ModelAndView VIEW = new ModelAndView("admin/product/detail");
+        VIEW.addObject("product", productAdmin);
+        return VIEW;
+    }
+
+    @RequestMapping(value = "/product/brands", method = RequestMethod.GET)
+    public ModelAndView brands() {
+        ModelAndView VIEW = new ModelAndView("admin/product/brand-list");
+        VIEW.addObject("brands", productService.getBrands());
+        return VIEW;
+    }
+
     @RequestMapping(value = "/banner/list", method = RequestMethod.GET)
     public ModelAndView getBanner(){
         Message message = new Message();
@@ -114,19 +130,15 @@ public class AdminController {
     public ModelAndView addUser(){
         Message message = new Message();
         ModelAndView view = new ModelAndView("admin/user/add");
-
         return view;
-
     }
 
     @GetMapping("/notice/list/{page}")
     public ModelAndView getNotice(@PathVariable int page){
         Message message = new Message();
         ModelAndView view = new ModelAndView("/admin/notice/notice-list");
-
         List<Notice> notice = noticeService.getNotices(page);
         view.addObject("notice",notice);
-
         return  view;
     }
 
@@ -134,10 +146,8 @@ public class AdminController {
     public ModelAndView getNotice(){
         Message message = new Message();
         ModelAndView view = new ModelAndView("/admin/qna/qna-list");
-
         List<Qna> qna = qnaService.getAllQna();
         view.addObject("qna",qna);
-
         return  view;
     }
 
@@ -145,13 +155,9 @@ public class AdminController {
     public ModelAndView QnADetail(@PathVariable int no){
         Message message = new Message();
         ModelAndView view = new ModelAndView("admin/qna/detail");
-
-
         Qna qna = qnaService.getQnaData(no);
         view.addObject("qna", qna);
-//
         message.put("qna",qna);
-//
         return view;
 
     }
@@ -160,23 +166,10 @@ public class AdminController {
     public ModelAndView NoticeDetail(@PathVariable int no){
         Message message = new Message();
         ModelAndView view = new ModelAndView("admin/notice/detail");
-
-
-
         Notice notice = noticeService.getNotice(no);
         view.addObject("notice", notice);
-//
         message.put("notice",notice);
-//
         return view;
 
     }
-
-
-
-
-
-
-
-
 }
