@@ -57,6 +57,13 @@ public class AdminController {
         return VIEW;
     }
 
+    @RequestMapping(value = "/product/brands", method = RequestMethod.GET)
+    public ModelAndView brands() {
+        ModelAndView VIEW = new ModelAndView("admin/product/brand-list");
+        VIEW.addObject("brands", productService.getBrands());
+        return VIEW;
+    }
+
     @RequestMapping(value = "/banners", method = RequestMethod.GET)
     public ModelAndView getBanner(){
         Message message = new Message();

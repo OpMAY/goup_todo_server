@@ -10,6 +10,7 @@ import com.model.kream.order.before.Sell;
 import com.model.kream.order.before.sub.purchase.PURCHASE_TYPE;
 import com.model.kream.order.before.sub.sell.SELL_TYPE;
 import com.model.kream.product.*;
+import com.model.kream.product.brand.Brand;
 import com.model.kream.product.category.Category;
 import com.model.kream.product.category.CategoryFilter;
 import com.model.kream.product.interactions.PRODUCT_TRANSACTION_TYPE;
@@ -687,5 +688,9 @@ public class ProductService {
         }
         productShopFilter.setCategories(filters);
         return productShopFilter;
+    }
+
+    public List<Brand> getBrands() {
+        return brandDao.getAllBrands();
     }
 }

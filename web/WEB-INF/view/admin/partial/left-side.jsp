@@ -39,7 +39,6 @@
                         </ul>
                     </div>
                 </li>
-
                 <li>
                     <a href="#sidebarEcommerce" data-bs-toggle="collapse">
                         <i data-feather="shopping-cart"></i>
@@ -48,6 +47,12 @@
                     </a>
                     <div class="collapse" id="sidebarEcommerce">
                         <ul class="nav-second-level">
+                            <li>
+                                <a href="/admin/product/brands">브랜드 관리</a>
+                            </li>
+                            <li>
+                                <a href="/admin/product/categories">카테고리 관리</a>
+                            </li>
                             <li>
                                 <a href="/admin/product/list">상품 목록</a>
                             </li>
