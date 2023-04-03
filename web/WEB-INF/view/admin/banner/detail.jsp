@@ -107,19 +107,20 @@
                                             <br><br>
                                             <div class="col-md-4">
                                                 <div class="mb-3">
-                                                    <label for="billing-state" class="form-label">CLICK TO URL</label>
-                                                    <input class="form-control" type="text" placeholder= "${banner.click_to_url}" id="billing-state" />
+                                                    <label  class="form-label">CLICK TO URL</label><p></p>
+                                                   ${banner.click_to_url}
                                                 </div>
                                             </div>
 
                                             <div class="mb-3">
                                                 <div class="form-check">
-                                                    <label class="form-check-label" for="customCheck2">해당 배너 미사용</label>
-                                                    <input type="checkbox" class="form-check-input" id="customCheck2">
+                                                    <label class="form-check-label" >해당 배너 사용</label>
+                                                    ${banner.banner_flag}
                                                 </div>
                                             </div>
 
-                                            <label for="billing-state" class="form-label">배너 이미지</label>
+                                            <label  class="form-label">배너 이미지</label>
+                                            ${banner.banner_image.url}
 
                                             <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
                                                 <div class="fallback">
@@ -134,7 +135,7 @@
                                             <br><br><br><br><br><br><br><br>
 
                                             <div class="col-sm-6">
-                                                <a href="ecommerce-checkout.html" class="btn btn-success">
+                                                <a  class="btn btn-success" onclick="bannerEdit()">
                                                     <i class="mdi mdi-pencil me-1"></i> 수정 완료 </a>
                                             </div> <!-- end col -->
                                         </div>
@@ -153,22 +154,7 @@
         </div> <!-- content -->
 
         <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-md-end footer-links d-none d-sm-block">
-                            <a href="javascript:void(0);">About Us</a>
-                            <a href="javascript:void(0);">Help</a>
-                            <a href="javascript:void(0);">Contact Us</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <jsp:include page="../partial/footer.jsp"/>
         <!-- end Footer -->
 
     </div>
@@ -182,6 +168,32 @@
 <!-- END wrapper -->
 
 <div class="rightbar-overlay"></div>
+
+<script>
+    function bannerEdit(){
+
+        let no = ${banner.no};
+        let banner_flag = $('#check').is(':checked');
+        let clicktoUrl = $('#clickToUrl').val();
+
+        $.ajax({
+            url: "/api/kream/admin/banner/" + no,
+            type: "put",
+            data:  {
+                click_to_url : clicktoUrl,
+                banner_flag: banner_flag
+            },
+            success: function (data) {
+                console.log("성공" + data );
+                let url = "/admin/banner/list";
+                location.replace(url);
+            },
+            error: function (request, status, error, data) {
+                console.log("실패"  );
+            }
+        });
+    }
+</script>
 
 <!-- Vendor js -->
 <script src="/resources/admin/assets/js/vendor.min.js"></script>

@@ -110,26 +110,66 @@ public class AdminController {
 
     }
 
-    @GetMapping("/notice")
+    @RequestMapping(value = "/user/add", method = RequestMethod.GET)
+    public ModelAndView addUser(){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/user/add");
+
+        return view;
+
+    }
+
+    @GetMapping("/notice/list/{page}")
     public ModelAndView getNotice(@PathVariable int page){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
+        ModelAndView view = new ModelAndView("/admin/notice/notice-list");
 
-        List<Notice> notices = noticeService.getNotices(page);
-        view.addObject("notices",notices);
+        List<Notice> notice = noticeService.getNotices(page);
+        view.addObject("notice",notice);
 
         return  view;
     }
 
-    @GetMapping("/qna")
+    @GetMapping("/qna/list")
     public ModelAndView getNotice(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
+        ModelAndView view = new ModelAndView("/admin/qna/qna-list");
 
-        List<Qna> qnas = qnaService.getAllQna();
-        view.addObject("qnas",qnas);
+        List<Qna> qna = qnaService.getAllQna();
+        view.addObject("qna",qna);
 
         return  view;
+    }
+
+    @RequestMapping(value = "/qna-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView QnADetail(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/qna/detail");
+
+
+        Qna qna = qnaService.getQnaData(no);
+        view.addObject("qna", qna);
+//
+        message.put("qna",qna);
+//
+        return view;
+
+    }
+
+    @RequestMapping(value = "/notice-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView NoticeDetail(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/notice/detail");
+
+
+
+        Notice notice = noticeService.getNotice(no);
+        view.addObject("notice", notice);
+//
+        message.put("notice",notice);
+//
+        return view;
+
     }
 
 

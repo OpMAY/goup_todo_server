@@ -84,7 +84,7 @@
                                 <a href="/admin/user/list">사용자 목록</a>
                             </li>
                             <li>
-                                <a href="ecommerce-products.html">정지된 사용자</a>
+                                <a href="/admin/user/add">사용자 등록</a>
                             </li>
                         </ul>
                     </div>
@@ -100,10 +100,10 @@
                     <div class="collapse" id="sidebarCs">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="ecommerce-dashboard.html">공지사항</a>
+                                <a href="/admin/notice/list">공지사항</a>
                             </li>
                             <li>
-                                <a href="ecommerce-products.html">QNA</a>
+                                <a href="/admin/qna/list">QNA</a>
                             </li>
                         </ul>
                     </div>

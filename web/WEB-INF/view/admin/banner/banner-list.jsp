@@ -97,6 +97,7 @@
                                         <th>이동 url 주소</th>
                                         <th>등록 일자</th>
                                         <th>수정 일자</th>
+                                        <th>Action</th>
 
 
                                     </tr>
@@ -112,10 +113,17 @@
 -                                           <td>${banner.click_to_url}</td>
                                             <td>${banner.reg_datetime}</td>
                                             <td>${banner.updated_datetime}</td>
+
+                                            <td>
+                                                <a href="javascript:void(0)" class="action-icon"data-bs-toggle="modal" data-bs-target="#custom-modal" d> <i class="mdi mdi-square-edit-outline"></i></a>
+                                                <a href="javascript:void(0);" class="action-icon" data-bs-toggle="modal" data-bs-target="custom-modal"> <i class="mdi mdi-delete"></i></a>
+<%--                                                <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#custom-modal">--%>
+<%--                                                    <i class="mdi mdi-plus-circle me-1"></i> Add New</button>--%>
+                                            </td>
                                             <td>
                                                 <a href="/admin/banner-detail/${banner.no}">
-                                                            <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >상세 보기</button>
-                                                        </a>
+                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >상세 보기</button>
+                                                </a>
                                             </td>
 
                                         </tr>
@@ -146,6 +154,37 @@
 </div>
 <!-- END wrapper -->
 
+<div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h4 class="modal-title" id="myCenterModalLabel">Edit Banner</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form>
+                    <div class="mb-3">
+                        <label for="click_to_url" class="form-label">이동 url 주소</label>
+                        <input type="text" class="form-control" id="click_to_url" placeholder="Enter click_to_url">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-check-label" for="banner_flag">해당 배너 사용 여부</label>
+                        <input type="checkbox" class="form-check-input" id="banner_flag">
+                    </div>
+
+
+
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-success waves-effect waves-light">Edit Save</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">Continue</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <!-- Vendor js -->
 <script src="/resources/admin/assets/js/vendor.min.js"></script>
@@ -171,6 +210,7 @@
 <!-- third party js ends -->
 
 <script src="/resources/admin/assets/js/pages/datatables.init.js"></script>
+
 
 
 </body>

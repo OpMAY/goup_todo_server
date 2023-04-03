@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>User list</title>
+    <title>Notice list</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
@@ -60,10 +60,10 @@
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">KREAM ADMIN</a></li>
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Users</a></li>
-                                    <li class="breadcrumb-item active">사용자 리스트</li>
+                                    <li class="breadcrumb-item active">공지 리스트</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">사용자 리스트</h4>
+                            <h4 class="page-title">공지 리스트</h4>
                         </div>
                     </div>
                 </div>
@@ -98,23 +98,17 @@
                                                 </div>
                                             </th>
                                             <th>No</th>
-                                            <th>Profile Image</th>
-                                            <th>name</th>
-                                            <th>Phone</th>
-                                            <th>Email</th>
-                                            <th>Zipcode</th>
-                                            <th>Address</th>
-                                            <th>Address Detail</th>
-                                            <th>Point</th>
-                                            <th>Reg Date</th>
-                                            <th>Update Date</th>
-                                            <th>Status</th>
+                                            <th>title</th>
+                                            <th>content</th>
+                                            <th>reg_datetime</th>
+                                            <th>updated_datetime</th>
+
                                             <th style="width: 85px;">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
 
-                                        <c:forEach var="user" items="${user}" varStatus="status">
+                                        <c:forEach var="notice" items="${notice}" varStatus="status">
                                             <tr>
                                                 <td>
                                                     <div class="form-check">
@@ -122,40 +116,35 @@
                                                         <label class="form-check-label" for="customCheck4">&nbsp;</label>
                                                     </div>
                                                 </td>
-                                                <td>${status.count}</td>
+
+
+<%--                                                <td><a href="/admin/user-detail/${user.no}"> ${user.name} </a> </td>--%>
+                                                <td>${notice.no}</td>
+                                                <td><a href="/admin/notice-detail/${notice.no}"> ${notice.title}</a></td>
+                                                <td>${notice.content}</td>
+                                                <td>${notice.reg_datetime}</td>
+                                                <td>${notice.updated_datetime}</td>
                                                 <td>
-                                                    <img src= ${user.profile_img.url} alt="profile-img" height="32" /></a>
-                                                </td>
-                                                <td><a href="/admin/user-detail/${user.no}"> ${user.name} </a> </td>
-                                                <td>${user.phone_number}</td>
-                                                <td>${user.email}</td>
-                                                <td>${user.zipcode}</td>
-                                                <td>${user.address}</td>
-                                                <td>${user.address_detail}</td>
-                                                <td>${user.point}</td>
-                                                <td>${user.reg_datetime}</td>
-                                                <td>${user.updated_datetime}</td>
-                                                <td>
-                                                        <c:if test="${user.user_flag == 1}">
-                                                            <span class="badge bg-soft-success text-success">Active</span>
-                                                        </c:if>
-                                                        <c:if test="${user.user_flag == 0}">
-                                                            <span class="badge bg-soft-danger text-danger"> Suspended </span>
-                                                        </c:if>
+                                                    <c:if test="${notice.flag == true}">
+                                                        <span class="badge bg-soft-success text-success">사용</span>
+                                                    </c:if>
+                                                    <c:if test="${user.flag == false}">
+                                                        <span class="badge bg-soft-danger text-danger"> 미사용 </span>
+                                                    </c:if>
 
                                                 </td>
                                                 <td>
                                                     <a href="javascript:void(0)" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                                     <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
                                                 </td>
-<%--                                                <td>--%>
+                                                    <%--                                                <td>--%>
 
-<%--                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >--%>
-<%--                                                        <a href="/admin/banner-detail/${banner.no}"></a>--%>
-<%--                                                        상세 보기--%>
-<%--                                                    </button>--%>
-<%--                                                    </a>--%>
-<%--                                                </td>--%>
+                                                    <%--                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >--%>
+                                                    <%--                                                        <a href="/admin/banner-detail/${banner.no}"></a>--%>
+                                                    <%--                                                        상세 보기--%>
+                                                    <%--                                                    </button>--%>
+                                                    <%--                                                    </a>--%>
+                                                    <%--                                                </td>--%>
 
                                             </tr>
                                         </c:forEach>
