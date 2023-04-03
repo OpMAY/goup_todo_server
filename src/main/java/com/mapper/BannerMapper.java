@@ -9,10 +9,13 @@ public interface BannerMapper {
 
     List<Banner> getAllBanner();
 
+    Banner getBanner(int no);
+
     void registBanner(Banner banner);
 
     void editBanner(Map<String,Object> banner);
 
     void deleteBanner(int no);
+
 
 }

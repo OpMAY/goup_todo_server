@@ -64,58 +64,112 @@ public class AdminController {
         return VIEW;
     }
 
-    @RequestMapping(value = "/banners", method = RequestMethod.GET)
+    @RequestMapping(value = "/banner/list", method = RequestMethod.GET)
     public ModelAndView getBanner(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("admin/banner/banners");
+        ModelAndView view = new ModelAndView("admin/banner/banner-list");
 
-        List<Banner> bannerList = bannerService.getAllBanner();
-        view.addObject("bannerList", bannerList);
+        List<Banner> banner = bannerService.getAllBanner();
+        view.addObject("banner", banner);
 //
-        message.put("bannerList",bannerList);
+        message.put("banner",banner);
 //
         return view;
 
     }
 
-    @GetMapping("/user")
+    @RequestMapping(value = "/banner-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView getDetailBanner(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/banner/detail");
+
+        Banner banner = bannerService.getBanner(no);
+        view.addObject("banner", banner);
+//
+        message.put("banner",banner);
+//
+        return view;
+
+    }
+
+    @RequestMapping(value = "/banner/add", method = RequestMethod.GET)
+    public ModelAndView addBanner(){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/banner/add");
+
+        return view;
+
+    }
+
+    @GetMapping("/user/list")
     public ModelAndView getUser(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
+        ModelAndView view = new ModelAndView("admin/user/user-list");
 
-        List<User> users = userService.getAllUser();
-        view.addObject("users",users);
+        List<User> user = userService.getAllUser();
+        view.addObject("user",user);
 
         return  view;
     }
 
-    @GetMapping("/notice")
+    @RequestMapping(value = "/user-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView getDetailUser(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/user/detail");
+
+        User user = userService.getProfileInfo(no);
+        view.addObject("user", user);
+//
+        message.put("user",user);
+//
+        return view;
+
+    }
+
+    @RequestMapping(value = "/user/add", method = RequestMethod.GET)
+    public ModelAndView addUser(){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/user/add");
+        return view;
+    }
+
+    @GetMapping("/notice/list/{page}")
     public ModelAndView getNotice(@PathVariable int page){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
-
-        List<Notice> notices = noticeService.getNotices(page);
-        view.addObject("notices",notices);
-
+        ModelAndView view = new ModelAndView("/admin/notice/notice-list");
+        List<Notice> notice = noticeService.getNotices(page);
+        view.addObject("notice",notice);
         return  view;
     }
 
-    @GetMapping("/qna")
+    @GetMapping("/qna/list")
     public ModelAndView getNotice(){
         Message message = new Message();
-        ModelAndView view = new ModelAndView("/admin");
-
-        List<Qna> qnas = qnaService.getAllQna();
-        view.addObject("qnas",qnas);
-
+        ModelAndView view = new ModelAndView("/admin/qna/qna-list");
+        List<Qna> qna = qnaService.getAllQna();
+        view.addObject("qna",qna);
         return  view;
     }
 
+    @RequestMapping(value = "/qna-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView QnADetail(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/qna/detail");
+        Qna qna = qnaService.getQnaData(no);
+        view.addObject("qna", qna);
+        message.put("qna",qna);
+        return view;
 
+    }
 
+    @RequestMapping(value = "/notice-detail/{no}", method = RequestMethod.GET)
+    public ModelAndView NoticeDetail(@PathVariable int no){
+        Message message = new Message();
+        ModelAndView view = new ModelAndView("admin/notice/detail");
+        Notice notice = noticeService.getNotice(no);
+        view.addObject("notice", notice);
+        message.put("notice",notice);
+        return view;
 
-
-
-
-
+    }
 }

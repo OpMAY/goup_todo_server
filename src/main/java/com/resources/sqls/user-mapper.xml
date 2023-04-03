@@ -25,6 +25,11 @@
 
     </select>
 
+    <!--    <List>-->
+    <select id="getAllUser" resultType="User" resultMap="user_map" >
+        select * from user order by reg_datetime desc;
+    </select>
+
 
     <insert id="registUser" useGeneratedKeys="true" keyProperty="no">
         insert into user(name, access_token, phone_number, size, point, email_alarm, zipcode, address, address_detail,
@@ -118,10 +123,7 @@
           and login_type = #{login_type}
     </select>
 
-<!--    <List>-->
-    <select id="getAllUser">
-        select * from user order by reg_datetime desc;
-    </select>
+
 
 
 </mapper>

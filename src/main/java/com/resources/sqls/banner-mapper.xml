@@ -17,6 +17,10 @@
         ORDER BY reg_datetime desc;
     </select>
 
+    <select id="getBanner" resultType="Banner" resultMap="Banner">
+        select * from banner where no=#{no}
+    </select>
+
     <insert id="registBanner" useGeneratedKeys="true" keyProperty="no">
         insert into banner(banner_image,banner_flag,click_to_url,reg_datetime,update_datetime)
         values (#{banner_image,typeHandler=JsonObjectTypeHandler},

@@ -44,4 +44,8 @@ public class BannerService {
     public void deleteBanner(int no) {
         bannerDao.deleteBanner(no);
     }
+
+    public Banner getBanner(int no) {
+        return bannerDao.getBanner(no);
+    }
 }
