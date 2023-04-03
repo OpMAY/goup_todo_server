@@ -39,7 +39,7 @@ public class FileUploadUtility {
      * LocalFileUploadStrategy or awsFileUploadStrategy 중 선택
      */
     @Autowired
-    public FileUploadUtility(@Qualifier("LocalFileUploadStrategy") FileUploadStrategy fileUploadStrategy,
+    public FileUploadUtility(@Qualifier("AWSFileUploadStrategy") FileUploadStrategy fileUploadStrategy,
                              ConfigurableWebApplicationContext ctx) {
         upload_path = (String) ctx.getEnvironment().getPropertySources().get("path_props").getProperty("UPLOAD_PATH");
         this.fileUploadStrategy = fileUploadStrategy;
@@ -65,6 +65,7 @@ public class FileUploadUtility {
 
             return mFile;
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException();
         }
     }

@@ -266,13 +266,12 @@
         });
     })
 
-    async function objectFileUpload(url, object, file) {
+    async function objectFileUpload(url, file) {
         function apiFetch(file) {
             const formData = new FormData();
-            formData.append('object', object);
             formData.append('file', file);
             let requestOptions = {
-                method: 'PUT',
+                method: 'POST',
                 body: formData,
             };
             const response = fetch(url, requestOptions);
@@ -297,21 +296,53 @@
         let url = modal.find('#click_to_url');
         let flag = modal.find('#banner_flag');
 
-        const formData = new FormData();
-        let object = {};
-        object.click_to_url = url.val();
-        object.banner_flag = flag.is(':checked');
-        console.log(object)
-
         if(fileInput[0].files && fileInput[0].files.length > 0) {
-            object.file = fileInput[0].files[0];
-            console.log("hasfile : ", fileInput[0].files[0]);
+            objectFileUpload('/api/kream/admin/banner/file/' + no, fileInput[0].files[0]).then((res) => {
+                console.log(res);
+                let object = {};
+                object.click_to_url = url.val();
+                object.banner_flag = flag.is(':checked');
+                object.banner_image = res.data.file;
+                $.ajax({
+                    url: "/api/kream/admin/banner/" + no,
+                    type: "put",
+                    data: JSON.stringify(object),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if(res.status === 'OK') {
+                            if(res.data.status) {
+                                alert('수정되었습니다');
+                                window.location.reload();
+                            }
+                        }
+                    },
+                    error: function (request, status, error, data) {
+                        console.log("실패"  );
+                    }
+                });
+            })
+        } else {
+            let object = {};
+            object.click_to_url = url.val();
+            object.banner_flag = flag.is(':checked');
+            $.ajax({
+                url: "/api/kream/admin/banner/" + no,
+                type: "put",
+                data: JSON.stringify(object),
+                contentType: 'application/json',
+                success: function (res) {
+                    if(res.status === 'OK') {
+                        if(res.data.status) {
+                            alert('수정되었습니다');
+                            window.location.reload();
+                        }
+                    }
+                },
+                error: function (request, status, error, data) {
+                    console.log("실패"  );
+                }
+            });
         }
-
-        formData.append("banner", object);
-        objectFileUpload('/api/kream/admin/banner/' + no, object, fileInput[0].files[0]).then((res) => {
-            console.log(res);
-        })
     })
 </script>
 

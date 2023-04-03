@@ -1,6 +1,9 @@
 package com.restcontroller;
 
+import com.aws.file.FileUploadUtility;
+import com.aws.model.CDNUploadPath;
 import com.exception.ContentsException;
+import com.model.common.MFile;
 import com.model.kream.cs.Notice;
 import com.model.kream.home.Banner;
 import com.model.kream.point.Point;
@@ -33,6 +36,7 @@ public class AdminRestController {
     private final BannerService bannerService;
     private final UserService userService;
     private final PointService pointService;
+    private final FileUploadUtility fileUploadUtility;
 
 
     @PostMapping(value = "/banner")
@@ -48,24 +52,33 @@ public class AdminRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/banner/{no}", consumes = "multipart/form-data")
-    public ResponseEntity editBanner(HttpServletRequest request, @RequestBody Map<String, Object> body,  @PathVariable int no) throws ServletException, IOException {
+    @PostMapping(value = "/banner/file/{no}")
+    public ResponseEntity editBanner(@RequestBody MultipartFile file, @PathVariable int no) {
         Message message = new Message();
-        log.info("banner : {}", body);
-        MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
-        Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
-        log.info("fileMap : {}", fileMap);
-//        if (banner.getNo() == 0) {
-//            throw new ContentsException();
-//        } else {
-//            Map<String, Object> map = new HashMap<>();
-//            log.info("banner : {}", banner);
-//            MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
-//            Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
-//            log.info("fileMap : {}",fileMap);
-////            bannerService.editBanner(map, banner);
-//            message.put("status", true);
-//        }
+        if (bannerService.getBanner(no) == null) {
+            throw new ContentsException();
+        } else {
+            if (file.getSize() != 0) {
+                log.info("file -> {},{},{}", file.getOriginalFilename(), file.getName(), file.getSize());
+                MFile mFile = fileUploadUtility.uploadFile(file, CDNUploadPath.BANNER.getPath());
+                message.put("file", mFile);
+            }
+            message.put("status", true);
+        }
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/banner/{no}")
+    public ResponseEntity editBanner(@RequestBody Banner banner, @PathVariable int no) {
+        Message message = new Message();
+        if (bannerService.getBanner(no) == null) {
+            throw new ContentsException();
+        } else {
+            banner.setNo(no);
+            log.info("banner : {}", banner);
+            bannerService.editBanner(banner);
+            message.put("status", true);
+        }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

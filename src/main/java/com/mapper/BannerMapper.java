@@ -1,6 +1,8 @@
 package com.mapper;
 
+import com.model.common.MFile;
 import com.model.kream.home.Banner;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,7 @@ public interface BannerMapper {
 
     void registBanner(Banner banner);
 
-    void editBanner(Map<String,Object> banner);
+    void editBanner(Banner banner);
 
     void deleteBanner(int no);
 
