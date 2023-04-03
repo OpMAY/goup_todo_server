@@ -10,4 +10,14 @@
         from category
         WHERE no = #{no}
     </select>
+    <select id="getParentCategories" resultType="Category">
+        select no, name
+        from category
+        WHERE parent_no is null
+    </select>
+    <select id="getChildrenCategories" resultType="Category">
+        select no, name
+        from category
+        WHERE parent_no = #{parent_no}
+    </select>
 </mapper>

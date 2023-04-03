@@ -19,4 +19,6 @@ public interface WishMapper {
     boolean isUserWishProduct(@Param("product_no") int product_no, @Param("user_no") int user_no);
 
     boolean isUserWishSize(@Param("user_no") int user_no, @Param("size_no") int size_no);
+
+    void resetUserProductWishes(@Param("user_no") int user_no, @Param("product_no") int product_no);
 }

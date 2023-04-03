@@ -1,0 +1,12 @@
+.card-body > .header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-body > .header > .buttons {
+    float: right
+}
+
+.card-content {
+    margin-top: 2rem;
+}

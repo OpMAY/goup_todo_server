@@ -1,10 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>대시보드 - KREAM</title>
+    <title>상품 목록 - KREAM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
     <meta content="Coderthemes" name="author"/>
@@ -36,11 +37,13 @@
 
     <!-- icons -->
     <link href="/resources/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
-<style>
-    .table-text-overflow {
-        overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    }
-</style>
+    <style>
+        .table-text-overflow {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 
 <!-- body start -->
@@ -92,10 +95,8 @@
                                     <thead>
                                     <tr>
                                         <th>번호</th>
-                                        <th style="width: 10%;">(한) 상품 이름
-                                        </th>
-                                        <th style="width: 10%;">(영) 상품 이름
-                                        </th>
+                                        <th>(한) 상품 이름</th>
+                                        <th>(영) 상품 이름</th>
                                         <th>브랜드</th>
                                         <th>카테고리</th>
                                         <th>거래 가격</th>
@@ -108,15 +109,23 @@
                                     <c:forEach var="product" items="${products}" varStatus="status">
                                         <tr>
                                             <td>${status.count}</td>
-                                            <td class="table-text-overflow" style="width: 10%;">${product.kor_name}</td>
-                                            <td class="table-text-overflow" style="width: 10%;">${product.en_name}</td>
-                                            <td>${product.brand_no}</td>
-                                            <td>${product.category_no}</td>
-                                            <td>150,000원</td>
-                                            <td>3,122회</td>
-                                            <td>${product.reg_datetime}</td>
+                                            <td class="table-text-overflow">${product.product.kor_name}</td>
+                                            <td class="table-text-overflow">${product.product.en_name}</td>
+                                            <td>${product.brand.name}</td>
+
+                                            <td>${product.upperCategory != null ? product.upperCategory.name.concat(" > ").concat(product.category.name) : product.category.name}</td>
+                                            <td><c:choose>
+                                                <c:when test="${product.price ne null}">
+                                                    <custom:formatPrice value="${product.price}"/>원
+                                                </c:when>
+                                                <c:otherwise>
+                                                    -
+                                                </c:otherwise>
+                                            </c:choose></td>
+                                            <td><custom:formatPrice value="${product.wishes}"/>회</td>
+                                            <td><custom:formatDatetime value="${product.product.reg_datetime}"/></td>
                                             <td>
-                                                <a href="/admin/product/detail/${product.no}">
+                                                <a href="/admin/product/detail/${product.product.no}">
                                                     <button type="button"
                                                             class="btn btn-primary rounded-pill waves-effect waves-light">
                                                         상세 보기
@@ -175,8 +184,23 @@
 <script src="/resources/admin/assets/libs/pdfmake/build/vfs_fonts.js"></script>
 <!-- third party js ends -->
 
-
-<script src="/resources/admin/assets/js/pages/datatables.init.js"></script>
+<script>
+    $(document).ready(() => {
+        $("#basic-datatable").removeAttr('width').DataTable({
+            columnDefs: [
+                {targets: [1, 2], width: 50}
+            ],
+            language: {
+                paginate: {
+                    previous: "<i class='mdi mdi-chevron-left'>",
+                    next: "<i class='mdi mdi-chevron-right'>"
+                }
+            }, drawCallback: function () {
+                $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+            }
+        });
+    })
+</script>
 
 </body>
 </html>

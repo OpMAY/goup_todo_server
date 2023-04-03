@@ -347,7 +347,7 @@
                 # 사이즈
             </if>
         </if>
-        ORDER BY orders DESC, no DESC LIMIT 10, #{cursor}
+        ORDER BY orders DESC, no DESC LIMIT #{cursor}, 10
     </select>
     <select id="getProductCountViaSearch" resultType="int">
         select COUNT(*)
