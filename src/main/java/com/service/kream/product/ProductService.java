@@ -693,4 +693,17 @@ public class ProductService {
     public List<Brand> getBrands() {
         return brandDao.getAllBrands();
     }
+
+    public List<CategoryFilter> getCategories() {
+        List<Category> parents = categoryDao.getParentCategories();
+        List<CategoryFilter> filters = new ArrayList<>();
+        for(Category category : parents) {
+            CategoryFilter categoryFilter = new CategoryFilter();
+            categoryFilter.setNo(category.getNo());
+            categoryFilter.setName(category.getName());
+            categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));
+            filters.add(categoryFilter);
+        }
+        return filters;
+    }
 }

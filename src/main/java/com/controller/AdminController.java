@@ -54,6 +54,8 @@ public class AdminController {
         ProductAdmin productAdmin = productService.getAdminProduct(no);
         ModelAndView VIEW = new ModelAndView("admin/product/detail");
         VIEW.addObject("product", productAdmin);
+        VIEW.addObject("brands", productService.getBrands());
+        VIEW.addObject("categories", productService.getCategories());
         return VIEW;
     }
 
@@ -61,6 +63,13 @@ public class AdminController {
     public ModelAndView brands() {
         ModelAndView VIEW = new ModelAndView("admin/product/brand-list");
         VIEW.addObject("brands", productService.getBrands());
+        return VIEW;
+    }
+
+    @RequestMapping(value = "/product/categories", method = RequestMethod.GET)
+    public ModelAndView categories() {
+        ModelAndView VIEW = new ModelAndView("admin/product/category-list");
+        VIEW.addObject("categories", productService.getCategories());
         return VIEW;
     }
 

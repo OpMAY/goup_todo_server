@@ -7,5 +7,5 @@ import java.time.LocalDate;
 @Data
 public class ProductPriceHistory {
     private int price;
-    private LocalDate target_date;
+    private String target_date;
 }

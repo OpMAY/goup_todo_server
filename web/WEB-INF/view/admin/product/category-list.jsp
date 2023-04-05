@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>브랜드 목록 - KREAM</title>
+    <title>카테고리 목록 - KREAM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
     <meta content="Coderthemes" name="author"/>
@@ -77,10 +77,10 @@
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">KREAM ADMIN</a></li>
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Products</a></li>
-                                    <li class="breadcrumb-item active">브랜드 관리</li>
+                                    <li class="breadcrumb-item active">카테고리 관리</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">브랜드 관리</h4>
+                            <h4 class="page-title">카테고 관리</h4>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                             <div class="card-body">
                                 <div class="row justify-content-between">
                                     <div class="col-md-6">
-                                        <h5>등록된 브랜드 ${brands.size()}개</h5>
+                                        <h5>등록된 카테고리 ${categories.size()}개</h5>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-md-end mt-3 mt-md-0">
@@ -110,50 +110,8 @@
                 </div>
                 <!-- end row -->
 
-                <div class="row" id="brands">
-                    <c:forEach var="brand" items="${brands}">
-                        <div class="col-lg-3">
-                            <div class="text-center card">
-                                <div class="card-body">
-                                    <div class="pt-2 pb-2">
-                                        <h4 class="mt-3 text-dark">${brand.name}</h4>
-                                        <div class="_brand-color mb-2"
-                                             style="width: 25%; height: 20px; margin-left: auto;margin-right: auto; background-color: ${brand.color}">
-                                            <p class="text-muted">${brand.color}</p></div>
-                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"
-                                                data-no="${brand.no}">수정
-                                        </button>
-                                        <button type="button" class="btn btn-light btn-sm waves-effect"
-                                                data-no="${brand.no}">삭제
-                                        </button>
+                <div class="row" id="categories">
 
-                                        <div class="row mt-4">
-                                            <div class="col-4">
-                                                <div class="mt-3">
-                                                    <h4>24</h4>
-                                                    <p class="mb-0 text-muted text-truncate">상품 갯수</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="mt-3">
-                                                    <h4>423</h4>
-                                                    <p class="mb-0 text-muted text-truncate">누적 판매량</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="mt-3">
-                                                    <h4>1,125</h4>
-                                                    <p class="mb-0 text-muted text-truncate">관심 횟수</p>
-                                                </div>
-                                            </div>
-                                        </div> <!-- end row-->
-
-                                    </div> <!-- end .padding -->
-                                </div>
-                            </div> <!-- end card-->
-                        </div>
-                        <!-- end col -->
-                    </c:forEach>
                 </div>
                 <!-- end row -->
 

@@ -133,8 +133,8 @@
             </otherwise>
         </choose>
         AND o.no is not null
-        GROUP BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d'), o.no
-        ORDER BY DATE_FORMAT(o.reg_datetime, '%Y-%m-%d') DESC) as t
+        GROUP BY target_date, o.no
+        ORDER BY target_date DESC) as t
         WHERE order_number = 1;
     </select>
     <update id="updateProductViews">
