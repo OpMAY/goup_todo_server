@@ -13,6 +13,10 @@
         where no = #{no}
     </select>
 
+    <select id="getAllNotice" resultType="Notice">
+        select * from notice order by reg_datetime desc
+    </select>
+
     <insert id="addNotice" useGeneratedKeys="true" keyProperty="no">
         insert into notice(title, content, reg_datetime, updated_datetime, flag)
         values (#{title},
@@ -26,15 +30,14 @@
         update notice
         set title=#{title},
             content=#{content},
+            flag=#{flag},
             updated_datetime =now()
 
         where no = #{no}
     </update>
 
     <delete id="deleteNotice">
-        update notice
-        set flag=#{flag}
-        where no = #{no}
+       delete from notice where no=#{no}
     </delete>
 
     <select id="getNotices" resultType="Notice">

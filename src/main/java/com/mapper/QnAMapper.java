@@ -16,7 +16,7 @@ public interface QnAMapper {
 
     void addQna(Qna qna);
 
-    void updateQna(Map<String, Object> data);
+    void updateQna(Qna data);
 
     void deleteQna(int no);
 

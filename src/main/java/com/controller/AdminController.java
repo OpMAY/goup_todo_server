@@ -17,6 +17,8 @@ import com.service.kream.user.PointService;
 import com.service.kream.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -133,17 +135,19 @@ public class AdminController {
         return view;
     }
 
-    @GetMapping("/notice/list/{page}")
-    public ModelAndView getNotice(@PathVariable int page){
+
+    @GetMapping("/notice/list")
+    public ModelAndView getNotice(){
         Message message = new Message();
         ModelAndView view = new ModelAndView("/admin/notice/notice-list");
-        List<Notice> notice = noticeService.getNotices(page);
+        List<Notice> notice = noticeService.getAllnotice();
         view.addObject("notice",notice);
+        message.put("notice",notice);
         return  view;
     }
 
     @GetMapping("/qna/list")
-    public ModelAndView getNotice(){
+    public ModelAndView getQna(){
         Message message = new Message();
         ModelAndView view = new ModelAndView("/admin/qna/qna-list");
         List<Qna> qna = qnaService.getAllQna();

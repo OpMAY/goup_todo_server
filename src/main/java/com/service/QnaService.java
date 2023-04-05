@@ -33,14 +33,10 @@ public class QnaService {
         qnaDao.addQna(qna);
     }
 
-    public void updateQna(Map<String,Object> data, Qna qna){
-        data.put("no",qna.getNo());
-        data.put("title",qna.getTitle());
-        data.put("content",qna.getContent());
-        data.put("type",qna.getType());
-        data.put("updated_datetime",qna.getUpdated_datetime());
+    public void updateQna(Qna qna){
 
-        qnaDao.updateQna(data);
+
+        qnaDao.updateQna(qna);
 
 
     }

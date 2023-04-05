@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,8 +92,15 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                <div class="col-sm-4">
+
+                                    <button type="button"  class="btn btn-soft-success waves-effect waves-light" data-bs-toggle="modal"
+                                            data-bs-target="#add-banner-modal">
+                                        <i class="mdi mdi-plus-circle me-1"> </i> 배너 등록</button>
+
+                                </div>
                                 <%--                                <h4 class="header-title">${bannerList.size()} 개의 상품</h4>--%>
-                                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                <table id="banner-datatable" class="table dt-responsive nowrap w-100">
                                     <thead>
                                     <tr>
                                         <th>번호</th>
@@ -115,14 +123,14 @@
                                             </td>
                                             <td>${banner.banner_flag}</td>
                                             <td>${banner.click_to_url}</td>
-                                            <td>${banner.reg_datetime}</td>
-                                            <td>${banner.updated_datetime}</td>
+                                            <td><custom:formatDatetime value="${banner.reg_datetime}"/></td>
+                                            <td><custom:formatDatetime value="${banner.updated_datetime}"/></td>
                                             <td>
                                                 <a href="javascript:void(0)" class="_edit action-icon" data-no="${banner.no}" data-bs-toggle="modal"
                                                    data-bs-target="#custom-modal"> <i
                                                         class="mdi mdi-square-edit-outline"></i></a>
-                                                <a href="javascript:void(0);" class="action-icon" data-bs-toggle="modal"
-                                                   data-bs-target="custom-modal"> <i class="mdi mdi-delete"></i></a>
+                                                <a href="javascript:void(0);" class="_delete action-icon" data-no="${banner.no}" data-bs-toggle="modal"
+                                                   data-bs-target="#del-banner-modal"> <i class="mdi mdi-delete"></i></a>
                                                     <%--                                                <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#custom-modal">--%>
                                                     <%--                                                    <i class="mdi mdi-plus-circle me-1"></i> Add New</button>--%>
                                             </td>
@@ -162,6 +170,37 @@
 
 </div>
 <!-- END wrapper -->
+<div class="modal fade" id="add-banner-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h4 class="modal-title" >Add Banner</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="file" data-plugins="dropify">
+
+                <div class="mb-3">
+                    <label for="click_to_url" class="form-label">이동 url 주소</label>
+                    <input type="text" class="form-control" id="add-click_to_url" placeholder="Enter click_to_url">
+                </div>
+                <div class="mb-3">
+                    <label class="form-check-label" for="add-banner_flag">해당 배너 사용 여부</label>
+                    <input type="checkbox" class="form-check-input" id="add-banner_flag">
+                </div>
+
+
+                <div class="text-end">
+                    <button type="button" id="add-banner" class="btn btn-success waves-effect waves-light">등록 완료</button>
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
 
 <div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -193,6 +232,27 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="del-banner-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h4 class="modal-title" >배너 삭제</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form>
+
+                    <h5>삭제하시겠습니까?</h5>
+                    <div class="text-end">
+                        <button type="button" id="delete_banner" class="btn btn-success waves-effect waves-light">삭제 완료</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 
 
 <!-- Vendor js -->
@@ -325,6 +385,8 @@
             let object = {};
             object.click_to_url = url.val();
             object.banner_flag = flag.is(':checked');
+
+
             $.ajax({
                 url: "/api/kream/admin/banner/" + no,
                 type: "put",
@@ -343,7 +405,98 @@
                 }
             });
         }
-    })
+    });
+
+
+    $('._delete').on('click', function () {
+        let no = $(this).data().no;
+        $.ajax({
+            url: "/api/kream/admin/banner/" + no,
+            type: "get",
+            success: function (data) {
+                console.log( data );
+
+                $('#del-banner-modal').find('#delete_banner').data('no',data.data.banner.no);
+
+            },
+            error: function (request, status, error, data) {
+                console.log("실패"  );
+            }
+        });
+    });
+
+
+    $('#delete_banner').on('click', function () {
+        let no = $(this).data().no;
+        let modal = $('#del-banner-modal');
+        let object = {};
+        object.no = no;
+
+
+
+        $.ajax({
+            url: "/api/kream/admin/banner/" + no,
+            type:"delete",
+            data: JSON.stringify(object),
+            contentType: 'application/json',
+            success: function (){
+                window.location.reload();
+            },
+            error: function (){
+                alert("실패");
+            }
+        })
+    });
+
+    $('#add-banner').on('click',function (){
+
+        let modal = $('#add-banner-modal');
+        let click_to_url = modal.find('#add-click_to_url');
+        let banner_flag = modal.find('#add-banner_flag');
+        let fileInput = modal.find('input[type=file]');
+
+
+        if(fileInput[0].files && fileInput[0].files.length >0 ){
+            objectFileUpload('/api/kream/admin/user/file',fileInput[0].files[0]).then((res) =>{
+                let object = {};
+                object.click_to_url = click_to_url.val();
+                object.banner_flag = banner_flag.is(':checked');
+                object.banner_image = res.data.file;
+
+                $.ajax({
+                    url: "/api/kream/admin/banner" ,
+                    type: "post",
+                    data: JSON.stringify(object),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if(res.status === 'OK') {
+                            if(res.data.status) {
+                                alert('등록완료');
+                                window.location.reload();
+                            }
+                        }
+                    },
+                    error: function (request, status, error, data) {
+                        console.log("실패"  );
+                    }
+                });
+            });
+        }
+
+
+    });
+
+
+    $("#banner-datatable").DataTable({
+        language: {
+            paginate: {
+                previous: "<i class='mdi mdi-chevron-left'>",
+                next: "<i class='mdi mdi-chevron-right'>"
+            }
+        }, drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+        }
+    });
 </script>
 
 </body>

@@ -8,11 +8,13 @@ import com.service.NoticeService;
 import com.service.QnaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,6 +24,9 @@ import java.util.Map;
 public class AdminCsRestController {
     private final NoticeService noticeService;
     private final QnaService qnaService;
+
+
+
 
     @PostMapping("/notice")
     public ResponseEntity registNotice(@RequestBody Notice notice){
@@ -33,12 +38,11 @@ public class AdminCsRestController {
     }
 
     @PutMapping("/notice/{no}")
-    public ResponseEntity editNotice(@PathVariable int no  ){
+    public ResponseEntity editNotice(@PathVariable int no, @RequestBody Notice notice){
         Message message  = new Message();
-        Notice notice = noticeService.getNotice(no);
-        Map<String,Object> data = new HashMap<>();
 
-        noticeService.updateNotice(data,notice);
+        log.info("{}",notice);
+        noticeService.updateNotice(notice);
         message.put("notice",true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
@@ -48,6 +52,7 @@ public class AdminCsRestController {
     public ResponseEntity deleteNotice(@PathVariable int no  ){
         Message message  = new Message();
         noticeService.deleteNotice(no);
+
         message.put("notice",true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
@@ -56,21 +61,20 @@ public class AdminCsRestController {
     @PostMapping("/qna")
     public ResponseEntity registQna(@RequestBody Qna qna){
         Message message  = new Message();
+        log.info("{}",qna);
         qnaService.addQna(qna);
-        message.put("notice",true);
+        message.put("qna",true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
 
     @PutMapping("/qna/{no}")
-    public ResponseEntity updateQna(@PathVariable int no){
-        Qna qna = qnaService.getQnaData(no);
+    public ResponseEntity updateQna(@PathVariable int no, @RequestBody Qna data){
+        System.out.println(data);
         Message message  = new Message();
-        Map<String, Object> data = new HashMap<>();
 
-
-        qnaService.updateQna(data,qna);
-        message.put("notice",true);
+        qnaService.updateQna(data);
+        message.put("qna",true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }

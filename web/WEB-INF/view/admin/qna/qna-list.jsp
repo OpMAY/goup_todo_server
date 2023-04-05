@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="custom" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -12,6 +13,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <!-- App favicon -->
   <link rel="shortcut icon" href="../assets/images/favicon.ico">
+
+  <!-- third party css -->
+  <link href="/resources/admin/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet"
+        type="text/css"/>
+  <link href="/resources/admin/assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css"
+        rel="stylesheet" type="text/css"/>
+  <link href="/resources/admin/assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet"
+        type="text/css"/>
+  <link href="/resources/admin/assets/libs/datatables.net-select-bs5/css//select.bootstrap5.min.css" rel="stylesheet"
+        type="text/css"/>
+  <!-- third party css end -->
 
   <!-- App css -->
   <link href="/resources/admin/assets/css/config/default/bootstrap.min.css" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
@@ -76,7 +88,11 @@
               <div class="card-body">
                 <div class="row mb-2">
                   <div class="col-sm-4">
-                    <button type="button" class="btn btn-soft-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#custom-modal"><i class="mdi mdi-plus-circle me-1"></i> QnA 등록</button>
+
+                    <button type="button"  class="btn btn-soft-success waves-effect waves-light" data-bs-toggle="modal"
+                            data-bs-target="#add-qna-modal">
+                      <i class="mdi mdi-plus-circle me-1"> </i> QnA 등록</button>
+
                   </div>
                   <div class="col-sm-8">
                     <div class="text-sm-end mt-2 mt-sm-0">
@@ -88,7 +104,7 @@
                 </div>
 
                 <div class="table-responsive">
-                  <table class="table table-centered table-nowrap table-striped" id="products-datatable">
+                  <table class="table table-centered table-nowrap table-striped" id="qna-datatable">
                     <thead>
                     <tr>
                       <th style="width: 20px;">
@@ -124,8 +140,8 @@
                         <td><a href="/admin/qna-detail/${qna.no}">${qna.title}</a></td>
                         <td>${qna.content}</td>
                         <td>${qna.type}</td>
-                        <td>${qna.reg_datetime}</td>
-                        <td>${qna.updated_datetime}</td>
+                        <td><custom:formatDatetime value="${qna.reg_datetime}"/></td>
+                        <td><custom:formatDatetime value="${qna.updated_datetime}"/></td>
                         <td>
                           <c:if test="${qna.flag == true}">
                             <span class="badge bg-soft-success text-success">사용</span>
@@ -136,17 +152,12 @@
 
                         </td>
                         <td>
-                          <a href="javascript:void(0)" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                          <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                          <a href="javascript:void(0)" class="_edit action-icon" data-no="${qna.no}" data-bs-toggle="modal"
+                             data-bs-target="#qna-modal"> <i class="mdi mdi-square-edit-outline"></i></a>
+                          <a href="javascript:void(0);" class="_delete action-icon" data-no="${qna.no}" data-bs-toggle="modal"
+                             data-bs-target="#del-qna-modal"> <i class="mdi mdi-delete"></i></a>
                         </td>
-                          <%--                                                <td>--%>
 
-                          <%--                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >--%>
-                          <%--                                                        <a href="/admin/banner-detail/${banner.no}"></a>--%>
-                          <%--                                                        상세 보기--%>
-                          <%--                                                    </button>--%>
-                          <%--                                                    </a>--%>
-                          <%--                                                </td>--%>
 
                       </tr>
                     </c:forEach>
@@ -162,25 +173,7 @@
                   </table>
                 </div>
 
-                <ul class="pagination pagination-rounded justify-content-end mb-0">
-                  <li class="page-item">
-                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                      <span aria-hidden="true">«</span>
-                      <span class="visually-hidden">Previous</span>
-                    </a>
-                  </li>
-                  <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
-                  <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                  <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a></li>
-                  <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                  <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                      <span aria-hidden="true">»</span>
-                      <span class="visually-hidden">Next</span>
-                    </a>
-                  </li>
-                </ul>
+
 
               </div> <!-- end card-body-->
             </div> <!-- end card-->
@@ -193,22 +186,7 @@
     </div> <!-- content -->
 
     <!-- Footer Start -->
-    <footer class="footer">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-6">
-            <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a>
-          </div>
-          <div class="col-md-6">
-            <div class="text-md-end footer-links d-none d-sm-block">
-              <a href="javascript:void(0);">About Us</a>
-              <a href="javascript:void(0);">Help</a>
-              <a href="javascript:void(0);">Contact Us</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <jsp:include page="../partial/footer.jsp"/>
     <!-- end Footer -->
 
   </div>
@@ -222,41 +200,109 @@
 <!-- END wrapper -->
 
 <!-- Modal -->
-<div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="add-qna-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-light">
-        <h4 class="modal-title" id="myCenterModalLabel">회원 추가</h4>
+        <h4 class="modal-title" >QnA 등록</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
       </div>
       <div class="modal-body p-4">
         <form>
           <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter full name">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" class="form-control" id="add-title" placeholder="Enter full title">
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            <label for="content" class="form-label">내용</label>
+            <input type="text" class="form-control" id="add-content" placeholder="Enter content">
           </div>
           <div class="mb-3">
-            <label for="position" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="position" placeholder="Enter phone number">
-          </div>
-          <div class="mb-3">
-            <label for="category" class="form-label">Location</label>
-            <input type="text" class="form-control" id="category" placeholder="Enter Location">
+            <label  class="form-label">타입</label>
+            <select class="form-select" >
+              <option selected>타입을 선택하세요</option>
+              <option value="POLICY">이용정책</option>
+              <option value="COMMON">공통</option>
+              <option value="SELL">판매</option>
+              <option value="BUY">구매</option>
+            </select>
           </div>
 
+
+
           <div class="text-end">
-            <button type="submit" class="btn btn-success waves-effect waves-light">Save</button>
-            <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">Continue</button>
+            <button type="button" id="add_qna" class="btn btn-success waves-effect waves-light">등록 완료</button>
+            <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">취소</button>
           </div>
         </form>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="qna-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h4 class="modal-title" id="myCenterModalLabel">QnA 수정</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" class="form-control" id="title" placeholder="Enter full title">
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <input type="text" class="form-control" id="content" placeholder="Enter content">
+          </div>
+          <div class="mb-3">
+            <label  class="form-label">타입</label>
+            <select class="form-select">
+              <option selected>타입을 선택하세요</option>
+              <option value="POLICY">이용정책</option>
+              <option value="COMMON">공통</option>
+              <option value="SELL">판매</option>
+              <option value="BUY">구매</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-check-label" for="flag">상태</label>
+            <input type="checkbox" class="form-check-input" id="flag">
+          </div>
+
+          <div class="text-end">
+            <button type="button" id="edit_qna" class="btn btn-success waves-effect waves-light">수정 완료</button>
+            <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">취소</button>
+          </div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="del-qna-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h4 class="modal-title" >QnA 삭제</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+
+          <h5>삭제하시겠습니까?</h5>
+          <div class="text-end">
+            <button type="button" id="delete_qna" class="btn btn-success waves-effect waves-light">삭제 </button>
+            <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">취소</button>
+          </div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
 
 
 
@@ -265,6 +311,169 @@
 
 <!-- App js -->
 <script src="/resources/admin/assets/js/app.min.js"></script>
+
+<!-- third party js -->
+<script src="/resources/admin/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
+<script src="/resources/admin/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="/resources/admin/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+<!-- third party js ends -->
+
+<script>
+
+
+  $('._edit').on('click', function () {
+    let no = $(this).data().no;
+
+    $.ajax({
+      url: "/api/kream/qna/" + no,
+      type: "get",
+      success: function (data) {
+        console.log( data );
+
+
+        // CLICK_TO_URL
+        $('#qna-modal').find('#title').val(data.data.qna.title);
+
+        $('#qna-modal').find('#content').val(data.data.qna.content);
+
+        $('#qna-modal').find('#type').val(data.data.qna.type);
+        // BANNER FLAG
+        $('#qna-modal').find('#flag').attr('checked', data.data.qna.flag)
+
+        $('#qna-modal').find('#edit_qna').data('no',data.data.qna.no);
+
+
+
+      },
+      error: function (request, status, error, data) {
+        console.log("실패"  );
+      }
+    });
+  });
+
+  $('#edit_qna').on('click', function () {
+    let no = $(this).data().no;
+    let modal = $('#qna-modal');
+
+    let title = modal.find('#title');
+    let content = modal.find('#content');
+    let type = modal.find('#type');
+    let flag = modal.find('#flag');
+
+    let object = {};
+    object.no = no;
+    object.title = title.val();
+    object.content = content.val();
+    object.type = type.val();
+    object.flag = flag.is(':checked');
+
+
+
+    $.ajax({
+      url: "/api/kream/admin/cs/qna/" + no,
+      type:"put",
+      data: JSON.stringify(object),
+      contentType: 'application/json',
+      success: function (){
+        window.location.reload();
+      },
+      error: function (){
+        alert("실패");
+      }
+    })
+  });
+
+  $('._delete').on('click', function () {
+    let no = $(this).data().no;
+    $.ajax({
+      url: "/api/kream/qna/" + no,
+      type: "get",
+      success: function (data) {
+        console.log( data );
+
+        $('#del-qna-modal').find('#delete_qna').data('no',data.data.qna.no);
+
+      },
+      error: function (request, status, error, data) {
+        console.log("실패"  );
+      }
+    });
+  });
+
+
+  $('#delete_qna').on('click', function () {
+    let no = $(this).data().no;
+    let modal = $('#del-qna-modal');
+    let object = {};
+    object.no = no;
+
+
+
+    $.ajax({
+      url: "/api/kream/admin/cs/qna/" + no,
+      type:"delete",
+      data: JSON.stringify(object),
+      contentType: 'application/json',
+      success: function (){
+        window.location.reload();
+      },
+      error: function (){
+        alert("실패");
+      }
+    })
+  });
+
+  $('#add_qna').on('click',function (){
+    let title = $('#add-title').val();
+    let content = $('#add-content').val();
+    let type = $('#add-type').val();
+    let object = {};
+    object.title = title;
+    object.content = content;
+    object.type = type;
+    object.flag = 1;
+    console.log(title);
+
+    $.ajax({
+      url:"/api/kream/admin/cs/qna",
+      type:"post",
+      data: JSON.stringify(object),
+      contentType:'application/json',
+      success: function (){
+        window.location.reload();
+      },
+      error:function (){
+        alert("실패");
+      }
+    })
+  });
+
+
+
+
+  $("#qna-datatable").DataTable({
+      language: {
+          paginate: {
+              previous: "<i class='mdi mdi-chevron-left'>",
+              next: "<i class='mdi mdi-chevron-right'>"
+          }
+      }, drawCallback: function () {
+          $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+      }
+  });
+
+
+</script>
 
 
 

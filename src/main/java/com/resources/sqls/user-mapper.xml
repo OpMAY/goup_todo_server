@@ -53,6 +53,23 @@
     </insert>
 
 
+    <update id="editUser">
+        update user
+        set name = #{name},
+            phone_number = #{phone_number},
+            zipcode = #{zipcode},
+            email = #{email},
+            address = #{address},
+            address_detail = #{address_detail},
+            point = #{point},
+            user_flag = #{user_flag},
+            profile_img    = IF(#{profile_img, typeHandler=JsonObjectTypeHandler} is null, profile_img,
+                                 #{profile_img, typeHandler=JsonObjectTypeHandler}),
+            updated_datetime = now()
+        where no = #{no}
+
+    </update>
+
     <update id="updateEmail">
         update user
         set email            =#{email},

@@ -35,8 +35,8 @@ public class QnaDao {
         mapper.addQna(qna);
     }
 
-    public void updateQna(Map<String, Object> data) {
-        mapper.updateQna(data);
+    public void updateQna(Qna qna) {
+        mapper.updateQna(qna);
     }
 
     public void deleteQna(int no) {

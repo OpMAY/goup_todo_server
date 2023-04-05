@@ -38,4 +38,6 @@ public interface UserMapper {
 
 
     List<User> getAllUser();
+
+    void editUser(User user);
 }

@@ -33,9 +33,7 @@
                             <li>
                                 <a href="/admin/banner/list">배너 목록</a>
                             </li>
-                            <li>
-                                <a href="/admin/banner/add">배너 등록</a>
-                            </li>
+
                         </ul>
                     </div>
                 </li>
@@ -88,9 +86,7 @@
                             <li>
                                 <a href="/admin/user/list">사용자 목록</a>
                             </li>
-                            <li>
-                                <a href="/admin/user/add">사용자 등록</a>
-                            </li>
+
                         </ul>
                     </div>
                 </li>

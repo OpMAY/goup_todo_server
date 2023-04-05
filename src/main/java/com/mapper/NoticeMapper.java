@@ -17,7 +17,9 @@ public interface NoticeMapper {
 
     void addNotice(Notice notice);
 
-    void updateNotice(Map<String,Object> data);
+    void updateNotice(Notice notice);
 
     void deleteNotice(int no);
+
+    List<Notice> getAllNotice();
 }
