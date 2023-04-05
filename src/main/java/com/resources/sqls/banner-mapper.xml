@@ -18,11 +18,13 @@
     </select>
 
     <select id="getBanner" resultType="Banner" resultMap="Banner">
-        select * from banner where no=#{no}
+        select *
+        from banner
+        where no = #{no}
     </select>
 
     <insert id="registBanner" useGeneratedKeys="true" keyProperty="no">
-        insert into banner(banner_image,banner_flag,click_to_url,reg_datetime,update_datetime)
+        insert into banner(banner_image, banner_flag, click_to_url, reg_datetime, updated_datetime)
         values (#{banner_image,typeHandler=JsonObjectTypeHandler},
                 #{banner_flag},
                 #{click_to_url},
@@ -31,19 +33,21 @@
     </insert>
 
 
-    <update id="editBanner" parameterType="map">
+    <update id="editBanner">
         UPDATE banner
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="banner_image !=null">banner_image=#{banner_image,typeHandler=JsonObjectTypeHandler},</if>
-            <if test="banner_flag != null">banner_flag=#{banner_flag},</if>
-            <if test="click_to_url !=null">click_to_url=#{click_to_url}</if>
-            <if test="update_datetime != null">update_datetime=now()</if>
-        </trim>
+        SET banner_image    = IF(#{banner_image, typeHandler=JsonObjectTypeHandler} is null, banner_image,
+                                 #{banner_image, typeHandler=JsonObjectTypeHandler}),
+            banner_flag     = #{banner_flag},
+            click_to_url    = #{click_to_url},
+            updated_datetime = NOW()
         where no = #{no}
     </update>
 
+
     <delete id="deleteBanner">
-        delete from banner where no=#{no}
+        delete
+        from banner
+        where no = #{no}
     </delete>
 
 

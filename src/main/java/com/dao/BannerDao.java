@@ -3,6 +3,7 @@ package com.dao;
 import com.exception.ContentsException;
 import com.mapper.BannerMapper;
 import com.mapper.NoticeMapper;
+import com.model.common.MFile;
 import com.model.kream.home.Banner;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -33,12 +34,10 @@ public class BannerDao {
     }
 
 
-    public void editBanner(Map<String, Object> map) {
-        if(map != null || map.size()>0){
-            mapper.editBanner(map);
-        }
-
+    public void editBanner(Banner banner) {
+        mapper.editBanner(banner);
     }
+
 
     public void deleteBanner(int no) {
         mapper.deleteBanner(no);

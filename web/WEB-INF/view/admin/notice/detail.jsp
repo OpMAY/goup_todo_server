@@ -97,32 +97,20 @@
                       <br><br>
                       <div class="col-md-10">
                         <div class="mb-3">
-                          <label for="title" class="form-label">제목</label>
-                          <input class="form-control" type="text" placeholder= "${notice.title}" id="title" />
+                          <label  class="form-label">제목</label>
+                          ${notice.title}
                         </div>
                         <div class="mb-10">
                           <label  class="form-label">내용</label><p></p>
                           ${notice.content}
 <%--                          <input class="form-control" type="text" placeholder= "${notice.content}" id="content" />--%>
                         </div>
-                        <br><br>
-                        <div class="mb-10">
-                          <div class="form-check">
-                            <label class="form-check-label" for="customCheck2">해당 공지 미사용</label>
-                            <input type="checkbox" class="form-check-input" id="customCheck2">
-                          </div>
-                        </div>
+
                       </div>
 
 
 
 
-                      <br><br><br><br><br><br><br><br>
-
-                      <div class="col-sm-6">
-                        <a href="ecommerce-checkout.html" class="btn btn-success">
-                          <i class="mdi mdi-pencil me-1"></i> 수정 완료 </a>
-                      </div> <!-- end col -->
                     </div>
                   </div> <!-- end col -->
                 </div>

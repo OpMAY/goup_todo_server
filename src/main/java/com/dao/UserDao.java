@@ -80,4 +80,8 @@ public class UserDao {
     public List<User> getAllUser() {
         return mapper.getAllUser();
     }
+
+    public void editUser(User user) {
+        mapper.editUser(user);
+    }
 }

@@ -44,11 +44,8 @@ public class CsRestController {
     public ResponseEntity getNoticeDetail(@PathVariable int no){
         Message message = new Message();
         Notice notice = noticeService.getNotice(no);
-        Map<String,Object> map = new HashMap<>();
-        map.put("content",notice.getContent());
-        map.put("title",notice.getTitle());
-        map.put("reg_datetime",notice.getReg_datetime());
-        message.put("map",map);
+
+        message.put("notice",notice);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -72,11 +69,12 @@ public class CsRestController {
 
     }
 
-    @GetMapping("/qna/list/detail")
-    public ResponseEntity getQnaDetail (@RequestParam int no,  Pageable page){
+    @GetMapping("/qna/{no}")
+    public ResponseEntity getQnaDetail (@PathVariable int no){
         Message message = new Message();
 
-
+        Qna qna =qnaService.getQnaData(no);
+        message.put("qna",qna);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }

@@ -122,7 +122,7 @@ public class UserService {
 
         User user = userDao.getProfileInfo(no);
 
-        if (user.getUser_flag() == 1) {
+        if (user.isUser_flag() == true) {
             int user_flag = 0;
             userDao.deletedUser(no, user_flag);
 
@@ -141,7 +141,7 @@ public class UserService {
         Integer email_alarm = user.getEmail_alarm();
         Integer size = user.getSize();
         MultipartFile file = (MultipartFile) user.getProfile_img();
-        LOGIN_TYPE login_type = user.getLogin_type();
+
 
         if (user.getName() != null) {
             this.updateUserName(user.getName(), no);
@@ -173,5 +173,9 @@ public class UserService {
 
     public List<User> getAllUser() {
         return userDao.getAllUser();
+    }
+
+    public void editUser(User user) {
+        userDao.editUser(user);
     }
 }

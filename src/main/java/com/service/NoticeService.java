@@ -37,16 +37,17 @@ public class NoticeService {
         noticeDao.addNotice(notice);
     }
 
-    public void updateNotice(Map<String,Object> data, Notice notice) {
-        data.put("no",notice.getNo());
-        data.put("title",notice.getTitle());
-        data.put("content",notice.getContent());
-        data.put("flag",notice.isFlag());
+    public void updateNotice( Notice notice) {
 
-        noticeDao.updateNotice(data);
+
+        noticeDao.updateNotice(notice);
     }
 
     public void deleteNotice(int no) {
         noticeDao.deleteNotice(no);
+    }
+
+    public List<Notice> getAllnotice() {
+        return noticeDao.getAllNotice();
     }
 }

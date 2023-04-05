@@ -135,6 +135,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity handleException(Exception e) {
         log.error("handleException -> {}", e.getMessage());
+        e.printStackTrace();
         return new ResponseEntity(DefaultRes.res(HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.OK);
     }
 

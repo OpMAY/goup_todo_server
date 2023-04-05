@@ -31,12 +31,16 @@ public class NoticeDao {
         mapper.addNotice(notice);
     }
 
-    public void updateNotice(Map<String,Object> data) {
-        mapper.updateNotice(data);
+    public void updateNotice(Notice notice) {
+        mapper.updateNotice(notice);
     }
 
     public void deleteNotice(int no) {
         mapper.deleteNotice(no);
+    }
+
+    public List<Notice> getAllNotice() {
+        return mapper.getAllNotice();
     }
 }
 

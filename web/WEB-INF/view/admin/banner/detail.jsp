@@ -105,39 +105,26 @@
                                         <div class="ps-xl-3 mt-3 mt-xl-0">
                                             <a href="#" class="text-primary">No ${banner.no}</a>
                                             <br><br>
-                                            <div class="col-md-4">
+
                                                 <div class="mb-3">
-                                                    <label  class="form-label">CLICK TO URL</label><p></p>
+                                                    <label  class="form-label">CLICK TO URL : </label>
                                                    ${banner.click_to_url}
                                                 </div>
-                                            </div>
 
-                                            <div class="mb-3">
-                                                <div class="form-check">
-                                                    <label class="form-check-label" >해당 배너 사용</label>
-                                                    ${banner.banner_flag}
-                                                </div>
-                                            </div>
 
-                                            <label  class="form-label">배너 이미지</label>
-                                            ${banner.banner_image.url}
+                                                <div class="mb-3">
 
-                                            <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                                                <div class="fallback">
-                                                    <input name="file" type="file" />
+                                                        <label class="form-check-label" >해당 배너 사용 : </label>
+                                                        ${banner.banner_flag}
+
                                                 </div>
 
-                                                <div class="dz-message needsclick">
-                                                    <i class="h3 text-muted dripicons-cloud-upload"></i>
-                                                    <h4>Drop files here or click to upload.</h4>
-                                                </div>
-                                            </form>
+
+
+
                                             <br><br><br><br><br><br><br><br>
 
-                                            <div class="col-sm-6">
-                                                <a  class="btn btn-success" onclick="bannerEdit()">
-                                                    <i class="mdi mdi-pencil me-1"></i> 수정 완료 </a>
-                                            </div> <!-- end col -->
+
                                         </div>
                                     </div> <!-- end col -->
                                 </div>

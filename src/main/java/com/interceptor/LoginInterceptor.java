@@ -38,7 +38,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         User user = userService.getUserbyToken(access_token);
 
         if(access_token != null && session !=null   ){
-            if(user.getUser_flag()==1) {
+            if(user.isUser_flag()==true) {
                 return true;
             }else {
                 throw new LoginTokenException("삭제된 사용자 입니다.");

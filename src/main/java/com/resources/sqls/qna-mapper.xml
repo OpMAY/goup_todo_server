@@ -32,19 +32,27 @@
                 #{content},
                 #{type},
                 now(),
-                now());
+                now(),
+                #{flag}
+                );
     </insert>
 
 
 
-    <update id="updateQna" parameterType="map">
-        UPDATE qna
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="title !=null">title=#{title},</if>
-            <if test="content != null">content=#{content},</if>
-            <if test="flag !=null">flag=#{flag}</if>
-            <if test="update_datetime != null">update_datetime=now()</if>
-        </trim>
+    <update id="updateQna" >
+        UPDATE qna set
+                       title = #{title},
+                       content = #{content},
+                       type = #{type},
+                       flag = #{flag},
+                       updated_datetime = now()
+
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="title !=null">title=#{title},</if>-->
+<!--            <if test="content != null">content=#{content},</if>-->
+<!--            <if test="flag !=null">flag=#{flag}</if>-->
+<!--            <if test="updated_datetime != null">updated_datetime=now()</if>-->
+<!--        </trim>-->
         where no = #{no}
     </update>
 
