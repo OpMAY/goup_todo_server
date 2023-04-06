@@ -2,6 +2,7 @@ package com.dao;
 
 import com.mapper.CategoryMapper;
 import com.model.kream.product.category.Category;
+import com.model.kream.product.category.CategoryAdmin;
 import com.model.kream.product.category.CategoryFilter;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -26,5 +27,9 @@ public class CategoryDao {
 
     public List<Category> getChildrenCategories(int parent_no) {
         return mapper.getChildrenCategories(parent_no);
+    }
+
+    public List<CategoryAdmin> getCategoryChildrenAdmin(int parent_no) {
+        return mapper.getCategoryChildrenAdmin(parent_no);
     }
 }

@@ -74,4 +74,6 @@ public interface ProductMapper {
     List<Product> getAllProducts();
 
     List<Product> getBrandProducts(int brand_no);
+
+    int getCategoryProductCount(int category_no);
 }

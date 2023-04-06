@@ -80,33 +80,70 @@
                                     <li class="breadcrumb-item active">카테고리 관리</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">카테고 관리</h4>
+                            <h4 class="page-title">카테고리 관리</h4>
                         </div>
                     </div>
                 </div>
                 <!-- end page title -->
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row justify-content-between">
-                                    <div class="col-md-6">
-                                        <h5>등록된 상위 카테고리 ${categories.size()}개</h5>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="text-md-end mt-3 mt-md-0">
-                                            <button type="button" class="btn btn-success waves-effect waves-light me-1">
-                                                <i class="mdi mdi-cog"></i></button>
-                                            <button type="button" class="btn btn-danger waves-effect waves-light"
-                                                    data-bs-toggle="modal" data-bs-target="#custom-modal"><i
-                                                    class="mdi mdi-plus-circle me-1"></i> Add New
-                                            </button>
-                                        </div>
-                                    </div><!-- end col-->
-                                </div> <!-- end row -->
+                                <h4 class="header-title">${categories.size()}개의 상위 카테고리</h4>
+                                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                    <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>카테고리 명</th>
+                                        <th>하위 카테고리 수</th>
+                                        <th>상품 갯수</th>
+                                        <th>상세</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="category" items="${categories}" varStatus="status">
+                                        <tr>
+                                            <td>${status.count}</td>
+                                            <td>${category.name}</td>
+                                            <td>${category.items.size()}개</td>
+                                            <td>${category.products}개</td>
+                                            <td>
+                                                <button type="button" data-no="${category.no}"
+                                                        data-name="${category.name}"
+                                                        class="btn btn-primary rounded-pill waves-effect waves-light">
+                                                    상세 보기
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
                         </div> <!-- end card -->
                     </div><!-- end col-->
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="_category-detail">
+                                    <h4 class="header-title">카테고리 상세 - <span id="selected-category" class="text-muted">상위 카테고리를 선택해주세요.</span>
+                                    </h4>
+                                    <table id="child-datatable" class="table dt-responsive nowrap w-100">
+                                        <thead>
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>카테고리 명</th>
+                                            <th>상품 갯수</th>
+                                            <th>삭제</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- end row -->
 
@@ -218,9 +255,7 @@
 <script>
     $(document).ready(() => {
         $("#basic-datatable").removeAttr('width').DataTable({
-            columnDefs: [
-                {targets: [1, 2], width: 50}
-            ],
+            destroy: true,
             language: {
                 paginate: {
                     previous: "<i class='mdi mdi-chevron-left'>",
@@ -230,40 +265,74 @@
                 $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
             }
         });
-        $('#custom-modal .btn-success').on('click', () => {
-            const modal = $('#custom-modal');
-            console.log(modal.find('#name').val())
-            console.log(modal.find('#example-color').val());
-            // TODO CREATE AJAX
-        })
-
-        $('#brands .btn-primary').on('click', (e) => {
-            console.log(e.target.dataset.no, 'edit')
-            const brand_name = e.target.parentElement.querySelector('h4').textContent;
-            const brand_color = e.target.parentElement.querySelector('._brand-color p').textContent;
-            $('#edit-name').val(brand_name);
-            $('#edit-color').val(brand_color);
-            $('#edit-modal .btn-success').data('no', e.target.dataset.no);
-            $('#edit-modal').modal('show');
-        })
-
-        $('#edit-modal .btn-success').on('click', (e) => {
-            if (confirm('해당 브랜드를 수정하시겠어요?')) {
-                // TODO 수정
-                const no = $('#edit-modal .btn-success').data().no;
-                const name = $('#edit-name').val();
-                const color = $('#edit-color').val();
-                console.log(no, name, color);
+        $("#child-datatable").DataTable({
+            destroy: true,
+            columns: [
+                {data: 'no'},
+                {data: 'name'},
+                {data: 'count'},
+                {data: 'button'},
+            ],
+            language: {
+                paginate: {
+                    previous: "<i class='mdi mdi-chevron-left'>",
+                    next: "<i class='mdi mdi-chevron-right'>"
+                }
+            }, drawCallback: function () {
+                $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
             }
         })
 
-        $('#brands .btn-light').on('click', (e) => {
-            if (confirm('해당 브랜드를 삭제하시겠어요?')) {
-                // TODO 삭제
-                console.log(e.target.dataset.no, 'delete')
+        $('#basic-datatable').on('click', '.btn-primary', function (e) {
+            const no = e.target.dataset.no;
+            const name = e.target.dataset.name;
+            $('#selected-category').text(name).removeClass('text-muted');
+            $("#child-datatable").DataTable({
+                destroy: true,
+                ajax: {
+                    'url': '/api/kream/admin/category/children/' + no,
+                    'type': 'GET',
+                    dataType: "JSON",
+                    complete: function (data) {
+                    },
+                    dataSrc: function (res) {
+                        let data = res.data.categories
+                        let result = [];
+                        for (let i = 0; i < data.length; i++) {
+                            let d = {};
+                            d.no = i + 1;
+                            d.name = data[i].name;
+                            d.count = data[i].products + '개';
+                            d.button = `<button type="button" class="btn btn-danger waves-effect waves-light" data-no="` + data[i].no + `">삭제</button>`
+                            result.push(d);
+                        }
+                        return result;
+                    },
+                },
+                columns: [
+                    {data: 'no'},
+                    {data: 'name'},
+                    {data: 'count'},
+                    {data: 'button'},
+                ],
+                language: {
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"
+                    }
+                }, drawCallback: function () {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                }
+            });
+        });
+
+        $('#child-datatable').on('click', '.btn-danger', function (e) {
+            if (confirm('해당 카테고리를 삭제하시겠어요?')) {
+                const no = e.target.dataset.no;
+                console.log(no);
+                // TODO DELETE AJAX
             }
         })
-
     })
 </script>
 

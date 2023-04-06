@@ -121,4 +121,8 @@ public class ProductDao {
     public List<Product> getBrandProducts(int brand_no) {
         return mapper.getBrandProducts(brand_no);
     }
+
+    public int getCategoryProductCount(int category_no) {
+        return mapper.getCategoryProductCount(category_no);
+    }
 }

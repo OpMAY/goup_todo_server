@@ -14,6 +14,7 @@ import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
 import com.service.kream.product.BrandService;
+import com.service.kream.product.CategoryService;
 import com.service.kream.user.PointService;
 import com.service.kream.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,8 @@ public class AdminRestController {
     private final PointService pointService;
     private final FileUploadUtility fileUploadUtility;
     private final BrandService brandService;
+
+    private final CategoryService categoryService;
 
 
     @PostMapping(value = "/banner")
@@ -126,6 +129,13 @@ public class AdminRestController {
     public ResponseEntity deleteBrand(@PathVariable int no) {
         Message message = new Message();
         message.put("status", brandService.deleteBrand(no));
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @GetMapping("/category/children/{no}")
+    public ResponseEntity getCategoryChildren(@PathVariable int no) {
+        Message message = new Message();
+        message.put("categories", categoryService.getCategoryChildren(no));
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

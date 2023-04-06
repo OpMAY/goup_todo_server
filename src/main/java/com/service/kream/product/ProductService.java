@@ -702,6 +702,7 @@ public class ProductService {
             categoryFilter.setNo(category.getNo());
             categoryFilter.setName(category.getName());
             categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));
+            categoryFilter.setProducts(productDao.getCategoryProductCount(category.getNo()));
             filters.add(categoryFilter);
         }
         return filters;

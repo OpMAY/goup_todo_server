@@ -472,4 +472,10 @@
         from product
         WHERE brand_no = #{brand_no}
     </select>
+    <select id="getCategoryProductCount" resultType="int">
+        select COUNT(*)
+        from product
+        WHERE category_no = #{category_no}
+           OR category_no in (select no from category WHERE parent_no = #{category_no})
+    </select>
 </mapper>
