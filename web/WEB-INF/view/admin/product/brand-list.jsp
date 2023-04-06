@@ -255,6 +255,8 @@
 <script src="/resources/admin/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
 <script src="/resources/admin/assets/libs/pdfmake/build/pdfmake.min.js"></script>
 <script src="/resources/admin/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+<script src="/resources/js/utility.js"></script>
+<script src="/resources/js/api.js"></script>
 <!-- third party js ends -->
 
 <script>
@@ -274,9 +276,30 @@
         });
         $('#custom-modal .btn-success').on('click', () => {
             const modal = $('#custom-modal');
-            console.log(modal.find('#name').val())
-            console.log(modal.find('#example-color').val());
+            const name = modal.find('#name').val();
+            const color = modal.find('#example-color').val();
             // TODO CREATE AJAX
+            if (name.length <= 0) {
+                alert('브랜드 이름을 입력해주세요.');
+                return false;
+            }
+            if (color.length <= 0) {
+                alert('색상을 선택해주세요.');
+                return false;
+            }
+            makeBrand({name, color}).then((res) => {
+                console.log(res);
+                if (res.status === 'OK') {
+                    if (res.data.status) {
+                        alert('생성되었습니다.');
+                        window.location.reload();
+                    } else {
+                        alert('이미 존재하는 이름의 브랜드입니다.');
+                    }
+                } else {
+                    alert('Network ERROR : ' + res.status);
+                }
+            })
         })
 
         $('#brands .btn-primary').on('click', (e) => {
@@ -296,13 +319,37 @@
                 const name = $('#edit-name').val();
                 const color = $('#edit-color').val();
                 console.log(no, name, color);
+                updateBrand(no, {name, color}).then((res) => {
+                    console.log(res);
+                    if (res.status === 'OK') {
+                        if (res.data.status) {
+                            alert('변경되었습니다.');
+                            window.location.reload();
+                        } else {
+                            alert('이미 존재하는 이름의 브랜드입니다.');
+                        }
+                    } else {
+                        alert('Network ERROR : ' + res.status);
+                    }
+                })
             }
         })
 
         $('#brands .btn-light').on('click', (e) => {
             if (confirm('해당 브랜드를 삭제하시겠어요?')) {
-                // TODO 삭제
                 console.log(e.target.dataset.no, 'delete')
+                deleteBrand(e.target.dataset.no).then((res) => {
+                    if (res.status === 'OK') {
+                        if (res.data.status) {
+                            alert('삭제되었습니다.');
+                            window.location.reload();
+                        } else {
+                            alert('브랜드 내에 상품이 있어 삭제할 수 없습니다, 관련 상품을 모두 삭제하고 삭제해주세요.');
+                        }
+                    } else {
+                        alert('Network ERROR : ' + res.status);
+                    }
+                })
             }
         })
 

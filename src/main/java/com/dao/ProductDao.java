@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -115,5 +116,9 @@ public class ProductDao {
 
     public List<Product> getAllProducts() {
         return mapper.getAllProducts();
+    }
+
+    public List<Product> getBrandProducts(int brand_no) {
+        return mapper.getBrandProducts(brand_no);
     }
 }

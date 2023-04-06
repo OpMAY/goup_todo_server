@@ -467,4 +467,9 @@
         from product
         ORDER BY reg_datetime DESC
     </select>
+    <select id="getBrandProducts" resultType="Product" resultMap="Product">
+        select *
+        from product
+        WHERE brand_no = #{brand_no}
+    </select>
 </mapper>

@@ -91,7 +91,7 @@
                             <div class="card-body">
                                 <div class="row justify-content-between">
                                     <div class="col-md-6">
-                                        <h5>등록된 카테고리 ${categories.size()}개</h5>
+                                        <h5>등록된 상위 카테고리 ${categories.size()}개</h5>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-md-end mt-3 mt-md-0">

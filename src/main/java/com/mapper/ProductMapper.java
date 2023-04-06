@@ -72,4 +72,6 @@ public interface ProductMapper {
     boolean checkProductNameDuplicate(String en_name, String kor_name);
 
     List<Product> getAllProducts();
+
+    List<Product> getBrandProducts(int brand_no);
 }
