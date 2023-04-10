@@ -5,6 +5,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.WishMapper">
+    <resultMap id="WishList" type="com.model.kream.product.interactions.WishList">
+        <result column="images" property="images" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
     <select id="getProductWishCount" resultType="int">
         select COUNT(*)
         from wish
@@ -38,6 +41,14 @@
     </select>
     <select id="isUserWishSize" resultType="_boolean">
         select EXISTS(select * from wish where user_no = #{user_no} AND size_no = #{size_no})
+    </select>
+
+    <select id="getMywishList" resultType="WishList">
+        select p.images,s.size,p.en_name,b.name from wish w
+            left join size s on w.size_no = s.no
+            left join product p on s.product_no = p.no
+            left join brand b on p.brand_no = b.no
+            where user_no = #{user_no};
     </select>
     <delete id="resetUserProductWishes">
         delete

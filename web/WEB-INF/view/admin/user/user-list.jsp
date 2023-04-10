@@ -106,7 +106,7 @@
                                 </div>
 
                                 <div class="table-responsive">
-                                    <table class="table table-centered table-nowrap table-striped" id="products-datatable">
+                                    <table class="table table-centered table-nowrap table-striped" id="user-datatable">
                                         <thead>
                                         <tr>
                                             <th style="width: 20px;">
@@ -187,27 +187,6 @@
 
                                         </tbody>
                                     </table>
-                                </div>
-
-                                <ul class="pagination pagination-rounded justify-content-end mb-0">
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                            <span aria-hidden="true">«</span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                            <span aria-hidden="true">»</span>
-                                            <span class="visually-hidden">Next</span>
-                                        </a>
-                                    </li>
-                                </ul>
 
                             </div> <!-- end card-body-->
                         </div> <!-- end card-->
@@ -220,22 +199,7 @@
         </div> <!-- content -->
 
         <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-md-end footer-links d-none d-sm-block">
-                            <a href="javascript:void(0);">About Us</a>
-                            <a href="javascript:void(0);">Help</a>
-                            <a href="javascript:void(0);">Contact Us</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+            <jsp:include page="../partial/footer.jsp"/>
         <!-- end Footer -->
 
     </div>
@@ -601,6 +565,18 @@
             }
         });
     });
+
+    $("#user-datatable").DataTable({
+        language: {
+            paginate: {
+                previous: "<i class='mdi mdi-chevron-left'>",
+                next: "<i class='mdi mdi-chevron-right'>"
+            }
+        }, drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+        }
+    });
+
 </script>
 
 

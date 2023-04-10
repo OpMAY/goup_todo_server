@@ -10,11 +10,15 @@
         from category
         WHERE no = #{no}
     </select>
+
+<!--parent_no 가 null 인 category. 즉 부모 카테고리 가져오기-->
     <select id="getParentCategories" resultType="Category">
         select no, name
         from category
         WHERE parent_no is null
     </select>
+
+<!--parent_no 를 가지고 있는 자식 category 가져오기-->
     <select id="getChildrenCategories" resultType="Category">
         select no, name
         from category

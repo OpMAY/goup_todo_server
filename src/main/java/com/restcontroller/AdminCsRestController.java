@@ -31,8 +31,13 @@ public class AdminCsRestController {
     @PostMapping("/notice")
     public ResponseEntity registNotice(@RequestBody Notice notice){
         Message message  = new Message();
-        noticeService.addNotice(notice);
-        message.put("notice",true);
+        if( notice.getTitle() == "" || notice.getContent() == ""){
+            message.put("status",false);
+        }else{
+            noticeService.addNotice(notice);
+            message.put("status",true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -62,8 +67,13 @@ public class AdminCsRestController {
     public ResponseEntity registQna(@RequestBody Qna qna){
         Message message  = new Message();
         log.info("{}",qna);
-        qnaService.addQna(qna);
-        message.put("qna",true);
+        if(qna.getTitle()=="" || qna.getContent()==""){
+            message.put("status",false);
+        }else{
+            qnaService.addQna(qna);
+            message.put("status",true);
+        }
+
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }

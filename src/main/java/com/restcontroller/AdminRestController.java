@@ -45,10 +45,12 @@ public class AdminRestController {
     public ResponseEntity registBanner(@RequestBody Banner banner) {
         Message message = new Message();
         log.info("{}",banner);
-
+        if(banner == null){
+            message.put("status",false);
+        }else{
             bannerService.registBanner(banner);
             message.put("status", true);
-
+        }
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
@@ -73,7 +75,9 @@ public class AdminRestController {
     public ResponseEntity editBanner(@RequestBody Banner banner, @PathVariable int no) {
         Message message = new Message();
         if (bannerService.getBanner(no) == null) {
+            message.put("status",false);
             throw new ContentsException();
+
         } else {
             banner.setNo(no);
             log.info("banner : {}", banner);
@@ -107,7 +111,7 @@ public class AdminRestController {
         Message message = new Message();
         log.info("{}",user);
 
-        userService.registUser(user,new StyleUser());
+
         message.put("status", true);
 
 

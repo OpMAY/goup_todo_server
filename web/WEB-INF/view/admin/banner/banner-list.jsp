@@ -99,8 +99,8 @@
                                         <i class="mdi mdi-plus-circle me-1"> </i> 배너 등록</button>
 
                                 </div>
-                                <%--                                <h4 class="header-title">${bannerList.size()} 개의 상품</h4>--%>
-                                <table id="banner-datatable" class="table dt-responsive nowrap w-100">
+                                <div class = "table-responsive">
+                                <table class="table table-centered table-nowrap table-striped" id="banner-datatable">
                                     <thead>
                                     <tr>
                                         <th>번호</th>
@@ -110,8 +110,7 @@
                                         <th>등록 일자</th>
                                         <th>수정 일자</th>
                                         <th>Action</th>
-
-
+                                        <th>상세보기</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -147,7 +146,7 @@
                                     </c:forEach>
                                     </tbody>
                                 </table>
-
+                                </div>
                             </div> <!-- end card body-->
                         </div> <!-- end card -->
                     </div>
@@ -281,6 +280,7 @@
 
 <script src="/resources/admin/assets/js/pages/datatables.init.js"></script>
 
+
 <script>
     $('[data-plugins="dropify"]').length && $('[data-plugins="dropify"]').dropify({
         messages: {
@@ -395,8 +395,10 @@
                 success: function (res) {
                     if(res.status === 'OK') {
                         if(res.data.status) {
-                            alert('수정되었습니다');
+                            alert('수정 완료되었습니다.');
                             window.location.reload();
+                        }else{
+                            alert('수정 실패! 데이터 입력을 확인해주세요');
                         }
                     }
                 },
@@ -449,7 +451,7 @@
     });
 
     $('#add-banner').on('click',function (){
-
+        console.log("log");
         let modal = $('#add-banner-modal');
         let click_to_url = modal.find('#add-click_to_url');
         let banner_flag = modal.find('#add-banner_flag');
@@ -462,7 +464,7 @@
                 object.click_to_url = click_to_url.val();
                 object.banner_flag = banner_flag.is(':checked');
                 object.banner_image = res.data.file;
-
+                console.log("log1");
                 $.ajax({
                     url: "/api/kream/admin/banner" ,
                     type: "post",
@@ -470,9 +472,13 @@
                     contentType: 'application/json',
                     success: function (res) {
                         if(res.status === 'OK') {
+                            console.log("log2");
                             if(res.data.status) {
-                                alert('등록완료');
+                                alert('등록이 완료되었습니다.');
                                 window.location.reload();
+                            }else{
+                                alert('등록 실패! 데이터를 확인해주세요');
+
                             }
                         }
                     },
@@ -481,6 +487,8 @@
                     }
                 });
             });
+        }else{
+            alert("등록 실패! 이미지를 등록해주세요");
         }
 
 

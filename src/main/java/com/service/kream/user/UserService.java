@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -42,7 +44,7 @@ public class UserService {
     }
 
     @Transactional
-    public User registUser(User user, StyleUser styleUser) {
+    public User registUser(User user ) {
         /**
          *  1. user Table data insert
          *  2. style_user Table data insert
@@ -52,9 +54,6 @@ public class UserService {
 
         User result = userDao.getProfileInfo(user.getNo());
 
-        styleUser.setProfile_name(randomId);
-        styleUser.setName(user.getName());
-//        styleDao.registStyleUser(styleUser);
 
         return result;
     }
@@ -136,27 +135,42 @@ public class UserService {
     }
 
     @Transactional
-    public Message updateProfile(User user,Message message) {
-        int no = user.getNo();
-        Integer email_alarm = user.getEmail_alarm();
-        Integer size = user.getSize();
+    public Message editProfile(User user,Message message) {
+
+        Integer no = user.getNo();
+
         MultipartFile file = (MultipartFile) user.getProfile_img();
 
+        if(no != null){
 
-        if (user.getName() != null) {
-            this.updateUserName(user.getName(), no);
-        } else if (user.getEmail() != null) {
-            this.updateEmail(user.getEmail(), no);
-        } else if (user.getPhone_number() != null) {
-            this.updatePhoneNumber(user.getPhone_number(), no);
-        } else if (size != null) {
-            this.updateSize(size, no);
-        } else if (email_alarm != null) {
-            this.updateEmailAlarm(email_alarm, no);
-        } else if (file != null) {
-            this.updateProfileImage(file, no);
+
+            System.out.println(user.getEmail().length());
+            System.out.println(user.getEmail());
+
+            if(user.getName().length()>0 || user.getName().isEmpty() == false){
+                this.updateUserName(user.getName(),no);
+            }
+            if(user.getEmail().length()>0 || user.getEmail().isEmpty() == false){
+                this.updateEmail(user.getEmail(),no);
+            }
+            if(user.getPhone_number().length()>0 || user.getPhone_number().isEmpty() == false){
+                this.updatePhoneNumber(user.getPhone_number(),no);
+            }
+            if(user.getEmail_alarm() != 0 ){
+                this.updateEmailAlarm(user.getEmail_alarm(),no);
+            }
+            if(user.getProfile_img() != null ){
+              this.updateProfileImage(file,no);
+            }
+            if(user.getSize() != 0){
+                this.updateSize(user.getSize(),no);
+            }
+
+
+
         }
-        return message.put("USER", userDao.getProfileInfo(user.getNo()));
+        return message.put("USER",user);
+
     }
 
     public boolean checkUserExists(LOGIN_TYPE login_type, String access_token) {
@@ -178,4 +192,6 @@ public class UserService {
     public void editUser(User user) {
         userDao.editUser(user);
     }
+
+
 }

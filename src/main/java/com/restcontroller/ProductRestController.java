@@ -28,15 +28,16 @@ import java.util.*;
 public class ProductRestController {
     private final ProductService productService;
 
-    @RequestMapping(value = "/{no}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/{no}", method = RequestMethod.GET) // 상품 상세 정보 가져오기
     public ResponseEntity getProductDetail(@PathVariable int no) {
         Message message = new Message();
         message.put("product", productService.getProductDetail(no));
-        productService.updateProductViews(no);
+        productService.updateProductViews(no); //해당 no product view count update
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/shop", method = RequestMethod.GET)
+    @RequestMapping(value = "/shop", method = RequestMethod.GET)  // 상품 페이지별 필터 및 갯수 가져오기
     public ResponseEntity getProductShop(HttpServletRequest request,
                                          @RequestParam(value = "brands", required = false) List<Integer> brands,
                                          @RequestParam(value = "gender", required = false) List<Integer> genders,
@@ -48,10 +49,12 @@ public class ProductRestController {
         Message message = new Message();
         int user_no = 1;
         // TODO CHECK PARAM LIST ACCEPTABLE
-        if (price == null || priceFilters.contains(price)) {
-            List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories, keyword, sizes, user_no, cursor, price);
+        if (price == null || priceFilters.contains(price)) { // 가격이 null or priceFilter List 값 범위내 price 값이 해당될때
+
+            List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories,
+                    keyword, sizes, user_no, cursor, price); //product cursor별 정렬 검색 필터 결과
             message.put("products", n_products);
-            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes));
+            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes)); // 검색 필터 갯수
 
             // QUERY RETURN
             Map<String, Object> queryMap = new HashMap<>();
@@ -72,14 +75,15 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/shop/filter", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/shop/filter", method = RequestMethod.GET) //브랜드, 카테고리 data 가져오기
     public ResponseEntity getShopFilters() {
         Message message = new Message();
         message.put("filters", productService.getShopFilters());
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/order/sell", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/sell", method = RequestMethod.POST) // 판매 입찰
     public ResponseEntity RegisterProductSell(@RequestBody Sell sell) {
         Message message = productService.registerProductSell(sell);
         if (sell == null || sell.getNo() == 0) {
@@ -90,7 +94,7 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/order/purchase", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/purchase", method = RequestMethod.POST) //구매 입찰
     public ResponseEntity RegisterProductPurchase(@RequestBody Purchase purchase) {
         Message message = productService.registerProductPurchase(purchase);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
@@ -150,5 +154,6 @@ public class ProductRestController {
      * 2.
      **/
 
-    private final List<String> priceFilters = new ArrayList<>(Arrays.asList("-100000", "100000-300000", "300000-500000", "500000-1000000", "1000000-3000000", "3000000-"));
+    private final List<String> priceFilters = new ArrayList<>(Arrays.asList("-100000", "100000-300000",
+            "300000-500000", "500000-1000000", "1000000-3000000", "3000000-"));
 }
