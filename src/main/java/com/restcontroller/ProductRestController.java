@@ -51,7 +51,7 @@ public class ProductRestController {
         if (price == null || priceFilters.contains(price)) {
             List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories, keyword, sizes, user_no, cursor, price);
             message.put("products", n_products);
-            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes));
+            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes, price));
 
             // QUERY RETURN
             Map<String, Object> queryMap = new HashMap<>();

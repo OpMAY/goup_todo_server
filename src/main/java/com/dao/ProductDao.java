@@ -78,7 +78,7 @@ public class ProductDao {
         return mapper.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
     }
 
-    public int getProductCountViaSearch(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
+    public List<ProductShop> getProductCountViaSearch(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
         return mapper.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
     }
 

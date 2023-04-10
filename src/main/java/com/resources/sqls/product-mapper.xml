@@ -349,8 +349,8 @@
         </if>
         ORDER BY orders DESC, no DESC LIMIT #{cursor}, 10
     </select>
-    <select id="getProductCountViaSearch" resultType="int">
-        select COUNT(*)
+    <select id="getProductCountViaSearch" resultType="ProductShop">
+        select no, price
         from (select product.no,
         kor_name,
         en_name,
@@ -358,16 +358,8 @@
         gender,
         category_no,
         brand.name as brand_name,
-        JSON_EXTRACT(product.images, '$[0]') as image,
         MIN(sell.price) as price,
-        JSON_ARRAYAGG(s.size) as size_json,
-        (select COUNT(*)
-        from sell
-        left join `order` o2 on sell.no = o2.sell_no
-        left join size s2 on sell.size_no = s2.no
-        left join product p on s2.product_no = p.no
-        WHERE o2.no is not null
-        AND p.no = product.no) as orders
+        JSON_ARRAYAGG(s.size) as size_json
         from product
         left join brand on product.brand_no = brand.no
         left join size s on product.no = s.product_no

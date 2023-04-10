@@ -48,7 +48,7 @@ public interface ProductMapper {
                                                      @Param("size_list") List<String> size_list,
                                                      @Param("cursor") Integer cursor);
 
-    int getProductCountViaSearch(@Param("filtered") boolean filtered,
+    List<ProductShop> getProductCountViaSearch(@Param("filtered") boolean filtered,
                                  @Param("brand_list") List<Integer> brand_list,
                                  @Param("gender_list") List<Integer> gender_list,
                                  @Param("category_list") List<Integer> category_list,
