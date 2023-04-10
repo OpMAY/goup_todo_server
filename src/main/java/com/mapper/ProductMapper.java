@@ -48,7 +48,7 @@ public interface ProductMapper {
                                                      @Param("size_list") List<String> size_list,
                                                      @Param("cursor") Integer cursor);
 
-    int getProductCountViaSearch(@Param("filtered") boolean filtered,
+    List<ProductShop> getProductCountViaSearch(@Param("filtered") boolean filtered,
                                  @Param("brand_list") List<Integer> brand_list,
                                  @Param("gender_list") List<Integer> gender_list,
                                  @Param("category_list") List<Integer> category_list,
@@ -72,4 +72,8 @@ public interface ProductMapper {
     boolean checkProductNameDuplicate(String en_name, String kor_name);
 
     List<Product> getAllProducts();
+
+    List<Product> getBrandProducts(int brand_no);
+
+    int getCategoryProductCount(int category_no);
 }

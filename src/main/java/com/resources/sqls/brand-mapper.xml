@@ -20,4 +20,22 @@
         from brand
         order by name
     </select>
+    <update id="updateBrand">
+        update brand
+        SET name  = #{name},
+            color = #{color}
+        WHERE no = #{no}
+    </update>
+    <insert id="makeBrand" useGeneratedKeys="true" keyProperty="no">
+        insert into brand(name, color)
+        VALUES (#{name}, #{color})
+    </insert>
+    <select id="isNameDuplicated" resultType="_boolean">
+        select EXISTS(select * from brand WHERE name = #{name} <if test="no neq 0">AND no != #{no}</if> )
+    </select>
+    <delete id="deleteBrand">
+        delete
+        from brand
+        WHERE no = #{no}
+    </delete>
 </mapper>

@@ -154,10 +154,10 @@
                           <div class="mb-3">
                             <label  class="form-label">Status</label>
 
-                            <c:if test="${user.user_flag == 1}">
+                            <c:if test="${user.user_flag == true}">
                               <span class="badge bg-soft-success text-success">Active</span>
                             </c:if>
-                            <c:if test="${user.user_flag == 0}">
+                            <c:if test="${user.user_flag == false}">
                               <span class="badge bg-soft-danger text-danger"> Suspended </span>
                             </c:if>
 
