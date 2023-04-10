@@ -11,7 +11,6 @@
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- App favicon -->
     <link rel="shortcut icon" href="../assets/images/favicon.ico">
 
     <!-- third party css -->
@@ -115,7 +114,7 @@
                                             <th>content</th>
                                             <th>reg_datetime</th>
                                             <th>updated_datetime</th>
-
+                                            <th>status</th>
                                             <th style="width: 85px;">Action</th>
                                         </tr>
                                         </thead>
@@ -129,9 +128,6 @@
                                                         <label class="form-check-label" for="customCheck4">&nbsp;</label>
                                                     </div>
                                                 </td>
-
-
-<%--                                                <td><a href="/admin/user-detail/${user.no}"> ${user.name} </a> </td>--%>
                                                 <td>${notice.no}</td>
                                                 <td><a href="/admin/notice-detail/${notice.no}"> ${notice.title}</a></td>
                                                 <td>${notice.content}</td>
@@ -152,48 +148,12 @@
                                                     <a href="javascript:void(0);" class="_delete action-icon" data-no="${notice.no}" data-bs-toggle="modal"
                                                        data-bs-target="#del-notice-modal"> <i class="mdi mdi-delete"></i></a>
                                                 </td>
-                                                    <%--                                                <td>--%>
-
-                                                    <%--                                                    <button type="button" class="btn btn-primary rounded-pill waves-effect waves-light" >--%>
-                                                    <%--                                                        <a href="/admin/banner-detail/${banner.no}"></a>--%>
-                                                    <%--                                                        상세 보기--%>
-                                                    <%--                                                    </button>--%>
-                                                    <%--                                                    </a>--%>
-                                                    <%--                                                </td>--%>
 
                                             </tr>
                                         </c:forEach>
-
-
-
-
-
-
-
-
                                         </tbody>
                                     </table>
                                 </div>
-
-                                <ul class="pagination pagination-rounded justify-content-end mb-0">
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                            <span aria-hidden="true">«</span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                            <span aria-hidden="true">»</span>
-                                            <span class="visually-hidden">Next</span>
-                                        </a>
-                                    </li>
-                                </ul>
 
                             </div> <!-- end card-body-->
                         </div> <!-- end card-->
@@ -206,22 +166,7 @@
         </div> <!-- content -->
 
         <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-md-end footer-links d-none d-sm-block">
-                            <a href="javascript:void(0);">About Us</a>
-                            <a href="javascript:void(0);">Help</a>
-                            <a href="javascript:void(0);">Contact Us</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <jsp:include page="../partial/footer.jsp"/>
         <!-- end Footer -->
 
     </div>
@@ -326,7 +271,7 @@
 
 <!-- third party js -->
 <script src="/resources/admin/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/resources/admin/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="/resources/admin/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="/resources/admin/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="/resources/admin/assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
 <script src="/resources/admin/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
@@ -340,24 +285,35 @@
 <script src="/resources/admin/assets/libs/pdfmake/build/vfs_fonts.js"></script>
 <!-- third party js ends -->
 
+<script src="/resources/admin/assets/js/pages/datatables.init.js"></script>
+
 <script>
 
     $('#add_notice').on('click',function (){
         let title = $('#add-title').val();
         let content = $('#add-content').val();
         let object = {};
+        let result_data ;
         object.title = title;
         object.content = content;
         object.flag = 1;
-        console.log(title);
+
 
         $.ajax({
             url:"/api/kream/admin/cs/notice",
             type:"post",
             data: JSON.stringify(object),
             contentType:'application/json',
-            success: function (){
-                window.location.reload();
+            success: function (data){
+                console.log("DATA " +result_data.data);
+                result_data = data;
+                if(result_data.data.status){
+                    alert('등록 완료');
+                    window.location.reload();
+                }else{
+                    alert('등록 실패! 데이터 입력을 확인해주세요');
+                }
+
             },
             error:function (){
                 alert("실패");
@@ -464,16 +420,16 @@
 
 
 
-    $("#notice-datatable").DataTable({
-        language: {
-            paginate: {
-                previous: "<i class='mdi mdi-chevron-left'>",
-                next: "<i class='mdi mdi-chevron-right'>"
-            }
-        }, drawCallback: function () {
-            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+$("#notice-datatable").DataTable({
+    language: {
+        paginate: {
+            previous: "<i class='mdi mdi-chevron-left'>",
+            next: "<i class='mdi mdi-chevron-right'>"
         }
-    });
+    }, drawCallback: function () {
+        $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+    }
+});
 
 </script>
 

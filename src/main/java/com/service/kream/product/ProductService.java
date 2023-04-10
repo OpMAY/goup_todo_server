@@ -94,11 +94,13 @@ public class ProductService {
                 || (size_list != null && !size_list.isEmpty());
         List<ProductShop> result;
 
-        if (cursor != null && (cursor != 0 && cursor != 1)) {
+        if (cursor != null && (cursor != 0 && cursor != 1)) { //cursor(페이지) 가 null 이 아니고 0,1이 아닐때
             // TODO CURSOR
-            result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
-        } else {
-            result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list);
+
+            result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);   //product cursor 별로 reload하여  데이터 가져오기.
+
+        } else { //그 외
+            result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list); //product 10개씩 가져오기.
         }
         result.forEach(product -> {
             product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
@@ -106,12 +108,11 @@ public class ProductService {
             ProductPriceWithSize size = productDao.getProductLowestSellPrice(product.getNo());
             product.setPrice(size != null ? size.getPrice() : null);
             product.setWishes(wishDao.getProductWishCount(product.getNo()));
-//            product.setStyles(styleDao.getProductStyleCount(product.getNo()));
         });
 
-        if (price != null) {
-            int min_price = this.getMinPriceFromPriceFilter(price);
-            int max_price = this.getMaxPriceFromPriceFilter(price);
+        if (price != null) { //가격이 null 아닐때
+            int min_price = this.getMinPriceFromPriceFilter(price); //최소가격
+            int max_price = this.getMaxPriceFromPriceFilter(price); //최대가격
             log.info("minPrice : {}, maxPrice : {}", min_price, max_price);
             result = result.stream().filter(product ->
                     product.getPrice() != null && product.getPrice() >= min_price && product.getPrice() <= max_price).collect(Collectors.toList());
@@ -167,14 +168,15 @@ public class ProductService {
     @Transactional
     public Message registerProductSell(Sell sell) {
         Message message = new Message();
-        boolean pricing_check = sell.getTotal_price() == sell.getPrice() + sell.getInspection_price() + sell.getDelivery_price() + sell.getCommission();
+        boolean pricing_check = sell.getTotal_price() == sell.getPrice()
+                + sell.getInspection_price() + sell.getDelivery_price() + sell.getCommission();
         boolean required_info_check = (sell.getBank_info() != null
                 && sell.getRecall_address_info() != null
                 && sell.getRecall_method() != null
                 && sell.getSell_agree() != null
                 && sell.getS_order_agree() != null);
 
-        Product product = productDao.getProductBySizeNo(sell.getSize_no());
+        Product product = productDao.getProductBySizeNo(sell.getSize_no()); // 해당 size 를 가진 상품 데이터 가져오기.
         if (product != null && product.isProduct_yn()) {
             // Check all booleans
             if (pricing_check && required_info_check) {
@@ -188,8 +190,8 @@ public class ProductService {
                  * 3. 동일한 가격의 입찰이 있는 경우의 우선순위
                  *    - 구매 입찰을 가장 먼저 등록한 순서로
                  * **/
-                Purchase purchase = purchaseDao.getPurchaseForOrder(sell.getSize_no(), sell.getPrice());
-                if (sell.getSell_type().equals(SELL_TYPE.DIRECT)) {
+                Purchase purchase = purchaseDao.getPurchaseForOrder(sell.getSize_no(), sell.getPrice()); // size, 가격 정보에 의한 구매 데이터 가져오기
+                if (sell.getSell_type().equals(SELL_TYPE.DIRECT)) { // 판매 타입이 즉시 판매일때
                     if (purchase != null) {
                         // Sell Register
                         sell.setExpiration_days(0);
@@ -284,7 +286,7 @@ public class ProductService {
                 );
                 if (pricing_check && required_info_check) {
                     Sell sell = sellDao.getProductSellForAuction(purchase.getSize_no(), purchase.getPrice());
-                    if (purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) {
+                    if (purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) { //즉시 구매일때
                         if (sell != null) {
                             purchase.setExpiration_days(0);
                             purchase.setExpiration_date(LocalDate.now());
@@ -499,7 +501,7 @@ public class ProductService {
         // TODO user_no exist?
         List<ProductMain> popular_products = productDao.getMainPopularProducts();
         for (ProductMain product : popular_products) {
-            product.setBrand(brandDao.getBrandByProductNo(product.getNo()));
+            product.setBrand(brandDao.getBrandByProductNo(product.getNo()));  //
             product.set_wish(wishDao.isUserWishProduct(product.getNo(), user_no));
             ProductPriceWithSize price = productDao.getProductLowestSellPrice(product.getNo());
             product.setPrice(price != null ? price.getPrice() : null);
@@ -685,17 +687,17 @@ public class ProductService {
 
     public ProductShopFilter getShopFilters() {
         ProductShopFilter productShopFilter = new ProductShopFilter();
-        productShopFilter.setBrands(brandDao.getAllBrands());
-        List<Category> parents = categoryDao.getParentCategories();
+        productShopFilter.setBrands(brandDao.getAllBrands()); // 모든 브랜드 data SET
+        List<Category> parents = categoryDao.getParentCategories(); // 부모 category List
         List<CategoryFilter> filters = new ArrayList<>();
         for(Category category : parents) {
             CategoryFilter categoryFilter = new CategoryFilter();
             categoryFilter.setNo(category.getNo());
             categoryFilter.setName(category.getName());
-            categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));
-            filters.add(categoryFilter);
+            categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));  // 자식 카테고리 SET
+            filters.add(categoryFilter);  // filters 에 categoryFilter( 부모 카테고리 정보와 자식 카테고리 data ) ADD
         }
-        productShopFilter.setCategories(filters);
+        productShopFilter.setCategories(filters); // 모든 category data SET
         return productShopFilter;
     }
 

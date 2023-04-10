@@ -219,12 +219,12 @@
           </div>
           <div class="mb-3">
             <label  class="form-label">타입</label>
-            <select class="form-select" >
+            <select class="form-select" id="type-select" >
               <option selected>타입을 선택하세요</option>
-              <option value="POLICY">이용정책</option>
-              <option value="COMMON">공통</option>
-              <option value="SELL">판매</option>
-              <option value="BUY">구매</option>
+              <option value="이용정책">이용정책</option>
+              <option value="공통">공통</option>
+              <option value="판매">판매</option>
+              <option value="구매">구매</option>
             </select>
           </div>
 
@@ -259,12 +259,12 @@
           </div>
           <div class="mb-3">
             <label  class="form-label">타입</label>
-            <select class="form-select">
+            <select class="form-select" id="edit-type">
               <option selected>타입을 선택하세요</option>
-              <option value="POLICY">이용정책</option>
-              <option value="COMMON">공통</option>
-              <option value="SELL">판매</option>
-              <option value="BUY">구매</option>
+              <option value="이용정책">이용정책</option>
+              <option value="공통">공통</option>
+              <option value="판매">판매</option>
+              <option value="구매">구매</option>
             </select>
           </div>
 
@@ -341,13 +341,13 @@
         console.log( data );
 
 
-        // CLICK_TO_URL
+
         $('#qna-modal').find('#title').val(data.data.qna.title);
 
         $('#qna-modal').find('#content').val(data.data.qna.content);
 
-        $('#qna-modal').find('#type').val(data.data.qna.type);
-        // BANNER FLAG
+        $('#qna-modal').find('#edit-type').val(data.data.qna.type);
+
         $('#qna-modal').find('#flag').attr('checked', data.data.qna.flag)
 
         $('#qna-modal').find('#edit_qna').data('no',data.data.qna.no);
@@ -367,7 +367,7 @@
 
     let title = modal.find('#title');
     let content = modal.find('#content');
-    let type = modal.find('#type');
+    let type = modal.find('#edit-type');
     let flag = modal.find('#flag');
 
     let object = {};
@@ -385,6 +385,7 @@
       data: JSON.stringify(object),
       contentType: 'application/json',
       success: function (){
+
         window.location.reload();
       },
       error: function (){
@@ -409,6 +410,8 @@
       }
     });
   });
+
+
 
 
   $('#delete_qna').on('click', function () {
@@ -436,21 +439,29 @@
   $('#add_qna').on('click',function (){
     let title = $('#add-title').val();
     let content = $('#add-content').val();
-    let type = $('#add-type').val();
+    let type = $('#type-select').val();
     let object = {};
+    let result_data;
     object.title = title;
     object.content = content;
     object.type = type;
     object.flag = 1;
-    console.log(title);
+
+    console.log("TYPE" + type);
 
     $.ajax({
       url:"/api/kream/admin/cs/qna",
       type:"post",
       data: JSON.stringify(object),
       contentType:'application/json',
-      success: function (){
-        window.location.reload();
+      success: function (data){
+        result_data =data;
+        if(result_data.data.status){
+          alert('등록 완료');
+          window.location.reload();
+        }else{
+          alert('등록 실패! 데이터 입력을 확인해주세요');
+        }
       },
       error:function (){
         alert("실패");

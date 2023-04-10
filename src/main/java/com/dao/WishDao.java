@@ -3,6 +3,7 @@ package com.dao;
 
 import com.mapper.WishMapper;
 import com.model.kream.product.interactions.Wish;
+import com.model.kream.product.interactions.WishList;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -47,5 +48,9 @@ public class WishDao {
 
     public void resetUserProductWishes(int user_no, int product_no) {
         mapper.resetUserProductWishes(user_no, product_no);
+    }
+
+    public List<WishList> getMywishList(int user_no) {
+        return mapper.getMywishList(user_no);
     }
 }

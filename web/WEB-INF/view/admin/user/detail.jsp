@@ -99,14 +99,14 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="${user.name}">
+                            <label class="form-label">Name</label>
+                            <p>${user.name}</p>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="phone_number" class="form-label">Phone</label>
-                            <input type="text" class="form-control" id="phone_number" placeholder="${user.phone_number}">
+                            <label  class="form-label">Phone</label>
+                            <p>${user.phone_number}</p>
                           </div>
                         </div> <!-- end col -->
 
@@ -118,34 +118,34 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="${user.email}">
+                            <label  class="form-label">Email</label>
+                            <p>${user.email}</p>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="zipcode" class="form-label">Zipcode</label>
-                            <input type="text" class="form-control" id="zipcode" placeholder="${user.zipcode}">
+                            <label  class="form-label">Zipcode</label>
+                            <p>${user.zipcode}</p>
                           </div>
                         </div>
                       </div> <!-- end row -->
                       <div class="row">
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="Address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="Address" placeholder="${user.address}">
+                            <label  class="form-label">Address</label>
+                            <p>${user.address}</p>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="Address Detail" class="form-label">Address Detail</label>
-                            <input type="text" class="form-control" id="Address Detail" placeholder="${user.address_detail}">
+                            <label  class="form-label">Address Detail</label>
+                            <p>${user.address_detail}</p>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label for="point" class="form-label">Point</label>
-                            <input type="text" class="form-control" id="point" placeholder="${user.point}">
+                            <label class="form-label">Point</label>
+                            <p>${user.point}</p>
                           </div>
                         </div>
                       </div>
@@ -161,10 +161,7 @@
                               <span class="badge bg-soft-danger text-danger"> Suspended </span>
                             </c:if>
 
-                          <div class="form-check">
-                            <label class="form-check-label" for="customCheck2">사용자 정지하기</label>
-                            <input type="checkbox" class="form-check-input" id="customCheck2">
-                          </div>
+
 
 
 
@@ -173,35 +170,8 @@
                       </div>
 
 
-                    <div class="col-md-6">
-                      <div class="mb-3">
-                        <label class="form-check-label" for="customCheck2">Profile_Image</label>
-
-                          <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                            <div class="fallback">
-                              <input name="file" type="file" />
-                            </div>
-
-                            <div class="dz-message needsclick">
-                              <i class="h3 text-muted dripicons-cloud-upload"></i>
-                              <h4>Drop files here or click to upload.</h4>
-                            </div>
-                          </form>
-
-
-
-                      </div>
                     </div> <!-- end col -->
 
-
-
-
-
-
-
-                      <div class="text-end">
-                        <button type="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
-                      </div>
 
                     </form>
                   </div>

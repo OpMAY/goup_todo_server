@@ -49,6 +49,7 @@ public class UserRestController {
     private final AccountInfoService accountInfoService;
     private final CardInfoService cardInfoService;
 
+
     private final PointService pointService;
     private final LoginAPI loginAPI;
 
@@ -56,7 +57,7 @@ public class UserRestController {
     @GetMapping("/user/{no}")
     public ResponseEntity getUserList(HttpServletRequest request, HttpServletResponse response, @PathVariable int no) {
         Message message = new Message();
-        User user = userService.getProfileInfo(no);
+        User user = userService.getProfileInfo(no); // 해당 no 사용자 데이터 가져오기
         message.put("user", user);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
@@ -65,18 +66,14 @@ public class UserRestController {
     @RequestMapping(value = "/join", method = RequestMethod.POST)
     public ResponseEntity join(HttpServletRequest request, @RequestBody User user_model) {
         Message message = new Message();
-
-
-
-        boolean exist = userService.checkUserExists(user_model.getLogin_type(), user_model.getAccess_token());
+        boolean exist = userService.checkUserExists(user_model.getLogin_type(), user_model.getAccess_token()); // logintype, token 으로 user 등록여부 확인
         User user = new User();
-//        User user = loginAPI.apiLoginInit(request);
-        StyleUser styleUser = new StyleUser();
+
         if(user_model.getLogin_type() != null && user_model.getAccess_token() != null) {
             if (!exist) {
-                user = userService.registUser(user_model, styleUser);
+                user = userService.registUser(user_model); // 사용자 존재하지 않으면 등록.
             } else {
-                user = userService.getUserByLoginInfo(user_model.getLogin_type(), user_model.getAccess_token());
+                user = userService.getUserByLoginInfo(user_model.getLogin_type(), user_model.getAccess_token()); //사용자 존재하면 사용자 데이터 가져오기.
             }
             message.put("user", user);
             message.put("status", true);
@@ -89,12 +86,11 @@ public class UserRestController {
 
 
     @PutMapping("/profile/{no}")
-    public ResponseEntity userEdit(@RequestBody User user, @PathVariable int no
+    public ResponseEntity profileEdit(@RequestBody User user, @PathVariable int no
     ) throws JsonProcessingException {
         Message message = new Message();
-        userService.updateProfile(user, message);
+        userService.editProfile(user,message);
         message.put("status", true);
-        message.put("user", user);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -266,6 +262,8 @@ public class UserRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
+
+
 
 
 }
