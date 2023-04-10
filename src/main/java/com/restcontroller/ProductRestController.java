@@ -54,8 +54,7 @@ public class ProductRestController {
             List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories,
                     keyword, sizes, user_no, cursor, price); //product cursor별 정렬 검색 필터 결과
             message.put("products", n_products);
-            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes)); // 검색 필터 갯수
-
+            message.put("count", productService.getProductCountViaSearch(brands, genders, categories, keyword, sizes, price)); // 검색 필터 갯수
             // QUERY RETURN
             Map<String, Object> queryMap = new HashMap<>();
             queryMap.put("brand", brands);

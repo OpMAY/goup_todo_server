@@ -26,4 +26,20 @@ public class BrandDao {
     public List<Brand> getAllBrands() {
         return mapper.getAllBrands();
     }
+
+    public void updateBrand(Brand brand) {
+        mapper.updateBrand(brand);
+    }
+
+    public void makeBrand(Brand brand) {
+        mapper.makeBrand(brand);
+    }
+
+    public boolean isNameDuplicated(int no, String name) {
+        return mapper.isNameDuplicated(no, name);
+    }
+
+    public void deleteBrand(int no) {
+        mapper.deleteBrand(no);
+    }
 }

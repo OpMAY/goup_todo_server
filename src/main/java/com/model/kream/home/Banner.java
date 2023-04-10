@@ -11,6 +11,7 @@ public class Banner extends Time {
     private MFile banner_image;
     private boolean banner_flag;
     private String click_to_url;
+    private String bg_color;
 
     private MultipartFile file;
 }

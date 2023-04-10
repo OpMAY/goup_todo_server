@@ -124,13 +124,22 @@ public class ProductService {
                                         List<Integer> gender_list,
                                         List<Integer> category_list,
                                         String keyword,
-                                        List<String> size_list) {
+                                        List<String> size_list,
+                                        String price) {
         boolean filtered = (brand_list != null && !brand_list.isEmpty())
                 || (gender_list != null && !gender_list.isEmpty())
                 || (category_list != null && !category_list.isEmpty())
                 || keyword != null
                 || (size_list != null && !size_list.isEmpty());
-        return productDao.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
+        List<ProductShop> all = productDao.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
+        if (price != null) {
+            int min_price = this.getMinPriceFromPriceFilter(price);
+            int max_price = this.getMaxPriceFromPriceFilter(price);
+            log.info("minPrice : {}, maxPrice : {}", min_price, max_price);
+            all = all.stream().filter(product ->
+                    product.getPrice() != null && product.getPrice() >= min_price && product.getPrice() <= max_price).collect(Collectors.toList());
+        }
+        return all.size();
     }
 
 
@@ -704,6 +713,7 @@ public class ProductService {
             categoryFilter.setNo(category.getNo());
             categoryFilter.setName(category.getName());
             categoryFilter.setItems(categoryDao.getChildrenCategories(category.getNo()));
+            categoryFilter.setProducts(productDao.getCategoryProductCount(category.getNo()));
             filters.add(categoryFilter);
         }
         return filters;

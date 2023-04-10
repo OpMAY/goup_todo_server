@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -77,7 +78,7 @@ public class ProductDao {
         return mapper.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);
     }
 
-    public int getProductCountViaSearch(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
+    public List<ProductShop> getProductCountViaSearch(boolean filtered, List<Integer> brand_list, List<Integer> gender_list, List<Integer> category_list, String keyword, List<String> size_list) {
         return mapper.getProductCountViaSearch(filtered, brand_list, gender_list, category_list, keyword, size_list);
     }
 
@@ -115,5 +116,13 @@ public class ProductDao {
 
     public List<Product> getAllProducts() {
         return mapper.getAllProducts();
+    }
+
+    public List<Product> getBrandProducts(int brand_no) {
+        return mapper.getBrandProducts(brand_no);
+    }
+
+    public int getCategoryProductCount(int category_no) {
+        return mapper.getCategoryProductCount(category_no);
     }
 }

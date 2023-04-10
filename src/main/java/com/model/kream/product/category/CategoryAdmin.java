@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CategoryFilter {
+public class CategoryAdmin {
     private int no;
     private String name;
     private List<Category> items;
