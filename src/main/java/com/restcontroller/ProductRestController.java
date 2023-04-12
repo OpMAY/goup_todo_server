@@ -119,6 +119,7 @@ public class ProductRestController {
             return new ResponseEntity(DefaultRes.res(HttpStatus.BAD_REQUEST), HttpStatus.OK);
         } else {
             List<ProductPriceWithSize> sizes = productService.getProductSizes(no, user_no, price_bool, sort_type);
+            message.put("product", productService.getProductSummary(no));
             message.put("sizes", sizes);
         }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);

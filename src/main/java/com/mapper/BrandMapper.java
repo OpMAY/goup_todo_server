@@ -1,6 +1,7 @@
 package com.mapper;
 
 import com.model.kream.product.brand.Brand;
+import com.model.kream.product.brand.BrandMain;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface BrandMapper {
     boolean isNameDuplicated(@Param("no") int no, @Param("name") String name);
 
     void deleteBrand(int no);
+
+    List<BrandMain> getMainBrands();
 }

@@ -2,6 +2,7 @@ package com.dao;
 
 import com.mapper.BrandMapper;
 import com.model.kream.product.brand.Brand;
+import com.model.kream.product.brand.BrandMain;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -41,5 +42,9 @@ public class BrandDao {
 
     public void deleteBrand(int no) {
         mapper.deleteBrand(no);
+    }
+
+    public List<BrandMain> getMainBrands() {
+        return mapper.getMainBrands();
     }
 }

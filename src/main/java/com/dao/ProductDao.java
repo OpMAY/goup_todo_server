@@ -125,4 +125,8 @@ public class ProductDao {
     public int getCategoryProductCount(int category_no) {
         return mapper.getCategoryProductCount(category_no);
     }
+
+    public ProductShop getProductSummary(int no) {
+        return mapper.getProductSummary(no);
+    }
 }

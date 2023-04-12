@@ -718,4 +718,8 @@ public class ProductService {
         }
         return filters;
     }
+
+    public ProductShop getProductSummary(int no) {
+        return productDao.getProductSummary(no);
+    }
 }

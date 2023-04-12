@@ -19,5 +19,7 @@ public interface BannerMapper {
 
     void deleteBanner(int no);
 
+    List<Banner> getActiveBanners();
+
 
 }

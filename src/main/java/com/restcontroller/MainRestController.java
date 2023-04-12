@@ -2,9 +2,12 @@ package com.restcontroller;
 
 import com.model.kream.home.Banner;
 import com.model.kream.product.ProductMain;
+import com.model.kream.product.brand.Brand;
+import com.model.kream.product.brand.BrandMain;
 import com.response.DefaultRes;
 import com.response.Message;
 import com.service.BannerService;
+import com.service.kream.product.BrandService;
 import com.service.kream.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +27,21 @@ import java.util.List;
 public class MainRestController {
     private final ProductService productService;
     private final BannerService bannerService;
+    private final BrandService brandService;
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
     public ResponseEntity getProductMain(HttpServletRequest request) {
         Message message = new Message();
-        // TODO Type 별 products => Main Controller 로 빠질 예정
-        List<Banner> banners = bannerService.getAllBanner();
-        List<ProductMain> popular_products = productService.getPopularProducts(0);
-        List<ProductMain> recent_products = productService.getRecentProducts(0);
+        String user_header = request.getHeader("user_no");
+        int user_no = user_header != null ? Integer.parseInt(user_header) : 0;
+        List<Banner> banners = bannerService.getActiveBanners();
+        List<ProductMain> popular_products = productService.getPopularProducts(user_no);
+        List<ProductMain> recent_products = productService.getRecentProducts(user_no);
+        List<BrandMain> brands = brandService.getMainBrands();
         message.put("popular_products", popular_products);
         message.put("recent_products", recent_products);
         message.put("banners", banners);
+        message.put("brands", brands);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 }

@@ -43,5 +43,8 @@ public class BannerDao {
         mapper.deleteBanner(no);
     }
 
+    public List<Banner> getActiveBanners() {
+        return mapper.getActiveBanners();
+    }
 
 }

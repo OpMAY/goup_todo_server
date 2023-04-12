@@ -50,5 +50,9 @@
         where no = #{no}
     </delete>
 
+    <select id="getActiveBanners" resultType="Banner" resultMap="Banner">
+        select * from banner WHERE banner_flag = true ORDER BY updated_datetime DESC
+    </select>
+
 
 </mapper>

@@ -163,7 +163,7 @@
         LIMIT 12
     </select>
     <select id="getMainRecentProducts" resultType="ProductMain" resultMap="ProductMain">
-        select no, en_name, kor_name, JSON_EXTRACT(images, '$[0]') as image
+        select no, en_name as name, JSON_EXTRACT(images, '$[0]') as image
         from product
         order by reg_datetime DESC
         LIMIT 12
@@ -347,7 +347,7 @@
                 # 사이즈
             </if>
         </if>
-# cursor 1 페이지당 product 10개
+        # cursor 1 페이지당 product 10개
         ORDER BY orders DESC, no DESC LIMIT #{cursor}, 10
     </select>
     <select id="getProductCountViaSearch" resultType="ProductShop">
@@ -472,5 +472,18 @@
         from product
         WHERE category_no = #{category_no}
            OR category_no in (select no from category WHERE parent_no = #{category_no})
+    </select>
+    <select id="getProductSummary" resultType="ProductShop" resultMap="ProductShop">
+        select product.no,
+               kor_name,
+               en_name,
+               brand_no,
+               gender,
+               category_no,
+               brand.name                           as brand_name,
+               JSON_EXTRACT(product.images, '$[0]') as image
+        from product
+                 left join brand on product.brand_no = brand.no
+        WHERE product.no = #{no}
     </select>
 </mapper>

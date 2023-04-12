@@ -147,7 +147,7 @@ public class AdminRestController {
     public ResponseEntity registUser(@RequestBody User user) {
         Message message = new Message();
         log.info("{}", user);
-        userService.registUser(user, new StyleUser());
+        userService.registUser(user);
         message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }

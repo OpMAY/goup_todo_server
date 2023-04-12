@@ -40,4 +40,8 @@ public class BannerService {
     public Banner getBanner(int no) {
         return bannerDao.getBanner(no);
     }
+
+    public List<Banner> getActiveBanners() {
+        return bannerDao.getActiveBanners();
+    }
 }

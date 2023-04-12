@@ -5,6 +5,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.BrandMapper">
+    <resultMap id="BrandMain" type="com.model.kream.product.brand.BrandMain">
+        <result column="image" property="image" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
     <select id="getBrandByNo" resultType="Brand">
         select *
         from brand
@@ -38,4 +41,12 @@
         from brand
         WHERE no = #{no}
     </delete>
+    <select id="getMainBrands" resultType="BrandMain" resultMap="BrandMain">
+        select brand.no, brand.name, brand.color, JSON_EXTRACT(p.images, '$[0]') as image
+        from brand
+                 left join product p on brand.no = p.brand_no
+        WHERE (select COUNT(*) from product WHERE brand_no = brand.no) > 0
+        GROUP BY brand.no ORDER BY RAND()
+        LIMIT 10
+    </select>
 </mapper>

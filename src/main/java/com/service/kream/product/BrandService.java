@@ -3,10 +3,13 @@ package com.service.kream.product;
 import com.dao.BrandDao;
 import com.dao.ProductDao;
 import com.model.kream.product.brand.Brand;
+import com.model.kream.product.brand.BrandMain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,5 +46,9 @@ public class BrandService {
             brandDao.deleteBrand(no);
             return true;
         }
+    }
+
+    public List<BrandMain> getMainBrands() {
+        return brandDao.getMainBrands();
     }
 }
