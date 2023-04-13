@@ -2,11 +2,13 @@ package com.dao;
 
 import com.mapper.SellMapper;
 import com.model.kream.order.ORDER_STATUS;
+import com.model.kream.order.after.sub.DELIVERY_STATUS;
 import com.model.kream.order.after.sub.INSPECTION_TYPE;
 import com.model.kream.order.after.sub.SELLSTOCK_TYPE;
 import com.model.kream.order.before.Sell;
 import com.model.kream.order.before.sub.sell.SELL_TYPE;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
+import com.model.kream.shop.SellList;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Repository;
@@ -43,12 +45,12 @@ public class SellDao {
         return mapper.getMySell(user_no ,expiration_date,after);
     }
 
-    public List<Sell> getMySellByOrder(int user_no, SELLSTOCK_TYPE status, INSPECTION_TYPE type, ORDER_STATUS order_status) {
-        return mapper.getMySellByOrder(user_no,status,type,order_status);
+    public List<SellList> getMySellByOrder(int user_no, SELLSTOCK_TYPE type , DELIVERY_STATUS status) {
+        return mapper.getMySellByOrder(user_no,type,status);
     }
 
-    public List<Sell> getMySellNotByOrder(int user_no, SELL_TYPE sell_type) {
-        return mapper.getMySellNotByOrder(user_no,sell_type);
+    public List<Sell> getCompleteSell(int user_no, ORDER_STATUS order_status) {
+        return mapper.getCompleteSell(user_no,order_status);
     }
 
     public List<Sell> getMySellEnd(int user_no, LocalDate expiration_date) {

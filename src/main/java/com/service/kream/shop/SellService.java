@@ -2,17 +2,16 @@ package com.service.kream.shop;
 
 import com.dao.SellDao;
 import com.model.kream.order.ORDER_STATUS;
-import com.model.kream.order.after.sub.INSPECTION_TYPE;
+import com.model.kream.order.after.sub.DELIVERY_STATUS;
 import com.model.kream.order.after.sub.SELLSTOCK_TYPE;
 import com.model.kream.order.before.Sell;
 import com.model.kream.order.before.sub.sell.SELL_TYPE;
+import com.model.kream.shop.SellList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,11 +33,11 @@ public class SellService {
         return sellDao.getMySellEnd(user_no,expiration_date);
     }
 
-    public List<Sell> getMySellByOrder(int user_no, SELLSTOCK_TYPE status, INSPECTION_TYPE type, ORDER_STATUS order_status){
-        return sellDao.getMySellByOrder(user_no,status,type,order_status);
+    public List<SellList> getMySellByOrder(int user_no, SELLSTOCK_TYPE type, DELIVERY_STATUS status){
+        return sellDao.getMySellByOrder(user_no,type,status);
     }
 
-    public List<Sell> getMySellNotByOrder(int user_no, SELL_TYPE sell_type){
-        return sellDao.getMySellNotByOrder(user_no,sell_type);
+    public List<Sell> getCompleteSell(int user_no, ORDER_STATUS order_status){
+        return sellDao.getCompleteSell(user_no,order_status);
     }
 }

@@ -5,6 +5,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mapper.SellMapper">
+    <resultMap id="SellList" type="com.model.kream.shop.SellList">
+        <result column="images" property="images" typeHandler="com.middleware.JsonObjectTypeHandler"/>
+    </resultMap>
     <select id="getProductSellHistory" resultType="ProductPriceWithSizeAndCount">
         select (select size from size WHERE no = s.size_no)                                 as size,
                price,
@@ -47,55 +50,52 @@
         LIMIT 1;
     </select>
 
-<!-- 판매내역 -판매입찰 -->
-    <select id="getMySell" resultType="Sell">
-        select * from sell
+    <!-- 판매내역 -판매입찰 -->
+    <select id="getMySell" resultType="SellList" resultMap="SellList">
+        select sell.no,sell.expiration_date,p.en_name,p.kor_name,JSON_EXTRACT(p.images,'$[0]')as images,s.size from sell
+        left join size s on sell.size_no = s.no
+        left join product p on s.product_no = p.no
         where user_no =#{user_no} and
-              <if test="after == true">
-                  expiration_date <![CDATA[ >= ]]>now();
-              </if>
+        <if test="after == true">
+            expiration_date <![CDATA[ >= ]]>now();
+        </if>
 
-              <if test="after == false">
-                  expiration_date <![CDATA[ < ]]>now();
-              </if>
+        <if test="after == false">
+            expiration_date <![CDATA[ < ]]>now();
+        </if>
 
 
     </select>
 
 
-<!--판매내역 -진행중-->
-    <select id="getMySellByOrder" resultType="Sell">
-        select * from sell s
+    <!--판매내역 -진행중-->
+    <select id="getMySellByOrder" resultType="SellList" resultMap="SellList">
+        select s.no,d.status,ss.type,JSON_EXTRACT(p.images,'$[0]')as images,p.en_name,p.kor_name from sell s
         inner join `order` o on s.no = o.sell_no
         left join sell_stock ss on o.no = ss.order_no
-        left join inspection i on o.no = i.order_no
         left join size s2 on s.size_no = s2.no
         left join product p on p.no = s2.product_no
+        left join delivery d on o.no = d.order_no
 
         where user_no = #{user_no}
-          <if test="status != null">
-              and ss.status = #{status}
-          </if>
-          <if test="type != null">
-              and i.type = #{type}
-          </if>
-          <if test="order_status != null">
-              and o.order_status = #{order_status}
-          </if>
-
-
+        <if test="status != null">
+            and d.status = #{status}
+        </if>
+        <if test="type != null">
+            and ss.type = #{type}
+        </if>
 
     </select>
 
-<!--판매내역 - 종료-->
-    <select id="getMySellNotByOrder" resultType="Sell">
-        select * from sell
-        left outer join `order` o on sell.no = o.sell_no
-        where sell_no is null
-          and user_no = #{user_no}
-          <if test="sell_type != null">
-              and sell_type = #{sell_type}
-          </if>
+    <!--판매내역 - 종료-->
+    <select id="getCompleteSell" resultType="SellList" resultMap="SellList">
+        select sell.no, JSON_EXTRACT(p.images,'$[0]')as images,p.kor_name,p.en_name,s.size ,o.order_status from sell
+        left  join `order` o on sell.no = o.sell_no
+        left join size s on sell.size_no = s.no
+        left join product p on s.product_no = p.no
+        where user_no = #{user_no}
+        and order_status = #{order_status}
+
 
     </select>
 </mapper>

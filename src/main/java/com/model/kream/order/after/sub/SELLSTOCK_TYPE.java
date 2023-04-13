@@ -6,8 +6,8 @@ public enum SELLSTOCK_TYPE {
 
     A("발송완료"),
     B("발송요청"),
-    C("입고대기"),
-    D("입고완료");
+    C("대기중");
+
 
     SELLSTOCK_TYPE(String keyword) {
         this.keyword = keyword;
