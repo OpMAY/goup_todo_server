@@ -24,4 +24,8 @@
         from category
         WHERE parent_no = #{parent_no}
     </select>
+    <select id="getCategoryChildrenAdmin" resultType="CategoryAdmin">
+        select no, name, (select COUNT(*) from product WHERE category_no = category.no) as products
+        from category WHERE parent_no = #{parent_no}
+    </select>
 </mapper>
