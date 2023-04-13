@@ -52,4 +52,51 @@
                 #{payment_method}, #{receipt, typeHandler=com.middleware.JsonObjectTypeHandler},
                 #{p_order_agree, typeHandler=com.middleware.JsonObjectTypeHandler}, NOW(), NOW())
     </insert>
+
+    <!--구매내역 - 구매입찰-->
+    <select id="getMyPurchase" resultType="Purchase" resultMap="Purchase">
+        select * from purchase
+        where user_no = #{user_no} and
+        <if test="after == true">
+            expiration_date <![CDATA[ >= ]]>now();
+        </if>
+        <if test="after == false">
+            expiration_date <![CDATA[ < ]]>now();
+        </if>
+    </select>
+
+
+<!--구매내역 - 진행중-->
+    <select id="getMyPurchaseByOrder" resultType="Purchase">
+        select * from purchase p
+        inner join `order` o on p.no = o.sell_no
+        left join delivery d on d.order_no = o
+        left join inspection i on o.no = i.order_no
+        left join size s2 on p.size_no = s2.no
+        left join product pr on pr.no = s2.product_no
+
+        where user_no = #{user_no}
+        <if test="status != null">
+            and ss.status = #{status}
+        </if>
+        <if test="type != null">
+            and i.type = #{type}
+        </if>
+        <if test="order_status != null">
+            and o.order_status = #{order_status}
+        </if>
+
+    </select>
+
+<!--    구매내역-종료-->
+    <select id="getMyPurchaseNotByOrder" resultType="Purchase">
+        select * from purchase p
+        left outer join `order` o on p.no = o.sell_no
+        where sell_no is null
+        and user_no = #{user_no}
+        <if test="sell_type != null">
+            and purchase_type = #{purchase_type}
+        </if>
+
+    </select>
 </mapper>

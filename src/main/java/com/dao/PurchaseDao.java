@@ -6,6 +6,7 @@ import com.model.kream.product.price.ProductPriceWithSizeAndCount;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -31,4 +32,11 @@ public class PurchaseDao {
     public void registerPurchase(Purchase purchase) {
         mapper.registerPurchase(purchase);
     }
+
+    public List<Purchase> getMyPurchase(int user_no, LocalDate expiration_date, boolean after) {
+       return mapper.getMyPurchase(user_no,expiration_date,after);
+
+    }
+
+
 }

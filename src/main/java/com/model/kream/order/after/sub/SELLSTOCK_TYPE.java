@@ -2,18 +2,22 @@ package com.model.kream.order.after.sub;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum DELIVERY_STATUS {
-    DELIVERY_READY("배송 준비"),
-    ON_DELIVERY("배송 중"),
-    DELIVERY_FINISHED("배송 완료");
+public enum SELLSTOCK_TYPE {
 
-    DELIVERY_STATUS(String keyword) {
+    A("발송완료"),
+    B("발송요청"),
+    C("입고대기"),
+    D("입고완료");
+
+    SELLSTOCK_TYPE(String keyword) {
         this.keyword = keyword;
     }
-    private final String keyword;
+
+    private String keyword;
 
     @JsonValue
     public String getKeyword() {
         return this.keyword;
     }
-}
+
+    }

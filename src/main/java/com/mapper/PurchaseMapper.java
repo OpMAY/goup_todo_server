@@ -3,6 +3,7 @@ package com.mapper;
 import com.model.kream.order.before.Purchase;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PurchaseMapper {
@@ -13,4 +14,6 @@ public interface PurchaseMapper {
     Purchase getPurchaseForOrder(int size_no, int price);
 
     void registerPurchase(Purchase purchase);
+
+    List<Purchase> getMyPurchase(int user_no, LocalDate expiration_date, boolean after);
 }

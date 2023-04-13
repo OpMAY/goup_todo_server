@@ -46,4 +46,56 @@
         order by sell.reg_datetime
         LIMIT 1;
     </select>
+
+<!-- 판매내역 -판매입찰 -->
+    <select id="getMySell" resultType="Sell">
+        select * from sell
+        where user_no =#{user_no} and
+              <if test="after == true">
+                  expiration_date <![CDATA[ >= ]]>now();
+              </if>
+
+              <if test="after == false">
+                  expiration_date <![CDATA[ < ]]>now();
+              </if>
+
+
+    </select>
+
+
+<!--판매내역 -진행중-->
+    <select id="getMySellByOrder" resultType="Sell">
+        select * from sell s
+        inner join `order` o on s.no = o.sell_no
+        left join sell_stock ss on o.no = ss.order_no
+        left join inspection i on o.no = i.order_no
+        left join size s2 on s.size_no = s2.no
+        left join product p on p.no = s2.product_no
+
+        where user_no = #{user_no}
+          <if test="status != null">
+              and ss.status = #{status}
+          </if>
+          <if test="type != null">
+              and i.type = #{type}
+          </if>
+          <if test="order_status != null">
+              and o.order_status = #{order_status}
+          </if>
+
+
+
+    </select>
+
+<!--판매내역 - 종료-->
+    <select id="getMySellNotByOrder" resultType="Sell">
+        select * from sell
+        left outer join `order` o on sell.no = o.sell_no
+        where sell_no is null
+          and user_no = #{user_no}
+          <if test="sell_type != null">
+              and sell_type = #{sell_type}
+          </if>
+
+    </select>
 </mapper>

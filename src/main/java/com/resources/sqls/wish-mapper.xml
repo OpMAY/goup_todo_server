@@ -43,8 +43,8 @@
         select EXISTS(select * from wish where user_no = #{user_no} AND size_no = #{size_no})
     </select>
 
-    <select id="getMywishList" resultType="WishList">
-        select p.images,s.size,p.en_name,b.name from wish w
+    <select id="getMywishList" resultType="WishList" resultMap="WishList">
+        select  JSON_EXTRACT(p.images, '$[0]') as images,s.size,p.en_name,b.name from wish w
             left join size s on w.size_no = s.no
             left join product p on s.product_no = p.no
             left join brand b on p.brand_no = b.no
