@@ -87,7 +87,7 @@
               WHERE o.no is null
                 AND p.purchase_type = 'AUCTION'
                 AND p.p_bid_flag = true
-                AND product.no = 1
+                AND product.no = #{product_no}
               order by size) as t
         WHERE price is not null;
     </select>

@@ -113,7 +113,7 @@ public class UserRestController {
     @PostMapping("/address")
     public ResponseEntity registAddress(@RequestBody Address address) {
         Message message = new Message();
-        if(address.getNo() == 0){
+        if(address.getUser_no() == 0){
             throw new ContentsException();
         } else{
             addressService.registAddress(address);
@@ -147,10 +147,10 @@ public class UserRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, status, true), HttpStatus.OK);
     }
 
-    @GetMapping("/account/{no}")
-    public ResponseEntity getAccountInfo(@PathVariable int no) {
+    @GetMapping("/account/{user_no}")
+    public ResponseEntity getAccountInfo(@PathVariable int user_no) {
         Message message = new Message();
-        List<AccountInfo> accountInfo = accountInfoService.getAccountInfo(no);
+        AccountInfo accountInfo = accountInfoService.getAccountInfo(user_no);
         message.put("accountInfo", accountInfo);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }

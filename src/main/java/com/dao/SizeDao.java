@@ -39,4 +39,8 @@ public class SizeDao {
     public void updateSize(int no, String size) {
        mapper.updateSize(no, size);
     }
+
+    public Size getSizeInfo(int size_no) {
+       return mapper.getSizeInfo(size_no);
+    }
 }

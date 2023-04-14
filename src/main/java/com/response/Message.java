@@ -40,6 +40,9 @@ public class Message {
         if (isLog) {
             for (String key : map.keySet()) {
                 String value = map.get(key) != null ? map.get(key).toString() : null;
+                if(value != null && value.length() > 50) {
+                    value = value.substring(0, 50) + "...(truncated)";
+                }
                 log.info("Message Map Value -> {},{}", key, value);
             }
         }

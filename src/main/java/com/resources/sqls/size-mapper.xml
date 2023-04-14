@@ -35,4 +35,9 @@
         SET size = #{size}
         WHERE no = #{no}
     </update>
+    <select id="getSizeInfo" resultType="Size">
+        select *
+        from size
+        WHERE no = #{size_no}
+    </select>
 </mapper>

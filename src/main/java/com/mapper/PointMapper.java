@@ -1,6 +1,7 @@
 package com.mapper;
 
 import com.model.kream.point.Point;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface PointMapper {
     void addPoint(Point point);
 
 
-    void editPoint(int user_no, int point);
+    void editPoint(@Param("user_no") int user_no, @Param("point") int point);
 
     Point getPointData(int no);
 }

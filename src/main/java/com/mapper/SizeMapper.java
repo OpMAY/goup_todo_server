@@ -17,4 +17,6 @@ public interface SizeMapper {
     void deleteSizeByProductNoAndSize(@Param("product_no") int product_no, @Param("size") String size);
 
     void updateSize(@Param("no") int no, @Param("size") String size);
+
+    Size getSizeInfo(int size_no);
 }

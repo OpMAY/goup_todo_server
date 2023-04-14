@@ -148,6 +148,14 @@ public class ProductRestController {
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/size/detail/{size_no}", method = RequestMethod.GET)
+    public ResponseEntity getParticularSizeDetail(@PathVariable int size_no) {
+        Message message = new Message();
+        message.put("purchase", productService.getProductSizePrice(size_no, PRODUCT_TRANSACTION_TYPE.PURCHASE));
+        message.put("sell", productService.getProductSizePrice(size_no, PRODUCT_TRANSACTION_TYPE.SELL));
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
     /**
      * TODO NOT Done
      * 1. 스타일 관련

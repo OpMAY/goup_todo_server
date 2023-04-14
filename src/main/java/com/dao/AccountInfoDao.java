@@ -17,7 +17,7 @@ public class AccountInfoDao {
         this.mapper = sqlSession.getMapper(AccountInfoMapper.class);
     }
 
-    public List<AccountInfo>  getAccountInfo(int user_no){
+    public AccountInfo  getAccountInfo(int user_no){
         return mapper.getAccountInfo(user_no);
     }
 

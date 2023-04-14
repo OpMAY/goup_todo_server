@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface AccountInfoMapper {
 
-    public void registAccountInfo(AccountInfo accountInfo);
+    void registAccountInfo(AccountInfo accountInfo);
 
-    List<AccountInfo> getAccountInfo(int user_no);
+    AccountInfo getAccountInfo(int user_no);
 
     void deleteAccountInfo(int user_no);
 

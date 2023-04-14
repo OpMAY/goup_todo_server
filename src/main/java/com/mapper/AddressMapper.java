@@ -1,6 +1,7 @@
 package com.mapper;
 
 import com.model.kream.user.address.Address;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface AddressMapper {
 
     public void deleteAddress(int no);
 
-    public Address getDefaultAddress(int no, int is_default_address);
+    public Address getDefaultAddress(@Param("no") int no, @Param("is_default_address") int is_default_address);
 
     void resetDefaultAddress(Address address);
 

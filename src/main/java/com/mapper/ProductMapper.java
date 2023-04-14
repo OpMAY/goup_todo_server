@@ -69,7 +69,7 @@ public interface ProductMapper {
 
     boolean checkProductHasTransaction(int no);
 
-    boolean checkProductNameDuplicate(String en_name, String kor_name);
+    boolean checkProductNameDuplicate(@Param("en_name") String en_name, @Param("kor_name") String kor_name);
 
     List<Product> getAllProducts();
 

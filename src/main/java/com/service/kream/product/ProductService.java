@@ -273,73 +273,74 @@ public class ProductService {
     @Transactional
     public Message registerProductPurchase(Purchase purchase) {
         Message message = new Message();
-        if (purchase.getReceipt() != null) {
-            if (bootPayService.verifyReceipt(purchase.getReceipt().getReceipt_bootpay())) {
-                // 영수증 검증 완료
-                boolean pricing_check = purchase.getPrice() - purchase.getPoint() + purchase.getDelivery_price() + purchase.getCommission() == purchase.getTotal_price();
-                boolean required_info_check = (
-                        purchase.getDelivery_info() != null
-                                && purchase.getDelivery_method() != null
-                                && purchase.getPurchase_agree() != null
-                                && purchase.getP_order_agree() != null
-                                && purchase.getPayment_method() != null
-                );
-                if (pricing_check && required_info_check) {
-                    Sell sell = sellDao.getProductSellForAuction(purchase.getSize_no(), purchase.getPrice());
-                    if (purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) { //즉시 구매일때
-                        if (sell != null) {
-                            purchase.setExpiration_days(0);
-                            purchase.setExpiration_date(LocalDate.now());
-                            purchaseDao.registerPurchase(purchase);
+//        if (purchase.getReceipt() != null) {
+//            if (bootPayService.verifyReceipt(purchase.getReceipt().getReceipt_bootpay())) {
+        // 영수증 검증 완료
+        boolean pricing_check = purchase.getPrice() - purchase.getPoint() + purchase.getDelivery_price() + purchase.getCommission() == purchase.getTotal_price();
+        boolean required_info_check = (
+                purchase.getDelivery_info() != null
+                        && purchase.getDelivery_method() != null
+                        && purchase.getPurchase_agree() != null
+                        && purchase.getP_order_agree() != null
+                        && purchase.getPayment_method() != null
+        );
+        if (pricing_check && required_info_check) {
+            Sell sell = sellDao.getProductSellForAuction(purchase.getSize_no(), purchase.getPrice());
+            purchase.setExpiration_date(LocalDate.now().plusDays(purchase.getExpiration_days()));
+            if (purchase.getPurchase_type().equals(PURCHASE_TYPE.DIRECT)) { //즉시 구매일때
+                if (sell != null) {
+                    purchase.setExpiration_days(0);
+                    purchase.setExpiration_date(LocalDate.now());
+                    purchaseDao.registerPurchase(purchase);
 
-                            Order order = new Order(
-                                    sell.getNo(),
-                                    purchase.getNo(),
-                                    "",
-                                    ORDER_STATUS.REGISTERED,
-                                    true
-                            );
-                            orderDao.registerOrder(order);
-                            message.put("status", true);
-                            message.put("result_type", PRODUCT_TRANSACTION_RESULT.ORDER_CREATED);
-                            message.put("order_no", order.getNo());
-                        } else {
-                            message.put("status", false);
-                            message.put("error_msg", "잘못된 요청 - 즉시 구매를 위한 판매 입찰 내역이 없음");
-                        }
-                    } else {
-                        purchaseDao.registerPurchase(purchase);
-                        if (sell != null) {
-                            Order order = new Order(
-                                    sell.getNo(),
-                                    purchase.getNo(),
-                                    "",
-                                    ORDER_STATUS.REGISTERED,
-                                    true
-                            );
-                            orderDao.registerOrder(order);
-                            message.put("status", true);
-                            message.put("result_type", PRODUCT_TRANSACTION_RESULT.ORDER_CREATED);
-                            message.put("order_no", order.getNo());
-                        } else {
-                            message.put("status", true);
-                            message.put("result_type", PRODUCT_TRANSACTION_RESULT.PURCHASE_CREATED);
-                            message.put("purchase_no", purchase.getNo());
-                        }
-                    }
+                    Order order = new Order(
+                            sell.getNo(),
+                            purchase.getNo(),
+                            "",
+                            ORDER_STATUS.REGISTERED,
+                            true
+                    );
+                    orderDao.registerOrder(order);
+                    message.put("status", true);
+                    message.put("result_type", PRODUCT_TRANSACTION_RESULT.ORDER_CREATED);
+                    message.put("order_no", order.getNo());
                 } else {
                     message.put("status", false);
-                    message.put("error_msg", "필수 정보 및 가격 데이터 오류");
+                    message.put("error_msg", "잘못된 요청 - 즉시 구매를 위한 판매 입찰 내역이 없음");
                 }
             } else {
-                message.put("status", false);
-                message.put("error_msg", "결제 영수증 정보 (receipt) 검증 실패");
+                purchaseDao.registerPurchase(purchase);
+                if (sell != null) {
+                    Order order = new Order(
+                            sell.getNo(),
+                            purchase.getNo(),
+                            "",
+                            ORDER_STATUS.REGISTERED,
+                            true
+                    );
+                    orderDao.registerOrder(order);
+                    message.put("status", true);
+                    message.put("result_type", PRODUCT_TRANSACTION_RESULT.ORDER_CREATED);
+                    message.put("order_no", order.getNo());
+                } else {
+                    message.put("status", true);
+                    message.put("result_type", PRODUCT_TRANSACTION_RESULT.PURCHASE_CREATED);
+                    message.put("purchase_no", purchase.getNo());
+                }
             }
         } else {
             message.put("status", false);
-            message.put("error_msg", "결제 영수증 정보 (receipt) 누락");
-            message.put("sent_data", purchase);
+            message.put("error_msg", "필수 정보 및 가격 데이터 오류");
         }
+//            } else {
+//                message.put("status", false);
+//                message.put("error_msg", "결제 영수증 정보 (receipt) 검증 실패");
+//            }
+//        } else {
+//            message.put("status", false);
+//            message.put("error_msg", "결제 영수증 정보 (receipt) 누락");
+//            message.put("sent_data", purchase);
+//        }
         return message;
     }
 
@@ -355,9 +356,11 @@ public class ProductService {
         // Product 객체 SET
         productDetail.setProduct(productDao.getProductByNo(product_no));
         // Product 즉시 판매가 SET
-        productDetail.setDirect_sell_price(productDao.getProductLowestSellPrice(product_no).getPrice());
+        ProductPriceWithSize lowestSellPrice = productDao.getProductLowestSellPrice(product_no);
+        ProductPriceWithSize highestPurchasePrice = productDao.getProductHighestPurchasePrice(product_no);
+        productDetail.setDirect_purchase_price(lowestSellPrice != null ? lowestSellPrice.getPrice() : null);
         // Product 즉시 구매가 SET
-        productDetail.setDirect_purchase_price(productDao.getProductHighestPurchasePrice(product_no).getPrice());
+        productDetail.setDirect_sell_price(highestPurchasePrice != null ? highestPurchasePrice.getPrice() : null);
         // Product 주문 체결 내역 SET
         List<ProductPriceWithSize> order_history = productDao.getProductOrderHistory(product_no);
         productDetail.setOrder_history(order_history);
@@ -433,6 +436,17 @@ public class ProductService {
             detailSizes.add(detailSize);
         });
         return detailSizes;
+    }
+
+    public ProductPriceWithSize getProductSizePrice(int size_no, PRODUCT_TRANSACTION_TYPE type) {
+        Size size = sizeDao.getSizeInfo(size_no);
+        ProductPriceWithSize detailSize = new ProductPriceWithSize();
+        detailSize.setNo(size.getNo());
+        detailSize.setSize(size.getSize());
+        detailSize.setPrice(type.equals(PRODUCT_TRANSACTION_TYPE.PURCHASE) ?
+                sellDao.getSizeProductSellLowestPrice(size.getNo()) :
+                purchaseDao.getSizeProductPurchaseHighestPrice(size.getNo()));
+        return detailSize;
     }
 
     // C - 미루기
@@ -675,8 +689,8 @@ public class ProductService {
     public boolean handleWishes(WishRequest wishRequest) {
         wishDao.resetUserProductWishes(wishRequest.getUser_no(), wishRequest.getProduct_no());
         List<Wish> wishes = wishRequest.getWishes();
-        if(wishes.size() > 0) {
-            for(Wish wish : wishes) {
+        if (wishes.size() > 0) {
+            for (Wish wish : wishes) {
                 wishDao.insertUserWish(wish);
             }
             return true;
@@ -690,7 +704,7 @@ public class ProductService {
         productShopFilter.setBrands(brandDao.getAllBrands()); // 모든 브랜드 data SET
         List<Category> parents = categoryDao.getParentCategories(); // 부모 category List
         List<CategoryFilter> filters = new ArrayList<>();
-        for(Category category : parents) {
+        for (Category category : parents) {
             CategoryFilter categoryFilter = new CategoryFilter();
             categoryFilter.setNo(category.getNo());
             categoryFilter.setName(category.getName());
@@ -708,7 +722,7 @@ public class ProductService {
     public List<CategoryFilter> getCategories() {
         List<Category> parents = categoryDao.getParentCategories();
         List<CategoryFilter> filters = new ArrayList<>();
-        for(Category category : parents) {
+        for (Category category : parents) {
             CategoryFilter categoryFilter = new CategoryFilter();
             categoryFilter.setNo(category.getNo());
             categoryFilter.setName(category.getName());

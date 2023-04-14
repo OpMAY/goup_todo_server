@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 @Service
@@ -50,7 +52,13 @@ public class KakaoAPI {
             params.put("client_id", KAKAO_CLIENT_ID);
             params.put("client_secret", KAKAO_CLIENT_SECRET);
 //            params.put("redirect_uri", req.getRequestURL());
-            params.put("redirect_uri", "http://localhost:3000/oauth");
+
+            String referer = req.getHeader("referer");
+            URI uri = new URI(referer);
+            String port = uri.getPort() != -1 ? ":" + uri.getPort() : "";
+            log.info("Host: {}", uri.getScheme() + "://" + uri.getHost() + port);
+
+            params.put("redirect_uri", uri.getScheme() + "://" + uri.getHost() + port + "/oauth");
             params.put("code", authorize_code);
 
             protocolBuilder.openWriter(params);
@@ -62,6 +70,8 @@ public class KakaoAPI {
             throw new LoginAPIException(GlobalExceptionType.KAKAO_API_EXCEPTION);
         } catch (IOException e) {
             throw new LoginAPIException(GlobalExceptionType.KAKAO_API_EXCEPTION);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 

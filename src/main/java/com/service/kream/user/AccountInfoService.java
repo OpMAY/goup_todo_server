@@ -16,7 +16,7 @@ public class AccountInfoService {
 
     private final AccountInfoDao accountInfoDao;
 
-    public List<AccountInfo> getAccountInfo(int user_no){
+    public AccountInfo getAccountInfo(int user_no){
        return accountInfoDao.getAccountInfo(user_no);
 
     }

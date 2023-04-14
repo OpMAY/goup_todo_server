@@ -2,6 +2,7 @@ package com.mapper;
 
 import com.model.kream.order.before.Sell;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface SellMapper {
 
     void registerSell(Sell sell);
 
-    Sell getProductSellForAuction(int size_no, int price);
+    Sell getProductSellForAuction(@Param("size_no") int size_no, @Param("price") int price);
 }

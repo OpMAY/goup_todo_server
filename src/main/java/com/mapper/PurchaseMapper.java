@@ -2,6 +2,7 @@ package com.mapper;
 
 import com.model.kream.order.before.Purchase;
 import com.model.kream.product.price.ProductPriceWithSizeAndCount;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface PurchaseMapper {
 
     Integer getSizeProductPurchaseHighestPrice(int size_no);
 
-    Purchase getPurchaseForOrder(int size_no, int price);
+    Purchase getPurchaseForOrder(@Param("size_no") int size_no, @Param("price") int price);
 
     void registerPurchase(Purchase purchase);
 }

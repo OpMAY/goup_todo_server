@@ -38,7 +38,7 @@ public class AddressService {
 
     * */
     public void registAddress(Address address) {
-        if (address.getIs_default_address() == 1) {
+        if (address.is_default_address()) {
             addressDao.resetDefaultAddress(address);
         }
         addressDao.registAddress(address);
@@ -48,7 +48,7 @@ public class AddressService {
 
     @Transactional
     public void updateAddress(Address address) {
-        if(address.getIs_default_address()==1){
+        if(address.is_default_address()){
             addressDao.resetDefaultAddress(address);
         }
         addressDao.updateAddress(address);
@@ -61,7 +61,7 @@ public class AddressService {
         Message message = new Message();
         Address address = this.getAddress(no);
 
-        if(address.getIs_default_address() == 0){
+        if(address.is_default_address()){
             addressDao.deleteAddress(no);
             message.put("status", true);
         } else {

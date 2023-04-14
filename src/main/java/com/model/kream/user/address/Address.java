@@ -11,6 +11,6 @@ public class Address {
     private String zip_code;
     private String address;
     private String address_detail;
-    private int is_default_address;
+    private boolean is_default_address;
 
 }
