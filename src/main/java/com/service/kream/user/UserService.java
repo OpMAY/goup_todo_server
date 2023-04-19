@@ -39,12 +39,12 @@ public class UserService {
         return userDao.getProfileInfo(user_no);
     }
 
-    public User getUserbyToken(String access_token){
+    public User getUserbyToken(String access_token) {
         return userDao.getUserbyToken(access_token);
     }
 
     @Transactional
-    public User registUser(User user ) {
+    public User registUser(User user) {
         /**
          *  1. user Table data insert
          *  2. style_user Table data insert
@@ -94,20 +94,13 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfileImage(MultipartFile multipartFile, int user_no) {
+    public void updateProfileImage(MFile multipartFile, int user_no) {
         /**
          * 1. 이미지 등록 ? 삭제 ?
          * 2. 이미지 등록이면 프론트에서 업로드 한 파일 우리가 S3에 업로드
          * 3. 업로드 완료하면 해당 ROUTE 기준으로 URL 생성해서 MFILE 따로 만들어서 넣어야함
          * **/
-        if (multipartFile == null) {
-            userDao.updateProfileImage(null, user_no);
-        } else {
-            MFile mFile = fileUploadUtility.uploadFile(multipartFile, "/image/user/profile/" + user_no + "/");
-            userDao.updateProfileImage(mFile, user_no);
-        }
-
-
+        userDao.updateProfileImage(multipartFile, user_no);
     }
 
     @Transactional
@@ -121,7 +114,7 @@ public class UserService {
 
         User user = userDao.getProfileInfo(no);
 
-        if (user.isUser_flag() == true) {
+        if (user.isUser_flag()) {
             int user_flag = 0;
             userDao.deletedUser(no, user_flag);
 
@@ -135,41 +128,33 @@ public class UserService {
     }
 
     @Transactional
-    public Message editProfile(User user,Message message) {
+    public Message editProfile(User user, Message message) {
 
         Integer no = user.getNo();
 
-        MultipartFile file = (MultipartFile) user.getProfile_img();
 
-        if(no != null){
+        if (no != null) {
 
-
-            System.out.println(user.getEmail().length());
-            System.out.println(user.getEmail());
-
-            if(user.getName().length()>0 || user.getName().isEmpty() == false){
-                this.updateUserName(user.getName(),no);
+            if (user.getName().length() != 0) {
+                this.updateUserName(user.getName(), no);
             }
-            if(user.getEmail().length()>0 || user.getEmail().isEmpty() == false){
-                this.updateEmail(user.getEmail(),no);
+            if (user.getEmail().length() != 0) {
+                this.updateEmail(user.getEmail(), no);
             }
-            if(user.getPhone_number().length()>0 || user.getPhone_number().isEmpty() == false){
-                this.updatePhoneNumber(user.getPhone_number(),no);
+            if (user.getPhone_number().length() != 0) {
+                this.updatePhoneNumber(user.getPhone_number(), no);
             }
-            if(user.getEmail_alarm() != 0 ){
-                this.updateEmailAlarm(user.getEmail_alarm(),no);
+            if (user.getEmail_alarm() != 0) {
+                this.updateEmailAlarm(user.getEmail_alarm(), no);
             }
-            if(user.getProfile_img() != null ){
-              this.updateProfileImage(file,no);
+            if (user.getProfile_img() != null) {
+                this.updateProfileImage(user.getProfile_img(), no);
             }
-            if(user.getSize() != 0){
-                this.updateSize(user.getSize(),no);
+            if (user.getSize() != 0) {
+                this.updateSize(user.getSize(), no);
             }
-
-
-
         }
-        return message.put("USER",user);
+        return message.put("USER", user);
 
     }
 
@@ -181,8 +166,8 @@ public class UserService {
         return userDao.getUserByLoginInfo(login_type, access_token);
     }
 
-    public void userSuspended(int no,int user_flag) {
-         userDao.userSuspended(no,user_flag);
+    public void userSuspended(int no, int user_flag) {
+        userDao.userSuspended(no, user_flag);
     }
 
     public List<User> getAllUser() {

@@ -1,9 +1,12 @@
 package com.restcontroller;
 
 import com.api.LoginAPI;
+import com.aws.file.FileUploadUtility;
+import com.aws.model.CDNUploadPath;
 import com.exception.ContentsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.model.User;
+import com.model.common.MFile;
 import com.model.kream.point.Point;
 import com.model.kream.user.LOGIN_TYPE;
 import com.model.kream.user.account.AccountInfo;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +56,7 @@ public class UserRestController {
 
     private final PointService pointService;
     private final LoginAPI loginAPI;
+    private final FileUploadUtility fileUploadUtility;
 
 
     @GetMapping("/user/{no}")
@@ -69,7 +74,7 @@ public class UserRestController {
         boolean exist = userService.checkUserExists(user_model.getLogin_type(), user_model.getAccess_token()); // logintype, token 으로 user 등록여부 확인
         User user = new User();
 
-        if(user_model.getLogin_type() != null && user_model.getAccess_token() != null) {
+        if (user_model.getLogin_type() != null && user_model.getAccess_token() != null) {
             if (!exist) {
                 user = userService.registUser(user_model); // 사용자 존재하지 않으면 등록.
             } else {
@@ -86,10 +91,18 @@ public class UserRestController {
 
 
     @PutMapping("/profile/{no}")
-    public ResponseEntity profileEdit(@RequestBody User user, @PathVariable int no
-    ) throws JsonProcessingException {
+    public ResponseEntity profileEdit(@RequestBody User user, @PathVariable int no) {
         Message message = new Message();
-        userService.editProfile(user,message);
+        userService.editProfile(user, message);
+        message.put("status", true);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
+
+    @PutMapping("/profile/image/{no}")
+    public ResponseEntity profileImageEdit(@RequestBody User user, @PathVariable int no) {
+        Message message = new Message();
+        userService.updateProfileImage(user.getProfile_img(), no);
+        message.put("result", user.getProfile_img());
         message.put("status", true);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
@@ -113,13 +126,12 @@ public class UserRestController {
     @PostMapping("/address")
     public ResponseEntity registAddress(@RequestBody Address address) {
         Message message = new Message();
-        if(address.getUser_no() == 0){
+        if (address.getUser_no() == 0) {
             throw new ContentsException();
-        } else{
+        } else {
             addressService.registAddress(address);
             message.put("status", true);
         }
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -127,23 +139,20 @@ public class UserRestController {
     @PutMapping("/address/{no}")
     public ResponseEntity editAddress(@RequestBody Address address, @PathVariable int no) {
         Message message = new Message();
-        if(address.getNo() == 0){
+        if (address.getNo() == 0) {
             throw new ContentsException();
-        } else{
+        } else {
             addressService.updateAddress(address);
             message.put("status", true);
-            message.put("address",address);
+            message.put("address", address);
         }
 
-        return new ResponseEntity(DefaultRes.res(HttpStatus.OK,message), HttpStatus.OK);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message), HttpStatus.OK);
     }
 
     @DeleteMapping("/address/{no}")
     public ResponseEntity deleteAddress(@PathVariable int no) {
-
-
         Message status = addressService.deleteAddress(no);
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, status, true), HttpStatus.OK);
     }
 
@@ -158,13 +167,12 @@ public class UserRestController {
     @PostMapping("/account")
     public ResponseEntity registAccountInfo(@RequestBody AccountInfo accountInfo) {
         Message message = new Message();
-        if(accountInfo == null || accountInfo.getUser_no()==0){
+        if (accountInfo == null || accountInfo.getUser_no() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
             accountInfoService.registAccountInfo(accountInfo);
             message.put("status", true);
         }
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
 
     }
@@ -172,14 +180,12 @@ public class UserRestController {
     @PutMapping("/account/{user_no}")
     public ResponseEntity editAccountInfo(@RequestBody AccountInfo accountInfo, @PathVariable int user_no) {
         Message message = new Message();
-
-        if(accountInfo == null || accountInfo.getUser_no()==0){
+        if (accountInfo == null || accountInfo.getUser_no() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
             accountInfoService.updateAccountInfo(accountInfo);
             message.put("status", true);
         }
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -195,7 +201,6 @@ public class UserRestController {
     @GetMapping("/payment/{user_no}")
     public ResponseEntity getListPayment(@PathVariable int user_no) {
         Message message = new Message();
-
         List<CardInfo> cardInfo = cardInfoService.getCardInfo(user_no);
         message.put("cardInfo", cardInfo);
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
@@ -205,13 +210,12 @@ public class UserRestController {
     @PostMapping("/payment")
     public ResponseEntity registPayment(@RequestBody CardInfo cardInfo) {
         Message message = new Message();
-        if(cardInfo == null || cardInfo.getNo()==0){
+        if (cardInfo == null || cardInfo.getNo() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
             cardInfoService.addCardInfo(cardInfo);
             message.put("status", true);
         }
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 
@@ -229,9 +233,9 @@ public class UserRestController {
         User user = userService.getProfileInfo(no);
         Map<String, Object> map = new HashMap<>();
         map.put("cash_receipt_type", user.getCash_receipt_type());
-        map.put("cr_card_number", user.getCash_receipt_type());
-        map.put("cr_phone_number", user.getCash_receipt_type());
-        map.put("cr_alarm_agree", user.getCash_receipt_type());
+        map.put("cr_card_number", user.getCr_card_number());
+        map.put("cr_phone_number", user.getCr_phone_number());
+        map.put("cr_alarm_agree", user.isCr_alarm_agree());
 
         message.put("receiptInfo", map);
 
@@ -252,19 +256,27 @@ public class UserRestController {
     @PostMapping("/point")
     public ResponseEntity RegistPoint(@RequestBody Point point) {
         Message message = new Message();
-        if(point == null || point.getNo()==0){
+        if (point == null || point.getNo() == 0) {
             throw new ContentsException();
-        }else{
+        } else {
             pointService.registPoint(point);
             message.put("status", true);
         }
 
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
-
     }
 
 
-
-
+    @PostMapping("/file")
+    public ResponseEntity uploadUserFile(@RequestBody MultipartFile file) {
+        Message message = new Message();
+        if (file.getSize() != 0) {
+            log.info("file -> {},{},{}", file.getOriginalFilename(), file.getName(), file.getSize());
+            MFile mFile = fileUploadUtility.uploadFile(file, CDNUploadPath.USER.getPath());
+            message.put("file", mFile);
+        }
+        message.put("status", true);
+        return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
+    }
 }
 

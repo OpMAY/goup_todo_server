@@ -190,9 +190,9 @@
         brand_no,
         gender,
         category_no,
-        brand.name as brand_name,
-        JSON_EXTRACT(product.images, '$[0]') as image,
-        MIN(sell.price) as price,
+        brand.name                                  as brand_name,
+        JSON_EXTRACT(product.images, '$[0]')        as image,
+        MIN((select sell.price WHERE o.no is null)) as price,
         JSON_ARRAYAGG(s.size) as size_json,
         (select COUNT(*)
         from sell
@@ -200,15 +200,12 @@
         left join size s2 on sell.size_no = s2.no
         left join product p on s2.product_no = p.no
         WHERE o2.no is not null
-        AND p.no = product.no) as orders
+        AND p.no = product.no)                   as orders
         from product
         left join brand on product.brand_no = brand.no
         left join size s on product.no = s.product_no
         left join sell on s.no = sell.size_no
         left join `order` o on sell.no = o.sell_no
-        WHERE (o.no is null
-        AND sell.sell_type = 'AUCTION'
-        AND sell.s_bid_flag = true) or (o.no is null AND sell.no is null)
         GROUP BY product.no) as t
         <if test="filtered == true">
             WHERE
@@ -278,9 +275,9 @@
         brand_no,
         gender,
         category_no,
-        brand.name as brand_name,
-        JSON_EXTRACT(product.images, '$[0]') as image,
-        MIN(sell.price) as price,
+        brand.name                                  as brand_name,
+        JSON_EXTRACT(product.images, '$[0]')        as image,
+        MIN((select sell.price WHERE o.no is null)) as price,
         JSON_ARRAYAGG(s.size) as size_json,
         (select COUNT(*)
         from sell
@@ -288,15 +285,12 @@
         left join size s2 on sell.size_no = s2.no
         left join product p on s2.product_no = p.no
         WHERE o2.no is not null
-        AND p.no = product.no) as orders
+        AND p.no = product.no)                   as orders
         from product
         left join brand on product.brand_no = brand.no
         left join size s on product.no = s.product_no
         left join sell on s.no = sell.size_no
         left join `order` o on sell.no = o.sell_no
-        WHERE (o.no is null
-        AND sell.sell_type = 'AUCTION'
-        AND sell.s_bid_flag = true) or (o.no is null AND sell.no is null)
         GROUP BY product.no) as t
         <if test="filtered == true">
             WHERE
@@ -359,16 +353,13 @@
         gender,
         category_no,
         brand.name as brand_name,
-        MIN(sell.price) as price,
+        MIN((select sell.price WHERE o.no is null)) as price,
         JSON_ARRAYAGG(s.size) as size_json
         from product
         left join brand on product.brand_no = brand.no
         left join size s on product.no = s.product_no
         left join sell on s.no = sell.size_no
         left join `order` o on sell.no = o.sell_no
-        WHERE (o.no is null
-        AND sell.sell_type = 'AUCTION'
-        AND sell.s_bid_flag = true) or (o.no is null AND sell.no is null)
         GROUP BY product.no) as t
         <if test="filtered == true">
             WHERE

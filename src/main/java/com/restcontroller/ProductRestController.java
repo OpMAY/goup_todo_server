@@ -85,11 +85,6 @@ public class ProductRestController {
     @RequestMapping(value = "/order/sell", method = RequestMethod.POST) // 판매 입찰
     public ResponseEntity RegisterProductSell(@RequestBody Sell sell) {
         Message message = productService.registerProductSell(sell);
-        if (sell == null || sell.getNo() == 0) {
-            throw new ContentsException();
-        } else {
-
-        }
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

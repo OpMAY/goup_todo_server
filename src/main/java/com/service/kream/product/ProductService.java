@@ -169,7 +169,7 @@ public class ProductService {
     public Message registerProductSell(Sell sell) {
         Message message = new Message();
         boolean pricing_check = sell.getTotal_price() == sell.getPrice()
-                + sell.getInspection_price() + sell.getDelivery_price() + sell.getCommission();
+                + sell.getInspection_price() + sell.getDelivery_price() - sell.getCommission();
         boolean required_info_check = (sell.getBank_info() != null
                 && sell.getRecall_address_info() != null
                 && sell.getRecall_method() != null
@@ -191,6 +191,7 @@ public class ProductService {
                  *    - 구매 입찰을 가장 먼저 등록한 순서로
                  * **/
                 Purchase purchase = purchaseDao.getPurchaseForOrder(sell.getSize_no(), sell.getPrice()); // size, 가격 정보에 의한 구매 데이터 가져오기
+                sell.setExpiration_date(LocalDate.now().plusDays(sell.getExpiration_days()));
                 if (sell.getSell_type().equals(SELL_TYPE.DIRECT)) { // 판매 타입이 즉시 판매일때
                     if (purchase != null) {
                         // Sell Register

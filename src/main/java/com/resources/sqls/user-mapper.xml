@@ -13,7 +13,7 @@
 
 
     <select id="getProfileInfo" resultType="User" resultMap="user_map">
-        select u.no, u.name, u.phone_number, u.size, u.email_alarm, u.email, u.profile_img, u.user_flag
+        select *
         from user u
         where no = #{no}
     </select>
@@ -120,7 +120,7 @@
 
     <update id="updateProfileImage">
         update user
-        set profile_img      =#{profile_img,typeHandler=JsonObjectTypeHandler},
+        set profile_img      =#{profile_image,typeHandler=JsonObjectTypeHandler},
             updated_datetime = now()
         where no = #{user_no}
     </update>

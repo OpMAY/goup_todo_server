@@ -103,7 +103,8 @@ public class AppConfig implements WebApplicationInitializer, SchedulingConfigure
     public void addCorsMappings(CorsRegistry corsRegistry) {
         log.info("corsRegistry init");
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
         log.info("corsRegistry initialized : {}", corsRegistry);
     }
 

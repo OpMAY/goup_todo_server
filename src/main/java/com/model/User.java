@@ -31,7 +31,7 @@ public class User extends RootUser {
     private String cash_receipt_type;
     private String cr_card_number;
     private String cr_phone_number;
-    private int cr_alarm_agree;
+    private boolean cr_alarm_agree;
     private boolean user_flag;
 
 }

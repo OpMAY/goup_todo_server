@@ -28,7 +28,7 @@ public interface UserMapper {
 
     void updateReceiptInfo(User user);
 
-    void updateProfileImage(@Param("profile_image") MFile profile_image, @Param("user_no")int user_no);
+    void updateProfileImage(@Param("profile_image") MFile profile_image, @Param("user_no") int user_no);
 
     User getUserbyToken(String access_token);
 

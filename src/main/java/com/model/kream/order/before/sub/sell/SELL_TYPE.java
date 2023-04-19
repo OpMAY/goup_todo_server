@@ -10,7 +10,6 @@ public enum SELL_TYPE {
     }
     private final String keyword;
 
-    @JsonValue
     public String getKeyword() {
         return this.keyword;
     }
