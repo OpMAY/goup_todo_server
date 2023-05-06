@@ -45,12 +45,11 @@ public class ProductRestController {
                                          @RequestParam(value = "keyword", required = false) String keyword,
                                          @RequestParam(value = "size_list", required = false) List<String> sizes,
                                          @RequestParam(value = "cursor", required = false) Integer cursor,
-                                         @RequestParam(value = "price", required = false) String price) {
+                                         @RequestParam(value = "price", required = false) String price,
+                                         @RequestParam(value = "user_no", required = false) Integer user_no) {
         Message message = new Message();
-        int user_no = 1;
         // TODO CHECK PARAM LIST ACCEPTABLE
         if (price == null || priceFilters.contains(price)) { // 가격이 null or priceFilter List 값 범위내 price 값이 해당될때
-
             List<ProductShop> n_products = productService.searchProductWithFilters(brands, genders, categories,
                     keyword, sizes, user_no, cursor, price); //product cursor별 정렬 검색 필터 결과
             message.put("products", n_products);
@@ -70,7 +69,6 @@ public class ProductRestController {
             message.put("status", false);
             message.put("error_msg", "가격 필터 설정 오류");
         }
-
         return new ResponseEntity(DefaultRes.res(HttpStatus.OK, message, true), HttpStatus.OK);
     }
 

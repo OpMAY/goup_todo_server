@@ -94,11 +94,10 @@ public class ProductService {
                 || (size_list != null && !size_list.isEmpty());
         List<ProductShop> result;
 
-        if (cursor != null && (cursor != 0 && cursor != 1)) { //cursor(페이지) 가 null 이 아니고 0,1이 아닐때
+        if (cursor != null && (cursor != 0 && cursor != 1)) {
+            // cursor(페이지) 가 null 이 아니고 0,1이 아닐때
             // TODO CURSOR
-
             result = productDao.searchProductWithFiltersReload(filtered, brand_list, gender_list, category_list, keyword, size_list, cursor);   //product cursor 별로 reload하여  데이터 가져오기.
-
         } else { //그 외
             result = productDao.searchProductWithFilters(filtered, brand_list, gender_list, category_list, keyword, size_list); //product 10개씩 가져오기.
         }
@@ -512,7 +511,7 @@ public class ProductService {
         productDao.updateProductViews(product_no);
     }
 
-    public List<ProductMain> getPopularProducts(int user_no) {
+    public List<ProductMain> getPopularProducts(Integer user_no) {
         // TODO user_no exist?
         List<ProductMain> popular_products = productDao.getMainPopularProducts();
         for (ProductMain product : popular_products) {
@@ -524,7 +523,7 @@ public class ProductService {
         return popular_products;
     }
 
-    public List<ProductMain> getRecentProducts(int user_no) {
+    public List<ProductMain> getRecentProducts(Integer user_no) {
         // TODO user_no exist?
         List<ProductMain> recent_products = productDao.getMainRecentProducts();
         for (ProductMain product : recent_products) {
@@ -735,6 +734,8 @@ public class ProductService {
     }
 
     public ProductShop getProductSummary(int no) {
-        return productDao.getProductSummary(no);
+        ProductShop productShop = productDao.getProductSummary(no);
+        productShop.setBrand(brandDao.getBrandByProductNo(productShop.getNo()));
+        return productShop;
     }
 }

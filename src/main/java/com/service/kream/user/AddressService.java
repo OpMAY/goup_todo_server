@@ -40,9 +40,10 @@ public class AddressService {
     public void registAddress(Address address) {
         if (address.is_default_address()) {
             addressDao.resetDefaultAddress(address);
+        } else if (addressDao.getMyAddresses(address.getUser_no()).isEmpty()) {
+            address.set_default_address(true);
         }
         addressDao.registAddress(address);
-
     }
 
 
@@ -52,7 +53,6 @@ public class AddressService {
             addressDao.resetDefaultAddress(address);
         }
         addressDao.updateAddress(address);
-
     }
 
 
@@ -60,16 +60,13 @@ public class AddressService {
     public Message deleteAddress(int no ) {
         Message message = new Message();
         Address address = this.getAddress(no);
-
-        if(address.is_default_address()){
+        if(!address.is_default_address()){
             addressDao.deleteAddress(no);
             message.put("status", true);
         } else {
             message.put("status",false);
         }
-
         return message;
-
     }
 
 

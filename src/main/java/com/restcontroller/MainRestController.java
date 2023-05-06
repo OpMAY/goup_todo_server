@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +31,8 @@ public class MainRestController {
     private final BrandService brandService;
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ResponseEntity getProductMain(HttpServletRequest request) {
+    public ResponseEntity getProductMain(HttpServletRequest request, @RequestParam(value = "user_no", required = false) Integer user_no) {
         Message message = new Message();
-        String user_header = request.getHeader("user_no");
-        int user_no = user_header != null ? Integer.parseInt(user_header) : 0;
         List<Banner> banners = bannerService.getActiveBanners();
         List<ProductMain> popular_products = productService.getPopularProducts(user_no);
         List<ProductMain> recent_products = productService.getRecentProducts(user_no);
